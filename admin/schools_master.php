@@ -1518,8 +1518,17 @@ require_once __DIR__ . '/includes/admin_header.php';
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal <span style="color: #ef4444;">*</span></label>
-                    <input list="modal_add_mandals_list" id="modal_add_mandal" name="mandal" class="sm-input" placeholder="Select or type mandal..." required>
-                    <datalist id="modal_add_mandals_list"></datalist>
+                    <div id="modal_add_mandal_select_wrapper">
+                        <select id="modal_add_mandal_select" name="mandal" class="sm-select" required onchange="onModalAddMandalSelectChange(this.value)">
+                            <option value="">-- Select District First --</option>
+                        </select>
+                    </div>
+                    <div id="modal_add_mandal_custom_wrapper" style="display: none; margin-top: 6px;">
+                        <div style="display: flex; gap: 6px;">
+                            <input type="text" id="modal_add_mandal_custom" class="sm-input" placeholder="Type new mandal name...">
+                            <button type="button" onclick="cancelCustomAddMandal()" style="height: 42px; padding: 0 12px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 700; white-space: nowrap;">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style="margin-bottom: 1.15rem;">
@@ -1561,11 +1570,26 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.15rem;">
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District <span style="color: #ef4444;">*</span></label>
-                    <input type="text" id="edit_school_district" name="district" class="sm-input" required>
+                    <select id="edit_school_district" name="district" class="sm-select" required onchange="loadMandalsForEditSchool(this.value)">
+                        <option value="">-- Select District --</option>
+                        <?php foreach ($districtsList as $d): ?>
+                            <option value="<?php echo htmlspecialchars($d); ?>"><?php echo htmlspecialchars($d); ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div>
                     <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal <span style="color: #ef4444;">*</span></label>
-                    <input type="text" id="edit_school_mandal" name="mandal" class="sm-input" required>
+                    <div id="edit_school_mandal_select_wrapper">
+                        <select id="edit_school_mandal_select" name="mandal" class="sm-select" required onchange="onModalEditMandalSelectChange(this.value)">
+                            <option value="">-- Select Mandal --</option>
+                        </select>
+                    </div>
+                    <div id="edit_school_mandal_custom_wrapper" style="display: none; margin-top: 6px;">
+                        <div style="display: flex; gap: 6px;">
+                            <input type="text" id="edit_school_mandal_custom" class="sm-input" placeholder="Type new mandal name...">
+                            <button type="button" onclick="cancelCustomEditMandal()" style="height: 42px; padding: 0 12px; background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 9px; cursor: pointer; font-size: 0.8rem; font-weight: 700; white-space: nowrap;">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style="margin-bottom: 1.15rem;">
@@ -1594,7 +1618,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 </div>
 
 <script>
-// Dynamic Mandals for Schools Filter
+// Dynamic Mandals for Schools Filter Toolbar
 function onSchoolsDistrictChange(district) {
     const sel = document.getElementById('schoolsMandalSelect');
     sel.innerHTML = '<option value="">All Mandals</option>';
@@ -1611,19 +1635,160 @@ function onSchoolsDistrictChange(district) {
         });
 }
 
-function loadMandalsForAddSchool(district) {
-    const list = document.getElementById('modal_add_mandals_list');
-    list.innerHTML = '';
-    if (!district) return;
+// Dynamic Mandals for Add School Modal Dropdown
+function loadMandalsForAddSchool(district, selectedMandal = '') {
+    const sel = document.getElementById('modal_add_mandal_select');
+    cancelCustomAddMandal();
+
+    if (!district) {
+        sel.innerHTML = '<option value="">-- Select District First --</option>';
+        return;
+    }
+
+    sel.innerHTML = '<option value="">Loading mandals...</option>';
+
     fetch('../api/get_mandals.php?district=' + encodeURIComponent(district))
         .then(r => r.json())
         .then(mandals => {
+            if (!Array.isArray(mandals) || mandals.length === 0) {
+                sel.innerHTML = '<option value="">-- No Mandals Found --</option>';
+                const customOpt = document.createElement('option');
+                customOpt.value = '__custom__';
+                customOpt.textContent = '➕ + Type a New Mandal...';
+                sel.appendChild(customOpt);
+                return;
+            }
+
+            sel.innerHTML = '<option value="">-- Select Mandal (' + mandals.length + ' available) --</option>';
+            let found = false;
             mandals.forEach(m => {
                 const opt = document.createElement('option');
                 opt.value = m;
-                list.appendChild(opt);
+                opt.textContent = m;
+                if (selectedMandal && m.toLowerCase() === selectedMandal.toLowerCase()) {
+                    opt.selected = true;
+                    found = true;
+                }
+                sel.appendChild(opt);
             });
+
+            if (selectedMandal && !found) {
+                const opt = document.createElement('option');
+                opt.value = selectedMandal;
+                opt.textContent = selectedMandal;
+                opt.selected = true;
+                sel.insertBefore(opt, sel.children[1] || null);
+            }
+
+            const customOpt = document.createElement('option');
+            customOpt.value = '__custom__';
+            customOpt.textContent = '➕ + Type a New Mandal...';
+            sel.appendChild(customOpt);
+        })
+        .catch(err => {
+            sel.innerHTML = '<option value="">-- Error loading mandals --</option>';
         });
+}
+
+function onModalAddMandalSelectChange(val) {
+    if (val === '__custom__') {
+        document.getElementById('modal_add_mandal_select_wrapper').style.display = 'none';
+        document.getElementById('modal_add_mandal_custom_wrapper').style.display = 'block';
+        const customInput = document.getElementById('modal_add_mandal_custom');
+        customInput.name = 'mandal';
+        customInput.required = true;
+        customInput.focus();
+        document.getElementById('modal_add_mandal_select').removeAttribute('name');
+    }
+}
+
+function cancelCustomAddMandal() {
+    const sel = document.getElementById('modal_add_mandal_select');
+    sel.name = 'mandal';
+    const customInput = document.getElementById('modal_add_mandal_custom');
+    customInput.removeAttribute('name');
+    customInput.value = '';
+    customInput.required = false;
+    document.getElementById('modal_add_mandal_custom_wrapper').style.display = 'none';
+    document.getElementById('modal_add_mandal_select_wrapper').style.display = 'block';
+}
+
+// Dynamic Mandals for Edit School Modal Dropdown
+function loadMandalsForEditSchool(district, selectedMandal = '') {
+    const sel = document.getElementById('edit_school_mandal_select');
+    cancelCustomEditMandal();
+
+    if (!district) {
+        sel.innerHTML = '<option value="">-- Select District First --</option>';
+        return;
+    }
+
+    sel.innerHTML = '<option value="">Loading mandals...</option>';
+
+    fetch('../api/get_mandals.php?district=' + encodeURIComponent(district))
+        .then(r => r.json())
+        .then(mandals => {
+            if (!Array.isArray(mandals) || mandals.length === 0) {
+                sel.innerHTML = '<option value="">-- No Mandals Found --</option>';
+                const customOpt = document.createElement('option');
+                customOpt.value = '__custom__';
+                customOpt.textContent = '➕ + Type a New Mandal...';
+                sel.appendChild(customOpt);
+                return;
+            }
+
+            sel.innerHTML = '<option value="">-- Select Mandal (' + mandals.length + ' available) --</option>';
+            let found = false;
+            mandals.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                if (selectedMandal && m.toLowerCase() === selectedMandal.toLowerCase()) {
+                    opt.selected = true;
+                    found = true;
+                }
+                sel.appendChild(opt);
+            });
+
+            if (selectedMandal && !found) {
+                const opt = document.createElement('option');
+                opt.value = selectedMandal;
+                opt.textContent = selectedMandal;
+                opt.selected = true;
+                sel.insertBefore(opt, sel.children[1] || null);
+            }
+
+            const customOpt = document.createElement('option');
+            customOpt.value = '__custom__';
+            customOpt.textContent = '➕ + Type a New Mandal...';
+            sel.appendChild(customOpt);
+        })
+        .catch(err => {
+            sel.innerHTML = '<option value="">-- Error loading mandals --</option>';
+        });
+}
+
+function onModalEditMandalSelectChange(val) {
+    if (val === '__custom__') {
+        document.getElementById('edit_school_mandal_select_wrapper').style.display = 'none';
+        document.getElementById('edit_school_mandal_custom_wrapper').style.display = 'block';
+        const customInput = document.getElementById('edit_school_mandal_custom');
+        customInput.name = 'mandal';
+        customInput.required = true;
+        customInput.focus();
+        document.getElementById('edit_school_mandal_select').removeAttribute('name');
+    }
+}
+
+function cancelCustomEditMandal() {
+    const sel = document.getElementById('edit_school_mandal_select');
+    sel.name = 'mandal';
+    const customInput = document.getElementById('edit_school_mandal_custom');
+    customInput.removeAttribute('name');
+    customInput.value = '';
+    customInput.required = false;
+    document.getElementById('edit_school_mandal_custom_wrapper').style.display = 'none';
+    document.getElementById('edit_school_mandal_select_wrapper').style.display = 'block';
 }
 
 // Modal open/close functions
@@ -1665,13 +1830,13 @@ function closeEditMandalModal() {
 
 function openAddSchoolModal(presetDistrict, presetMandal) {
     const dSel = document.getElementById('modal_add_district');
-    const mInp = document.getElementById('modal_add_mandal');
+    cancelCustomAddMandal();
     if (presetDistrict) {
         dSel.value = presetDistrict;
-        loadMandalsForAddSchool(presetDistrict);
-    }
-    if (presetMandal) {
-        mInp.value = presetMandal;
+        loadMandalsForAddSchool(presetDistrict, presetMandal || '');
+    } else {
+        dSel.value = '';
+        loadMandalsForAddSchool('', '');
     }
     document.getElementById('addSchoolModal').style.display = 'flex';
 }
@@ -1682,7 +1847,7 @@ function closeAddSchoolModal() {
 function openEditSchoolModal(school) {
     document.getElementById('edit_school_id').value = school.id;
     document.getElementById('edit_school_district').value = school.district || '';
-    document.getElementById('edit_school_mandal').value = school.mandal || '';
+    loadMandalsForEditSchool(school.district || '', school.mandal || '');
     document.getElementById('edit_school_name').value = school.school_name || '';
     document.getElementById('edit_school_unique_code').value = school.unique_code || '';
     document.getElementById('edit_school_is_registered').value = school.is_registered || '0';
