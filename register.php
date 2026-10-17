@@ -120,6 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
                         'district' => $district,
                         'mandal' => $mandal,
                         'unique_code' => $unique_code,
+                        'mobile' => $mobile,
+                        'created_at' => date('d M Y, h:i A')
                     ]);
 
                     // Redirect to confirmation
