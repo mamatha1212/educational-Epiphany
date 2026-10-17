@@ -165,12 +165,12 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
 
     <!-- Filter & Search Controls -->
-    <div class="card" style="margin-bottom: 1.5rem;">
-        <form method="GET" action="dashboard.php" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) 120px 140px; gap: 1rem; align-items: flex-end;">
+    <div class="card" style="margin-bottom: 1.5rem; padding: 1.1rem 1.25rem;">
+        <form method="GET" action="dashboard.php" style="display: flex; flex-direction: row; align-items: flex-end; gap: 0.75rem; width: 100%; flex-wrap: wrap;">
             
-            <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="district">District</label>
-                <select name="district" id="district" class="form-select">
+            <div class="form-group" style="margin-bottom: 0; flex: 1 1 150px; min-width: 120px;">
+                <label class="form-label" for="district" style="font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; display: block; white-space: nowrap;">District</label>
+                <select name="district" id="district" class="form-select" style="height: 40px; font-size: 0.88rem; width: 100%;">
                     <option value="">All Districts</option>
                     <?php foreach ($allDistricts as $d): ?>
                         <option value="<?php echo htmlspecialchars($d); ?>" <?php echo $districtFilter === $d ? 'selected' : ''; ?>>
@@ -180,14 +180,14 @@ require_once __DIR__ . '/../includes/header.php';
                 </select>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="mandal">Mandal</label>
-                <input type="text" name="mandal" id="mandal" class="form-input" placeholder="Type Mandal name..." value="<?php echo htmlspecialchars($mandalFilter); ?>">
+            <div class="form-group" style="margin-bottom: 0; flex: 1 1 150px; min-width: 120px;">
+                <label class="form-label" for="mandal" style="font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; display: block; white-space: nowrap;">Mandal</label>
+                <input type="text" name="mandal" id="mandal" class="form-input" style="height: 40px; font-size: 0.88rem; width: 100%;" placeholder="Type Mandal name..." value="<?php echo htmlspecialchars($mandalFilter); ?>">
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="status">Status</label>
-                <select name="status" id="status" class="form-select">
+            <div class="form-group" style="margin-bottom: 0; flex: 1 1 130px; min-width: 110px;">
+                <label class="form-label" for="status" style="font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; display: block; white-space: nowrap;">Status</label>
+                <select name="status" id="status" class="form-select" style="height: 40px; font-size: 0.88rem; width: 100%;">
                     <option value="">All Statuses</option>
                     <option value="submitted" <?php echo $statusFilter === 'submitted' ? 'selected' : ''; ?>>Submitted</option>
                     <option value="contacted" <?php echo $statusFilter === 'contacted' ? 'selected' : ''; ?>>Contacted</option>
@@ -195,19 +195,16 @@ require_once __DIR__ . '/../includes/header.php';
                 </select>
             </div>
 
-            <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="search">Keyword Search</label>
-                <input type="text" name="search" id="search" class="form-input" placeholder="Name, UDISE, Mobile, Code..." value="<?php echo htmlspecialchars($search); ?>">
+            <div class="form-group" style="margin-bottom: 0; flex: 2 1 200px; min-width: 150px;">
+                <label class="form-label" for="search" style="font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; display: block; white-space: nowrap;">Keyword Search</label>
+                <input type="text" name="search" id="search" class="form-input" style="height: 40px; font-size: 0.88rem; width: 100%;" placeholder="Name, UDISE, Mobile, Code..." value="<?php echo htmlspecialchars($search); ?>">
             </div>
 
-            <div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; background: #059669; border: none;">
-                    Filter
+            <div style="display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;">
+                <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 1.25rem; background: #059669; border: none; white-space: nowrap; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                    🔍 Filter
                 </button>
-            </div>
-
-            <div>
-                <a href="../admin/export.php?district=<?php echo urlencode($districtFilter); ?>&mandal=<?php echo urlencode($mandalFilter); ?>&search=<?php echo urlencode($search); ?>" class="btn btn-outline" style="width: 100%; justify-content: center;">
+                <a href="../admin/export.php?district=<?php echo urlencode($districtFilter); ?>&mandal=<?php echo urlencode($mandalFilter); ?>&search=<?php echo urlencode($search); ?>" class="btn btn-outline" style="height: 40px; padding: 0 1.15rem; white-space: nowrap; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
                     📥 Export CSV
                 </a>
             </div>

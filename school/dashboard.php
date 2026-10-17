@@ -497,7 +497,7 @@ $totalPapersCount = count($questionPapers);
         /* KPI Cards Grid */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.25rem;
             margin-bottom: 1.75rem;
         }
@@ -779,7 +779,7 @@ $totalPapersCount = count($questionPapers);
                 padding: 1.25rem 1rem;
             }
         }
-    
+
         /* Stacked Brand Group (School Portal + School Name One By One) */
         .topbar-brand-group {
             display: flex;
@@ -831,6 +831,7 @@ $totalPapersCount = count($questionPapers);
             .topbar-main-title {
                 font-size: 1.05rem;
             }
+
             .topbar-school-name {
                 max-width: 320px;
                 font-size: 0.82rem;
@@ -848,15 +849,17 @@ $totalPapersCount = count($questionPapers);
                 height: 58px;
                 padding: 0 0.75rem;
             }
+
             .topbar-left {
                 gap: 8px;
             }
+
             .sidebar-toggle-btn {
                 padding: 5px 8px;
             }
         }
 
-    
+
         .sidebar-header-row {
             display: flex;
             align-items: center;
@@ -896,7 +899,6 @@ $totalPapersCount = count($questionPapers);
                 display: inline-flex;
             }
         }
-
     </style>
 </head>
 
@@ -909,20 +911,23 @@ $totalPapersCount = count($questionPapers);
         <aside class="admin-sidebar" id="adminSidebar">
             <!-- Brand with Official Logo -->
             <div class="sidebar-header-row">
-            <a href="dashboard.php" class="sidebar-brand">
-                <div class="sidebar-logo-frame">
-                    <img src="../assets/images/logo.png" alt="EEMT Logo" class="sidebar-logo"
-                        onerror="this.src='../assets/images/logo.jpeg';">
-                </div>
-                <div class="sidebar-brand-text">
-                    <h1>EEMT 2027</h1>
-                    <span>School Portal</span>
-                </div>
-            </a>
-            <button type="button" class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close menu">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
+                <a href="dashboard.php" class="sidebar-brand">
+                    <div class="sidebar-logo-frame">
+                        <img src="../assets/images/logo.png" alt="EEMT Logo" class="sidebar-logo"
+                            onerror="this.src='../assets/images/logo.jpeg';">
+                    </div>
+                    <div class="sidebar-brand-text">
+                        <h1>EEMT 2027</h1>
+                        <span>School Portal</span>
+                    </div>
+                </a>
+                <button type="button" class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close menu">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
 
             <!-- School Info Snippet -->
             <div class="sidebar-user">
@@ -1122,13 +1127,11 @@ $totalPapersCount = count($questionPapers);
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">District</span>
-                                    <span
-                                        class="detail-val"><?php echo htmlspecialchars($district); ?></span>
+                                    <span class="detail-val"><?php echo htmlspecialchars($district); ?></span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Mandal</span>
-                                    <span
-                                        class="detail-val"><?php echo htmlspecialchars($mandal); ?></span>
+                                    <span class="detail-val"><?php echo htmlspecialchars($mandal); ?></span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Village / Location</span>
@@ -1155,8 +1158,7 @@ $totalPapersCount = count($questionPapers);
                             <div class="modern-card-body">
                                 <div class="detail-row">
                                     <span class="detail-label">In-Charge Name</span>
-                                    <span
-                                        class="detail-val"><?php echo htmlspecialchars($inchargeName); ?></span>
+                                    <span class="detail-val"><?php echo htmlspecialchars($inchargeName); ?></span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Designation</span>
