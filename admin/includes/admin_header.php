@@ -13,6 +13,8 @@ $badgePDO = getDB();
 $totalPapersBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM question_papers WHERE is_published = 1")->fetchColumn();
 $totalStaffBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM users WHERE is_active = 1")->fetchColumn();
 $totalSchoolsBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM school_registrations_2027")->fetchColumn();
+$rawMasterCount = (int) $badgePDO->query("SELECT COUNT(*) FROM schools_master")->fetchColumn();
+$totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . 'k' : $rawMasterCount;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -460,6 +462,15 @@ $totalSchoolsBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM school_registr
                         <span>State Dashboard</span>
                     </div>
                     <span class="sidebar-badge"><?php echo $totalSchoolsBadge; ?></span>
+                </a>
+
+                <a href="schools_master.php"
+                    class="sidebar-item <?php echo $currentPage === 'schools_master.php' ? 'active' : ''; ?>">
+                    <div class="sidebar-item-content">
+                        <span class="sidebar-icon">🏫</span>
+                        <span>Schools & Directory</span>
+                    </div>
+                    <span class="sidebar-badge"><?php echo $totalMasterBadge; ?></span>
                 </a>
 
                 <a href="coordinators.php"
