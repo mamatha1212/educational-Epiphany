@@ -548,12 +548,8 @@ require_once __DIR__ . '/includes/admin_header.php';
                     </label>
                     <select id="class" name="class" class="qp-select" required>
                         <option value="">-- Select Class --</option>
-                        <option value="Class 10">Class 10</option>
                         <option value="Class 7">Class 7</option>
-                        <option value="Class 6">Class 6</option>
-                        <option value="Class 8">Class 8</option>
-                        <option value="Class 9">Class 9</option>
-                        <option value="General / All Classes">General / All Classes</option>
+                        <option value="Class 10">Class 10</option>
                     </select>
                 </div>
 
@@ -654,12 +650,8 @@ require_once __DIR__ . '/includes/admin_header.php';
                     </label>
                     <select id="edit_class" name="class" class="qp-select" required>
                         <option value="">-- Select Class --</option>
-                        <option value="Class 10">Class 10</option>
                         <option value="Class 7">Class 7</option>
-                        <option value="Class 6">Class 6</option>
-                        <option value="Class 8">Class 8</option>
-                        <option value="Class 9">Class 9</option>
-                        <option value="General / All Classes">General / All Classes</option>
+                        <option value="Class 10">Class 10</option>
                     </select>
                 </div>
 
@@ -734,14 +726,24 @@ function filterPaperTable() {
 function openEditPaperModal(paper) {
     document.getElementById('edit_paper_id').value = paper.id;
     document.getElementById('edit_title').value = paper.title || '';
-    document.getElementById('edit_class').value = paper.class || '';
+    
+    // Normalize target class so both '7th'/'Class 7' and '10th'/'Class 10' are selected
+    let c = (paper.class || '').toString().trim();
+    if (c === '7th' || c === 'Class 7' || c === '7') {
+        document.getElementById('edit_class').value = 'Class 7';
+    } else if (c === '10th' || c === 'Class 10' || c === '10') {
+        document.getElementById('edit_class').value = 'Class 10';
+    } else {
+        document.getElementById('edit_class').value = c;
+    }
+
     document.getElementById('edit_subject').value = paper.subject || '';
     document.getElementById('edit_is_published').value = paper.is_published;
     document.getElementById('edit_paper_file').value = '';
     
     const fileName = paper.file_path ? paper.file_path.split('/').pop() : 'None';
     document.getElementById('edit_current_filename').textContent = fileName;
-    document.getElementById('modalPaperSubtitle').textContent = '#' + paper.id + ' • ' + (paper.class || 'All Classes');
+    document.getElementById('modalPaperSubtitle').textContent = '#' + paper.id + ' • ' + (document.getElementById('edit_class').value || paper.class || 'Paper');
     
     document.getElementById('editPaperModal').style.display = 'flex';
 }

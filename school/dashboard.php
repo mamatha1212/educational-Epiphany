@@ -1239,7 +1239,7 @@ $totalPapersCount = count($questionPapers);
                         <h2 style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin: 0 0 0.35rem 0;">Prelims
                             Question Papers</h2>
                         <p style="margin: 0; font-size: 0.88rem; color: #64748b;">EEMT 2027 Preliminary Examination
-                            question papers for 8th, 9th, and 10th standards.</p>
+                            question papers for 7th and 10th standards.</p>
                     </div>
 
                     <?php if (!empty($questionPapers)): ?>
@@ -1277,7 +1277,7 @@ $totalPapersCount = count($questionPapers);
                                                 <tr style="border-bottom: 1px solid #f1f5f9;">
                                                     <td style="padding: 1rem 1.25rem; vertical-align: middle;">
                                                         <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
-                                                            🎓 <?php echo htmlspecialchars($qp['class'] ?? 'Class 8-10'); ?>
+                                                            🎓 <?php echo htmlspecialchars($qp['class'] ?? 'Class 10'); ?>
                                                         </span>
                                                     </td>
                                                     <td style="padding: 1rem 1.25rem; vertical-align: middle;">
@@ -1330,7 +1330,7 @@ $totalPapersCount = count($questionPapers);
                             <div class="qp-bullets-box">
                                 <div class="qp-bullet-item">
                                     <span class="qp-bullet-dot">✓</span>
-                                    <span>Encrypted High-Resolution PDF papers for 8th, 9th, and 10th classes</span>
+                                    <span>Encrypted High-Resolution PDF papers for 7th and 10th classes</span>
                                 </div>
                                 <div class="qp-bullet-item">
                                     <span class="qp-bullet-dot">✓</span>
