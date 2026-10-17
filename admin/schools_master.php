@@ -225,7 +225,11 @@ $countStmt->execute($params);
 $totalFiltered = (int)$countStmt->fetchColumn();
 
 // Pagination params
-$perPage = in_array((int)($_GET['per_page'] ?? 25), [15, 25, 50, 100, 250]) ? (int)$_GET['per_page'] : 25;
+$reqPerPage = isset($_GET['per_page']) ? (int)$_GET['per_page'] : 25;
+$perPage = in_array($reqPerPage, [15, 25, 50, 100, 250], true) ? $reqPerPage : 25;
+if ($perPage <= 0) {
+    $perPage = 25;
+}
 $totalPages = max(1, (int)ceil($totalFiltered / $perPage));
 $page = max(1, min($totalPages, (int)($_GET['page'] ?? 1)));
 $offset = ($page - 1) * $perPage;
