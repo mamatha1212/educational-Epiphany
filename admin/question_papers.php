@@ -148,65 +148,69 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <p style="font-size: 0.9rem; margin: 0;">Use the form below to upload official EEMT 2027 prelims PDFs.</p>
             </div>
         <?php else: ?>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
+            <div class="table-responsive" style="overflow-x: auto; width: 100%;">
+                <table class="table" style="width: 100%; min-width: 950px; border-collapse: collapse; margin-bottom: 0;">
+                    <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                         <tr>
-                            <th>ID</th>
-                            <th>Paper Title</th>
-                            <th>Class / Grade</th>
-                            <th>Subject</th>
-                            <th>Status</th>
-                            <th>Uploaded On</th>
-                            <th style="text-align: right;">Actions</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 70px;">ID</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 240px;">Paper Title</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 130px;">Class / Grade</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 150px;">Subject</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 160px;">Status</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 160px;">Uploaded On</th>
+                            <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 220px; text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($papers as $p): ?>
-                            <tr>
-                                <td style="font-weight: 600; color: #64748b;">#<?php echo $p['id']; ?></td>
-                                <td>
-                                    <strong style="color: #0f172a; font-size: 0.95rem; display: block;"><?php echo htmlspecialchars($p['title']); ?></strong>
-                                    <span style="font-size: 0.8rem; color: #64748b; font-family: monospace;"><?php echo basename($p['file_path']); ?></span>
+                            <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
+                                <td style="padding: 14px 18px; vertical-align: middle; font-weight: 700; color: #94a3b8; font-size: 0.85rem;">#<?php echo $p['id']; ?></td>
+                                <td style="padding: 14px 18px; vertical-align: middle;">
+                                    <strong style="color: #0f172a; font-size: 0.94rem; display: block; line-height: 1.3;"><?php echo htmlspecialchars($p['title']); ?></strong>
+                                    <span style="font-size: 0.78rem; color: #64748b; font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 3px;"><?php echo basename($p['file_path']); ?></span>
                                 </td>
-                                <td>
-                                    <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 700;">
+                                <td style="padding: 14px 18px; vertical-align: middle;">
+                                    <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 700; border: 1px solid #bfdbfe; font-size: 0.78rem; padding: 4px 10px;">
                                         <?php echo htmlspecialchars($p['class']); ?>
                                     </span>
                                 </td>
-                                <td>
-                                    <span style="font-weight: 600; color: #334155;"><?php echo htmlspecialchars($p['subject']); ?></span>
+                                <td style="padding: 14px 18px; vertical-align: middle;">
+                                    <span style="font-weight: 600; color: #334155; font-size: 0.88rem;"><?php echo htmlspecialchars($p['subject']); ?></span>
                                 </td>
-                                <td>
+                                <td style="padding: 14px 18px; vertical-align: middle;">
                                     <?php if ($p['is_published'] == 1): ?>
-                                        <span class="badge badge-success">Published (Visible to Schools)</span>
+                                        <span class="badge" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; display: inline-flex; align-items: center; gap: 5px;">
+                                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span> Published
+                                        </span>
                                     <?php else: ?>
-                                        <span class="badge badge-warning">Draft (Hidden)</span>
+                                        <span class="badge" style="background: #fffbeb; color: #d97706; border: 1px solid #fde68a; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; display: inline-flex; align-items: center; gap: 5px;">
+                                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b;"></span> Draft
+                                        </span>
                                     <?php endif; ?>
                                 </td>
-                                <td style="font-size: 0.85rem; color: #64748b; white-space: nowrap;">
+                                <td style="padding: 14px 18px; vertical-align: middle; font-size: 0.82rem; color: #64748b; white-space: nowrap;">
                                     <?php echo date('d M Y, h:i A', strtotime($p['created_at'])); ?>
                                 </td>
-                                <td style="text-align: right; white-space: nowrap;">
-                                    <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                <td style="padding: 14px 18px; vertical-align: middle; text-align: right; white-space: nowrap;">
+                                    <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
                                         <form method="POST" style="display: inline;">
                                             <input type="hidden" name="action" value="toggle_publish">
                                             <input type="hidden" name="paper_id" value="<?php echo $p['id']; ?>">
                                             <input type="hidden" name="current_status" value="<?php echo $p['is_published']; ?>">
-                                            <button type="submit" class="btn btn-outline" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;">
-                                                <?php echo $p['is_published'] == 1 ? 'Unpublish' : 'Publish'; ?>
+                                            <button type="submit" class="btn" style="padding: 5px 10px; font-size: 0.78rem; font-weight: 600; border-radius: 6px; background: <?php echo $p['is_published'] == 1 ? '#fff7ed' : '#f0fdf4'; ?>; color: <?php echo $p['is_published'] == 1 ? '#c2410c' : '#15803d'; ?>; border: 1px solid <?php echo $p['is_published'] == 1 ? '#ffedd5' : '#bbf7d0'; ?>;">
+                                                <?php echo $p['is_published'] == 1 ? 'Hide' : 'Publish'; ?>
                                             </button>
                                         </form>
 
-                                        <a href="<?php echo $rootPath . htmlspecialchars($p['file_path']); ?>" target="_blank" class="btn btn-outline" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;">
-                                            Preview
+                                        <a href="<?php echo $rootPath . htmlspecialchars($p['file_path']); ?>" target="_blank" class="btn" style="padding: 5px 10px; font-size: 0.78rem; font-weight: 600; border-radius: 6px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none;">
+                                            👁️ Preview
                                         </a>
 
                                         <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to permanently delete this question paper?');">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="paper_id" value="<?php echo $p['id']; ?>">
-                                            <button type="submit" class="btn" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;">
-                                                Delete
+                                            <button type="submit" class="btn" style="padding: 5px 10px; font-size: 0.78rem; font-weight: 600; border-radius: 6px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;">
+                                                🗑️
                                             </button>
                                         </form>
                                     </div>

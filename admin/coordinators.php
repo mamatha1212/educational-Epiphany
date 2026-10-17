@@ -78,85 +78,146 @@ $pageTitle = "Staff & Coordinators - EEMT 2027 Admin";
 require_once __DIR__ . '/includes/admin_header.php';
 ?>
 
-<div>
-    <!-- Breadcrumb -->
-    <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+<div style="max-width: 1200px; margin: 0 auto;">
+    <!-- Breadcrumb & Top Bar -->
+    <div style="margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
-            <a href="dashboard.php" style="color: #2563eb; font-weight: 600; text-decoration: none; font-size: 0.9rem;">
+            <a href="dashboard.php" style="color: #2563eb; font-weight: 600; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;">
                 &larr; Back to Admin Dashboard
             </a>
-            <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-top: 0.25rem;">Staff & Coordinator Accounts</h2>
+            <h2 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem; letter-spacing: -0.5px;">
+                Staff & Coordinator Accounts
+            </h2>
+            <p style="font-size: 0.88rem; color: #64748b; margin-top: 2px;">
+                Manage administrative access and regional district coordinator credentials.
+            </p>
         </div>
-        <a href="#add-user-card" class="btn btn-primary">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-            Add Staff Member
+        <a href="#add-user-card" class="btn btn-primary" style="height: 42px; padding: 0 1.25rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Add New Staff Member
         </a>
     </div>
 
     <?php if (!empty($message)): ?>
-        <div class="alert alert-<?php echo $messageType; ?>" style="margin-bottom: 1.5rem;">
-            <?php echo htmlspecialchars($message); ?>
+        <div class="alert alert-<?php echo $messageType; ?>" style="margin-bottom: 1.5rem; border-radius: 10px; display: flex; align-items: center; gap: 10px; padding: 1rem 1.25rem;">
+            <span><?php echo $messageType === 'success' ? '✅' : '⚠️'; ?></span>
+            <span><?php echo htmlspecialchars($message); ?></span>
         </div>
     <?php endif; ?>
 
-    <!-- User Accounts Table -->
-    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
-        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0;">System Access Accounts</h3>
-            <span class="badge badge-info"><?php echo count($users); ?> Total Accounts</span>
+    <!-- User Accounts Table Card -->
+    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2.25rem; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+        <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
+            <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <span>👥 System Access Accounts</span>
+                </h3>
+                <span style="font-size: 0.8rem; color: #64748b; margin-top: 2px; display: block;">Authorized personnel with dashboard credentials</span>
+            </div>
+            <span class="badge" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 0.78rem; font-weight: 700; padding: 4px 10px;">
+                <?php echo count($users); ?> Total Accounts
+            </span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
+        <div class="table-responsive" style="overflow-x: auto; width: 100%;">
+            <table class="table" style="width: 100%; min-width: 950px; border-collapse: collapse; margin-bottom: 0;">
+                <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                     <tr>
-                        <th>ID</th>
-                        <th>Full Name / Username</th>
-                        <th>Role</th>
-                        <th>Contact Info</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                        <th style="text-align: right;">Action</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 70px;">ID</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 240px;">Staff Member</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 160px;">Role</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 240px;">Contact Details</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 120px;">Status</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 140px;">Created On</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 120px; text-align: right;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($users as $u): ?>
-                        <tr>
-                            <td style="font-weight: 600; color: #64748b;">#<?php echo $u['id']; ?></td>
-                            <td>
-                                <strong style="color: #0f172a;"><?php echo htmlspecialchars($u['name']); ?></strong>
-                                <div style="font-size: 0.82rem; color: #64748b; font-family: monospace;">@<?php echo htmlspecialchars($u['username']); ?></div>
+                    <?php foreach ($users as $u): 
+                        // Generate initials for avatar
+                        $words = explode(' ', trim($u['name']));
+                        $initials = '';
+                        foreach ($words as $w) {
+                            if (!empty($w)) $initials .= strtoupper($w[0]);
+                            if (strlen($initials) >= 2) break;
+                        }
+                        if ($initials === '') $initials = 'ST';
+                        $isCurrent = ($u['id'] == ($_SESSION['user']['id'] ?? 0));
+                    ?>
+                        <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
+                            <td style="padding: 14px 18px; vertical-align: middle; font-weight: 700; color: #94a3b8; font-size: 0.85rem;">
+                                #<?php echo $u['id']; ?>
                             </td>
-                            <td>
-                                <span class="badge" style="background: <?php echo $u['role'] === 'admin' ? '#eff6ff' : '#ecfdf5'; ?>; color: <?php echo $u['role'] === 'admin' ? '#1d4ed8' : '#047857'; ?>; font-weight: 700;">
-                                    <?php echo strtoupper(htmlspecialchars($u['role'])); ?>
-                                </span>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 38px; height: 38px; border-radius: 10px; background: <?php echo $u['role'] === 'admin' ? 'linear-gradient(135deg, #1e3a8a, #3b82f6)' : 'linear-gradient(135deg, #065f46, #10b981)'; ?>; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                                        <?php echo htmlspecialchars($initials); ?>
+                                    </div>
+                                    <div>
+                                        <strong style="color: #0f172a; font-size: 0.94rem; display: block; line-height: 1.2;">
+                                            <?php echo htmlspecialchars($u['name']); ?>
+                                        </strong>
+                                        <span style="font-size: 0.78rem; color: #64748b; font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 3px;">
+                                            @<?php echo htmlspecialchars($u['username']); ?>
+                                        </span>
+                                    </div>
+                                </div>
                             </td>
-                            <td style="font-size: 0.85rem;">
-                                <div><?php echo htmlspecialchars($u['mobile'] ?: 'N/A'); ?></div>
-                                <div style="color: #64748b;"><?php echo htmlspecialchars($u['email'] ?: 'N/A'); ?></div>
-                            </td>
-                            <td>
-                                <?php if ($u['is_active'] == 1): ?>
-                                    <span class="badge badge-success">Active</span>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <?php if ($u['role'] === 'admin'): ?>
+                                    <span class="badge" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px;">
+                                        🛡️ Administrator
+                                    </span>
                                 <?php else: ?>
-                                    <span class="badge badge-danger">Disabled</span>
+                                    <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px;">
+                                        👔 Coordinator
+                                    </span>
                                 <?php endif; ?>
                             </td>
-                            <td style="font-size: 0.82rem; color: #64748b; white-space: nowrap;">
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <?php if (!empty($u['mobile']) && $u['mobile'] !== 'N/A'): ?>
+                                    <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">
+                                        <a href="tel:<?php echo htmlspecialchars($u['mobile']); ?>" style="color: #2563eb; text-decoration: none;">
+                                            📞 <?php echo htmlspecialchars($u['mobile']); ?>
+                                        </a>
+                                    </div>
+                                <?php else: ?>
+                                    <div style="color: #94a3b8; font-size: 0.82rem;">No Phone</div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($u['email']) && $u['email'] !== 'N/A'): ?>
+                                    <div style="color: #64748b; font-size: 0.8rem; margin-top: 2px;">
+                                        ✉️ <?php echo htmlspecialchars($u['email']); ?>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <?php if ($u['is_active'] == 1): ?>
+                                    <span class="badge" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; display: inline-flex; align-items: center; gap: 5px;">
+                                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span> Active
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge" style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; display: inline-flex; align-items: center; gap: 5px;">
+                                        <span style="width: 6px; height: 6px; border-radius: 50%; background: #ef4444;"></span> Disabled
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="padding: 14px 18px; vertical-align: middle; font-size: 0.82rem; color: #64748b; white-space: nowrap;">
                                 <?php echo date('d M Y', strtotime($u['created_at'])); ?>
                             </td>
-                            <td style="text-align: right;">
-                                <?php if ($u['id'] != ($_SESSION['user']['id'] ?? 0)): ?>
-                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Delete this staff account?');">
+                            <td style="padding: 14px 18px; vertical-align: middle; text-align: right; white-space: nowrap;">
+                                <?php if (!$isCurrent): ?>
+                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Permanently delete staff account @<?php echo htmlspecialchars(addslashes($u['username'])); ?>?');">
                                         <input type="hidden" name="action" value="delete_user">
                                         <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
-                                        <button type="submit" class="btn" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;">
-                                            Delete
+                                        <button type="submit" class="btn" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Delete Staff Account">
+                                            🗑️ Delete
                                         </button>
                                     </form>
                                 <?php else: ?>
-                                    <span style="font-size: 0.8rem; color: #64748b; font-style: italic;">Current User</span>
+                                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                        👤 Current User
+                                    </span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -167,50 +228,71 @@ require_once __DIR__ . '/includes/admin_header.php';
     </div>
 
     <!-- Create Staff Card -->
-    <div class="card" id="add-user-card">
-        <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Create Staff / Coordinator Account</h3>
-        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem;">Add administrators or regional coordinators who can view school registrations and manage papers.</p>
+    <div class="card" id="add-user-card" style="padding: 2rem; border-top: 4px solid #2563eb; border-radius: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); background: #ffffff;">
+        <div style="margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #2563eb; flex-shrink: 0;">
+                ➕
+            </div>
+            <div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Create Staff / Coordinator Account</h3>
+                <p style="font-size: 0.88rem; color: #64748b; margin-top: 3px; margin-bottom: 0;">
+                    Add system administrators or regional district coordinators who can view school registrations and manage papers.
+                </p>
+            </div>
+        </div>
 
         <form method="POST" action="coordinators.php">
             <input type="hidden" name="action" value="create_user">
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                <div class="form-group">
-                    <label class="form-label" for="name">Full Name <span style="color: #ef4444;">*</span></label>
-                    <input type="text" id="name" name="name" class="form-input" placeholder="e.g. R. Suresh Kumar" required>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="name" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.4rem; display: block;">
+                        Full Name <span style="color: #ef4444;">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="e.g. R. Suresh Kumar" style="height: 42px; border-radius: 8px; font-size: 0.9rem;" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="username">Username <span style="color: #ef4444;">*</span></label>
-                    <input type="text" id="username" name="username" class="form-input" placeholder="e.g. suresh_coord" required>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="username" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.4rem; display: block;">
+                        Username <span style="color: #ef4444;">*</span>
+                    </label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="e.g. suresh_coord" style="height: 42px; border-radius: 8px; font-size: 0.9rem;" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="password">Password <span style="color: #ef4444;">*</span></label>
-                    <input type="password" id="password" name="password" class="form-input" placeholder="Minimum 6 characters" minlength="6" required>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="password" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.4rem; display: block;">
+                        Password <span style="color: #ef4444;">*</span>
+                    </label>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Minimum 6 characters" minlength="6" style="height: 42px; border-radius: 8px; font-size: 0.9rem;" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="role">System Role <span style="color: #ef4444;">*</span></label>
-                    <select id="role" name="role" class="form-select" required>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="role" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.4rem; display: block;">
+                        System Role <span style="color: #ef4444;">*</span>
+                    </label>
+                    <select id="role" name="role" class="form-select" style="height: 42px; border-radius: 8px; font-size: 0.9rem;" required>
                         <option value="coordinator">Coordinator (View registrations, papers)</option>
                         <option value="admin">Administrator (Full Access)</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="e.g. suresh@example.com">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="email" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.4rem; display: block;">
+                        Email Address
+                    </label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="e.g. suresh@example.com" style="height: 42px; border-radius: 8px; font-size: 0.9rem;">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="mobile">Phone Number</label>
-                    <input type="tel" id="mobile" name="mobile" class="form-input" placeholder="e.g. 9876543210" pattern="[0-9]{10}">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="mobile" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.4rem; display: block;">
+                        Phone Number
+                    </label>
+                    <input type="tel" id="mobile" name="mobile" class="form-input" placeholder="e.g. 9876543210 (10 digits)" pattern="[0-9]{10}" style="height: 42px; border-radius: 8px; font-size: 0.9rem;">
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; margin-top: 0.5rem;">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+            <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 2rem; font-weight: 700; font-size: 0.95rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                 Create Staff Account
             </button>
         </form>
