@@ -325,32 +325,38 @@ require_once __DIR__ . '/includes/admin_header.php';
 ?>
 
 <style>
+.sm-nav-tab-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 6px;
+    display: inline-flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
 .hierarchy-tab {
-    padding: 10px 20px;
-    font-size: 0.92rem;
+    padding: 8px 18px;
+    font-size: 0.88rem;
     font-weight: 700;
-    border-radius: 10px;
+    border-radius: 8px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.2s ease;
-    border: 1.5px solid transparent;
+    transition: all 0.15s ease;
+    color: #475569;
+    border: 1px solid transparent;
+}
+.hierarchy-tab:hover {
+    background: #f1f5f9;
+    color: #0f172a;
 }
 .hierarchy-tab.active {
     background: #2563eb;
     color: #ffffff;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
-}
-.hierarchy-tab:not(.active) {
-    background: #ffffff;
-    color: #475569;
-    border-color: #e2e8f0;
-}
-.hierarchy-tab:not(.active):hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    color: #0f172a;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
 }
 .sm-metric-card {
     background: #ffffff;
@@ -419,6 +425,144 @@ require_once __DIR__ . '/includes/admin_header.php';
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
 }
+
+/* Stat & Count Pills with guaranteed no-wrap */
+.sm-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    white-space: nowrap;
+    padding: 4px 11px;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+}
+.sm-pill-blue {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+.sm-pill-green {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+.sm-pill-purple {
+    background: #faf5ff;
+    color: #7e22ce;
+    border: 1px solid #e9d5ff;
+}
+.sm-pill-pink {
+    background: #fdf2f8;
+    color: #be185d;
+    border: 1px solid #fbcfe8;
+}
+.sm-pill-gray {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Unified Action Buttons */
+.sm-actions-flex {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    white-space: nowrap;
+}
+.sm-actions-flex form {
+    margin: 0;
+    display: inline-flex;
+}
+.sm-btn-primary {
+    height: 32px;
+    padding: 0 12px;
+    background: #2563eb;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(37,99,235,0.2);
+    transition: all 0.15s ease;
+}
+.sm-btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+.sm-btn-success {
+    height: 32px;
+    padding: 0 12px;
+    background: #059669;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(5,150,105,0.2);
+    transition: all 0.15s ease;
+}
+.sm-btn-success:hover {
+    background: #047857;
+    transform: translateY(-1px);
+}
+.sm-btn-outline {
+    height: 32px;
+    padding: 0 10px;
+    background: #ffffff;
+    color: #334155;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.sm-btn-outline:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+.sm-btn-danger {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+    background: #ffffff;
+    color: #e11d48;
+    border: 1.5px solid #fecdd3;
+    border-radius: 7px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.sm-btn-danger:hover {
+    background: #fff1f2;
+    border-color: #e11d48;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -464,6 +608,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     color: #64748b;
     font-weight: 700;
     letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 .data-table-row {
     border-bottom: 1px solid #f1f5f9;
@@ -473,7 +618,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     background: #f8fafc;
 }
 .data-table-row td {
-    padding: 1rem 1.25rem;
+    padding: 0.85rem 1.25rem;
     vertical-align: middle;
 }
 </style>
@@ -598,7 +743,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 </div>
 
 <!-- 3-TIER HIERARCHY NAVIGATION TABS -->
-<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;">
+<div class="sm-nav-tab-container">
     <a href="schools_master.php?view=districts" class="hierarchy-tab <?php echo $view === 'districts' ? 'active' : ''; ?>">
         <span>🏛️</span>
         <span>1. Districts (<?php echo $totalDistrictsCount; ?>)</span>
@@ -647,8 +792,15 @@ require_once __DIR__ . '/includes/admin_header.php';
             <?php endif; ?>
         </form>
 
-        <div style="font-size: 0.88rem; color: #64748b; font-weight: 600;">
-            Showing <strong><?php echo count($districtsData); ?></strong> Revenue Districts
+        <div style="display: flex; align-items: center; gap: 12px; margin-left: auto;">
+            <div style="font-size: 0.88rem; color: #64748b; font-weight: 600;">
+                Showing <strong><?php echo count($districtsData); ?></strong> Revenue Districts
+            </div>
+            <button type="button" onclick="openAddDistrictModal()" 
+                    class="btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.15rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                + Add District
+            </button>
         </div>
     </div>
 
@@ -662,12 +814,12 @@ require_once __DIR__ . '/includes/admin_header.php';
             <table style="width: 100%; border-collapse: collapse; text-align: left; margin: 0;">
                 <thead class="data-table-head">
                     <tr>
-                        <th style="width: 60px;">#</th>
+                        <th style="width: 50px; text-align: center;">#</th>
                         <th>District Name</th>
-                        <th style="text-align: center;">Total Mandals</th>
-                        <th style="text-align: center;">Total Schools</th>
-                        <th style="text-align: center;">Enrolled in EEMT</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th style="width: 150px; text-align: center;">Total Mandals</th>
+                        <th style="width: 150px; text-align: center;">Total Schools</th>
+                        <th style="width: 160px; text-align: center;">Enrolled in EEMT</th>
+                        <th style="width: 250px; text-align: right;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -681,47 +833,47 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <?php else: ?>
                         <?php $idx = 1; foreach ($districtsData as $d): ?>
                             <tr class="data-table-row">
-                                <td style="color: #94a3b8; font-family: monospace; font-size: 0.82rem;"><?php echo $idx++; ?></td>
+                                <td style="text-align: center; color: #94a3b8; font-family: monospace; font-size: 0.82rem;"><?php echo $idx++; ?></td>
                                 <td>
                                     <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">
                                         <?php echo htmlspecialchars($d['district']); ?>
                                     </div>
                                 </td>
                                 <td style="text-align: center;">
-                                    <span style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+                                    <span class="sm-pill sm-pill-green">
                                         🗺️ <?php echo number_format($d['total_mandals']); ?> Mandals
                                     </span>
                                 </td>
                                 <td style="text-align: center;">
-                                    <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+                                    <span class="sm-pill sm-pill-blue">
                                         🏫 <?php echo number_format($d['total_schools']); ?> Schools
                                     </span>
                                 </td>
                                 <td style="text-align: center;">
                                     <?php if ((int)$d['registered_schools'] > 0): ?>
-                                        <span style="background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+                                        <span class="sm-pill sm-pill-purple">
                                             🎓 <?php echo $d['registered_schools']; ?> Enrolled
                                         </span>
                                     <?php else: ?>
-                                        <span style="color: #94a3b8; font-size: 0.82rem;">0</span>
+                                        <span class="sm-pill-gray">0</span>
                                     <?php endif; ?>
                                 </td>
-                                <td style="text-align: right; white-space: nowrap;">
-                                    <a href="schools_master.php?view=mandals&district=<?php echo urlencode($d['district']); ?>" 
-                                       style="height: 32px; padding: 0 12px; background: #2563eb; color: #ffffff; border-radius: 7px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                        🔍 View Mandals &rarr;
-                                    </a>
-                                    <button type="button" onclick="openEditDistrictModal('<?php echo htmlspecialchars(addslashes($d['district'])); ?>')"
-                                            style="height: 32px; padding: 0 10px; background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-left: 4px;">
-                                        ✏️ Rename
-                                    </button>
-                                    <form method="POST" action="schools_master.php" style="display: inline-block; margin-left: 4px;" onsubmit="return confirm('WARNING: Are you sure you want to delete district <?php echo htmlspecialchars(addslashes($d['district'])); ?> and its schools?');">
-                                        <input type="hidden" name="action" value="delete_district">
-                                        <input type="hidden" name="district" value="<?php echo htmlspecialchars($d['district']); ?>">
-                                        <button type="submit" style="height: 32px; padding: 0 9px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-                                            🗑️
+                                <td style="text-align: right;">
+                                    <div class="sm-actions-flex">
+                                        <a href="schools_master.php?view=mandals&district=<?php echo urlencode($d['district']); ?>" class="sm-btn-primary">
+                                            🔍 View Mandals &rarr;
+                                        </a>
+                                        <button type="button" onclick="openEditDistrictModal('<?php echo htmlspecialchars(addslashes($d['district'])); ?>')" class="sm-btn-outline">
+                                            ✏️ Rename
                                         </button>
-                                    </form>
+                                        <form method="POST" action="schools_master.php" onsubmit="return confirm('WARNING: Are you sure you want to delete district <?php echo htmlspecialchars(addslashes($d['district'])); ?> and its schools?');">
+                                            <input type="hidden" name="action" value="delete_district">
+                                            <input type="hidden" name="district" value="<?php echo htmlspecialchars($d['district']); ?>">
+                                            <button type="submit" class="sm-btn-danger" title="Delete District">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -746,6 +898,20 @@ require_once __DIR__ . '/includes/admin_header.php';
     }
     $whereMSql = !empty($whereM) ? "WHERE " . implode(' AND ', $whereM) : "WHERE mandal != ''";
 
+    // Count distinct mandals for pagination
+    $mCountStmt = $pdo->query("SELECT COUNT(*) FROM (SELECT mandal FROM schools_master {$whereMSql} GROUP BY district, mandal) as t");
+    $totalMandalsFiltered = (int)$mCountStmt->fetchColumn();
+
+    $mPerPageReq = $_GET['m_per_page'] ?? '50';
+    if ($mPerPageReq === 'all') {
+        $mPerPage = 10000;
+    } else {
+        $mPerPage = in_array((int)$mPerPageReq, [25, 50, 100, 250], true) ? (int)$mPerPageReq : 50;
+    }
+    $mTotalPages = max(1, (int)ceil($totalMandalsFiltered / $mPerPage));
+    $mPage = max(1, min($mTotalPages, (int)($_GET['m_page'] ?? 1)));
+    $mOffset = ($mPage - 1) * $mPerPage;
+
     $mSql = "
         SELECT 
             mandal,
@@ -756,6 +922,7 @@ require_once __DIR__ . '/includes/admin_header.php';
         {$whereMSql}
         GROUP BY district, mandal 
         ORDER BY district ASC, mandal ASC
+        LIMIT {$mPerPage} OFFSET {$mOffset}
     ";
     $mandalsData = $pdo->query($mSql)->fetchAll(PDO::FETCH_ASSOC);
     ?>
@@ -776,20 +943,27 @@ require_once __DIR__ . '/includes/admin_header.php';
                 </select>
             </div>
 
-            <div style="flex: 1; min-width: 220px;">
+            <div style="flex: 1; min-width: 200px;">
                 <input type="text" name="search" class="sm-input" placeholder="Search Mandal by name..." value="<?php echo htmlspecialchars($mandalSearch); ?>">
             </div>
 
-            <button type="submit" class="btn" style="background: #2563eb; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer;">
+            <button type="submit" class="btn" style="background: #2563eb; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
                 Filter
             </button>
 
             <?php if ($selectedDistrict || $mandalSearch): ?>
-                <a href="schools_master.php?view=mandals" class="btn" style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center;">Reset</a>
+                <a href="schools_master.php?view=mandals" class="btn" style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;">Reset</a>
             <?php endif; ?>
 
-            <a href="schools_master.php?view=districts" class="btn" style="background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; margin-left: auto;">
-                &larr; Back to Districts
+            <button type="button" onclick="openAddMandalModal('<?php echo htmlspecialchars(addslashes($selectedDistrict)); ?>')" 
+                    class="btn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.15rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                + Add Mandal
+            </button>
+
+            <a href="schools_master.php?view=districts" class="btn" style="background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; margin-left: auto;">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to Districts
             </a>
         </form>
     </div>
@@ -797,26 +971,31 @@ require_once __DIR__ . '/includes/admin_header.php';
     <!-- Mandals Table -->
     <div class="data-table-wrapper">
         <div style="padding: 1.15rem 1.5rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span style="font-weight: 800; color: #0f172a; font-size: 1.05rem;">
                     <?php echo $selectedDistrict ? "Mandals in " . htmlspecialchars($selectedDistrict) : "Statewide Mandals"; ?>
                 </span>
-                <span style="background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; font-size: 0.78rem; font-weight: 700; padding: 2px 10px; border-radius: 9999px; margin-left: 8px;">
-                    <?php echo count($mandalsData); ?> Mandals
+                <span class="sm-pill sm-pill-green">
+                    <?php echo number_format($totalMandalsFiltered); ?> Mandals
                 </span>
             </div>
-            <span style="font-size: 0.82rem; color: #64748b;">Click <strong>"View Schools"</strong> to see all schools in a mandal</span>
+            <div style="display: flex; align-items: center; gap: 1rem; font-size: 0.82rem; color: #64748b;">
+                <?php if ($totalMandalsFiltered > $mPerPage && $mPerPage < 10000): ?>
+                    <span>Showing <?php echo number_format($mOffset + 1); ?> - <?php echo number_format(min($mOffset + $mPerPage, $totalMandalsFiltered)); ?></span>
+                <?php endif; ?>
+                <span>Click <strong>"View Schools"</strong> to see all schools in a mandal</span>
+            </div>
         </div>
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; text-align: left; margin: 0;">
                 <thead class="data-table-head">
                     <tr>
-                        <th style="width: 60px;">#</th>
+                        <th style="width: 50px; text-align: center;">#</th>
                         <th>Mandal Name</th>
-                        <th>District</th>
-                        <th style="text-align: center;">Total Schools</th>
-                        <th style="text-align: center;">Enrolled in EEMT</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th style="width: 180px;">District</th>
+                        <th style="width: 150px; text-align: center;">Total Schools</th>
+                        <th style="width: 160px; text-align: center;">Enrolled in EEMT</th>
+                        <th style="width: 250px; text-align: right;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -828,50 +1007,50 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </td>
                         </tr>
                     <?php else: ?>
-                        <?php $idx = 1; foreach ($mandalsData as $m): ?>
+                        <?php $idx = $mOffset + 1; foreach ($mandalsData as $m): ?>
                             <tr class="data-table-row">
-                                <td style="color: #94a3b8; font-family: monospace; font-size: 0.82rem;"><?php echo $idx++; ?></td>
+                                <td style="text-align: center; color: #94a3b8; font-family: monospace; font-size: 0.82rem;"><?php echo $idx++; ?></td>
                                 <td>
                                     <div style="font-weight: 800; color: #0f172a; font-size: 0.95rem;">
                                         <?php echo htmlspecialchars($m['mandal']); ?>
                                     </div>
                                 </td>
                                 <td>
-                                    <span style="background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8; font-size: 0.78rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                                    <span class="sm-pill sm-pill-pink">
                                         <?php echo htmlspecialchars($m['district']); ?>
                                     </span>
                                 </td>
                                 <td style="text-align: center;">
-                                    <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+                                    <span class="sm-pill sm-pill-blue">
                                         🏫 <?php echo number_format($m['total_schools']); ?> Schools
                                     </span>
                                 </td>
                                 <td style="text-align: center;">
                                     <?php if ((int)$m['registered_schools'] > 0): ?>
-                                        <span style="background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+                                        <span class="sm-pill sm-pill-purple">
                                             🎓 <?php echo $m['registered_schools']; ?> Enrolled
                                         </span>
                                     <?php else: ?>
-                                        <span style="color: #94a3b8; font-size: 0.82rem;">0</span>
+                                        <span class="sm-pill-gray">0</span>
                                     <?php endif; ?>
                                 </td>
-                                <td style="text-align: right; white-space: nowrap;">
-                                    <a href="schools_master.php?view=schools&district=<?php echo urlencode($m['district']); ?>&mandal=<?php echo urlencode($m['mandal']); ?>" 
-                                       style="height: 32px; padding: 0 12px; background: #059669; color: #ffffff; border-radius: 7px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                        🏫 View Schools &rarr;
-                                    </a>
-                                    <button type="button" onclick="openEditMandalModal('<?php echo htmlspecialchars(addslashes($m['district'])); ?>', '<?php echo htmlspecialchars(addslashes($m['mandal'])); ?>')"
-                                            style="height: 32px; padding: 0 10px; background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer; margin-left: 4px;">
-                                        ✏️ Rename
-                                    </button>
-                                    <form method="POST" action="schools_master.php" style="display: inline-block; margin-left: 4px;" onsubmit="return confirm('WARNING: Are you sure you want to delete mandal <?php echo htmlspecialchars(addslashes($m['mandal'])); ?> from <?php echo htmlspecialchars(addslashes($m['district'])); ?>?');">
-                                        <input type="hidden" name="action" value="delete_mandal">
-                                        <input type="hidden" name="district" value="<?php echo htmlspecialchars($m['district']); ?>">
-                                        <input type="hidden" name="mandal" value="<?php echo htmlspecialchars($m['mandal']); ?>">
-                                        <button type="submit" style="height: 32px; padding: 0 9px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-                                            🗑️
+                                <td style="text-align: right;">
+                                    <div class="sm-actions-flex">
+                                        <a href="schools_master.php?view=schools&district=<?php echo urlencode($m['district']); ?>&mandal=<?php echo urlencode($m['mandal']); ?>" class="sm-btn-success">
+                                            🏫 View Schools &rarr;
+                                        </a>
+                                        <button type="button" onclick="openEditMandalModal('<?php echo htmlspecialchars(addslashes($m['district'])); ?>', '<?php echo htmlspecialchars(addslashes($m['mandal'])); ?>')" class="sm-btn-outline">
+                                            ✏️ Rename
                                         </button>
-                                    </form>
+                                        <form method="POST" action="schools_master.php" onsubmit="return confirm('WARNING: Are you sure you want to delete mandal <?php echo htmlspecialchars(addslashes($m['mandal'])); ?> from <?php echo htmlspecialchars(addslashes($m['district'])); ?>?');">
+                                            <input type="hidden" name="action" value="delete_mandal">
+                                            <input type="hidden" name="district" value="<?php echo htmlspecialchars($m['district']); ?>">
+                                            <input type="hidden" name="mandal" value="<?php echo htmlspecialchars($m['mandal']); ?>">
+                                            <button type="submit" class="sm-btn-danger" title="Delete Mandal">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -879,6 +1058,40 @@ require_once __DIR__ . '/includes/admin_header.php';
                 </tbody>
             </table>
         </div>
+
+        <!-- Mandals Pagination Footer -->
+        <?php if ($mTotalPages > 1 || $totalMandalsFiltered > 25): ?>
+            <div style="padding: 1rem 1.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #64748b;">
+                    <span>Rows per page:</span>
+                    <select onchange="location.href='schools_master.php?view=mandals&district=<?php echo urlencode($selectedDistrict); ?>&search=<?php echo urlencode($mandalSearch); ?>&m_per_page=' + this.value;" style="height: 32px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 8px; background: white; font-size: 0.85rem;">
+                        <?php foreach ([25, 50, 100, 250] as $opt): ?>
+                            <option value="<?php echo $opt; ?>" <?php echo $mPerPage === $opt ? 'selected' : ''; ?>><?php echo $opt; ?></option>
+                        <?php endforeach; ?>
+                        <option value="all" <?php echo $mPerPage === 10000 ? 'selected' : ''; ?>>All (<?php echo $totalMandalsFiltered; ?>)</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 4px; align-items: center;">
+                    <?php $mbQ = "schools_master.php?view=mandals&district=" . urlencode($selectedDistrict) . "&search=" . urlencode($mandalSearch) . "&m_per_page=" . ($mPerPage === 10000 ? 'all' : $mPerPage) . "&m_page="; ?>
+                    <?php if ($mPage > 1): ?>
+                        <a href="<?php echo $mbQ . '1'; ?>" style="height: 32px; min-width: 32px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #334155; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">&laquo;</a>
+                        <a href="<?php echo $mbQ . ($mPage - 1); ?>" style="height: 32px; min-width: 32px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #334155; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">&lsaquo;</a>
+                    <?php endif; ?>
+
+                    <?php for ($p = max(1, $mPage - 2); $p <= min($mTotalPages, $mPage + 2); $p++): ?>
+                        <a href="<?php echo $mbQ . $p; ?>" style="height: 32px; min-width: 32px; padding: 0 10px; border: 1px solid <?php echo $p === $mPage ? '#2563eb' : '#cbd5e1'; ?>; border-radius: 6px; background: <?php echo $p === $mPage ? '#2563eb' : '#ffffff'; ?>; color: <?php echo $p === $mPage ? '#ffffff' : '#334155'; ?>; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                            <?php echo $p; ?>
+                        </a>
+                    <?php endfor; ?>
+
+                    <?php if ($mPage < $mTotalPages): ?>
+                        <a href="<?php echo $mbQ . ($mPage + 1); ?>" style="height: 32px; min-width: 32px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #334155; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">&rsaquo;</a>
+                        <a href="<?php echo $mbQ . $mTotalPages; ?>" style="height: 32px; min-width: 32px; padding: 0 8px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #334155; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">&raquo;</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 
 <!-- ============================================================== -->
@@ -980,13 +1193,18 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <input type="text" name="search" class="sm-input" placeholder="e.g. 28142500311..." value="<?php echo htmlspecialchars($search); ?>">
                 </div>
 
-                <div style="display: flex; gap: 8px;">
-                    <button type="submit" class="btn" style="height: 42px; background: #2563eb; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; flex: 1;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="submit" class="btn" style="height: 42px; background: #2563eb; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
                         Filter
                     </button>
                     <?php if ($selectedDistrict || $selectedMandal || $statusFilter || $search): ?>
-                        <a href="schools_master.php?view=schools" class="btn" style="height: 42px; background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center;">Reset</a>
+                        <a href="schools_master.php?view=schools" class="btn" style="height: 42px; background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;">Reset</a>
                     <?php endif; ?>
+                    <button type="button" onclick="openAddSchoolModal('<?php echo htmlspecialchars(addslashes($selectedDistrict)); ?>', '<?php echo htmlspecialchars(addslashes($selectedMandal)); ?>')" 
+                            class="btn" style="height: 42px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.15rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        + Add School
+                    </button>
                 </div>
 
             </div>
@@ -1000,7 +1218,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <span style="font-weight: 800; color: #0f172a; font-size: 1.05rem;">
                     Schools Master Directory
                 </span>
-                <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.78rem; font-weight: 700; padding: 2px 10px; border-radius: 9999px; margin-left: 8px;">
+                <span class="sm-pill sm-pill-blue" style="margin-left: 8px;">
                     <?php echo number_format($totalFiltered); ?> Schools Found
                 </span>
             </div>
@@ -1014,13 +1232,13 @@ require_once __DIR__ . '/includes/admin_header.php';
             <table style="width: 100%; border-collapse: collapse; text-align: left; margin: 0;">
                 <thead class="data-table-head">
                     <tr>
-                        <th style="width: 60px;">ID</th>
-                        <th>UDISE / Unique Code</th>
+                        <th style="width: 50px; text-align: center;">ID</th>
+                        <th style="width: 170px;">UDISE / Unique Code</th>
                         <th>School Name</th>
-                        <th>District</th>
-                        <th>Mandal</th>
-                        <th style="text-align: center;">Status</th>
-                        <th style="text-align: right;">Actions</th>
+                        <th style="width: 170px;">District</th>
+                        <th style="width: 170px;">Mandal</th>
+                        <th style="width: 130px; text-align: center;">Status</th>
+                        <th style="width: 150px; text-align: right;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1034,9 +1252,9 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <?php else: ?>
                         <?php foreach ($schoolsData as $s): ?>
                             <tr class="data-table-row">
-                                <td style="color: #94a3b8; font-family: monospace; font-size: 0.82rem;">#<?php echo $s['id']; ?></td>
+                                <td style="text-align: center; color: #94a3b8; font-family: monospace; font-size: 0.82rem;">#<?php echo $s['id']; ?></td>
                                 <td>
-                                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 8px;">
+                                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 8px; white-space: nowrap;">
                                         <code style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.85rem; font-weight: 700; color: #1e40af;">
                                             <?php echo htmlspecialchars($s['unique_code']); ?>
                                         </code>
@@ -1052,7 +1270,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 </td>
                                 <td>
                                     <a href="schools_master.php?view=mandals&district=<?php echo urlencode($s['district']); ?>" style="text-decoration: none;">
-                                        <span style="background: #fdf2f8; color: #be185d; border: 1px solid #fbcfe8; font-size: 0.78rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">
+                                        <span class="sm-pill sm-pill-pink">
                                             <?php echo htmlspecialchars($s['district']); ?>
                                         </span>
                                     </a>
@@ -1064,27 +1282,28 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 </td>
                                 <td style="text-align: center;">
                                     <?php if ((int)$s['is_registered'] === 1): ?>
-                                        <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 700; padding: 3px 9px; border-radius: 9999px;">
+                                        <span class="sm-pill sm-pill-green">
                                             🟢 Enrolled
                                         </span>
                                     <?php else: ?>
-                                        <span style="background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; font-size: 0.76rem; font-weight: 600; padding: 3px 9px; border-radius: 9999px;">
+                                        <span class="sm-pill" style="background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0;">
                                             Available
                                         </span>
                                     <?php endif; ?>
                                 </td>
-                                <td style="text-align: right; white-space: nowrap;">
-                                    <button type="button" onclick='openEditSchoolModal(<?php echo json_encode($s, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' 
-                                            style="height: 32px; padding: 0 10px; background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-                                        ✏️ Edit
-                                    </button>
-                                    <form method="POST" action="schools_master.php" style="display: inline-block; margin-left: 4px;" onsubmit="return confirm('Are you sure you want to delete school <?php echo htmlspecialchars(addslashes($s['school_name'])); ?>?');">
-                                        <input type="hidden" name="action" value="delete_school">
-                                        <input type="hidden" name="school_id" value="<?php echo $s['id']; ?>">
-                                        <button type="submit" style="height: 32px; padding: 0 9px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; border-radius: 7px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-                                            🗑️
+                                <td style="text-align: right;">
+                                    <div class="sm-actions-flex">
+                                        <button type="button" onclick='openEditSchoolModal(<?php echo json_encode($s, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' class="sm-btn-outline">
+                                            ✏️ Edit
                                         </button>
-                                    </form>
+                                        <form method="POST" action="schools_master.php" onsubmit="return confirm('Are you sure you want to delete school <?php echo htmlspecialchars(addslashes($s['school_name'])); ?>?');">
+                                            <input type="hidden" name="action" value="delete_school">
+                                            <input type="hidden" name="school_id" value="<?php echo $s['id']; ?>">
+                                            <button type="submit" class="sm-btn-danger" title="Delete School">
+                                                🗑️
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
