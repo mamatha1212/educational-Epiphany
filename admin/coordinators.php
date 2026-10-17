@@ -370,89 +370,182 @@ require_once __DIR__ . '/includes/admin_header.php';
 </div>
 
 <!-- Edit User Modal -->
-<div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem;">
-    <div style="background: #ffffff; border-radius: 16px; max-width: 580px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); border: 1px solid #e2e8f0; overflow: hidden;">
+<style>
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+.modal-field-input {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    font-size: 0.92rem;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+.modal-field-input:focus {
+    background: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+.modal-field-select {
+    width: 100%;
+    height: 44px;
+    padding: 0 40px 0 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    background-color: #f8fafc;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 0.92rem;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.modal-field-select:focus {
+    background-color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+.modal-field-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.4rem;
+}
+</style>
+
+<div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem;">
+    <div style="background: #ffffff; border-radius: 20px; max-width: 680px; width: 100%; box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(226, 232, 240, 0.8); overflow: hidden; animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1); position: relative;">
+        <!-- Top Accent Gradient Line -->
+        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6);"></div>
+
         <!-- Modal Header -->
-        <div style="padding: 1.25rem 1.75rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.35rem;">✏️</span>
+        <div style="padding: 1.35rem 2rem; background: linear-gradient(to right, #f8fafc, #ffffff); border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </div>
                 <div>
-                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Edit Staff Account</h3>
-                    <span id="modalUserSubtitle" style="font-size: 0.8rem; color: #64748b;">Update account details and permissions</span>
+                    <h3 style="font-size: 1.22rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.02em;">Edit Staff Account</h3>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                        <span id="modalUsernameBadge" style="display: inline-flex; align-items: center; gap: 4px; background: #e0e7ff; color: #3730a3; font-weight: 700; font-size: 0.76rem; padding: 2px 8px; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">@username</span>
+                        <span id="modalRoleBadge" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Coordinator</span>
+                    </div>
                 </div>
             </div>
-            <button type="button" onclick="closeEditModal()" style="background: none; border: none; font-size: 1.25rem; color: #64748b; cursor: pointer; padding: 4px 8px; border-radius: 6px;" title="Close">✕</button>
+            <button type="button" onclick="closeEditModal()" style="width: 36px; height: 36px; border-radius: 10px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#e2e8f0'; this.style.color='#0f172a'" onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b'" title="Close">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
 
         <!-- Modal Form -->
-        <form method="POST" action="coordinators.php" style="padding: 1.5rem 1.75rem;">
+        <form method="POST" action="coordinators.php" style="padding: 1.75rem 2rem 1.5rem 2rem;">
             <input type="hidden" name="action" value="edit_user">
             <input type="hidden" name="user_id" id="edit_user_id" value="">
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.15rem; margin-bottom: 1.25rem;">
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="edit_name" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 1.25rem;">
+                <!-- Full Name -->
+                <div>
+                    <label class="modal-field-label" for="edit_name">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         Full Name <span style="color: #ef4444;">*</span>
                     </label>
-                    <input type="text" id="edit_name" name="name" class="form-input" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                    <input type="text" id="edit_name" name="name" class="modal-field-input" placeholder="e.g. Hem Mohan" required>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="edit_username" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                <!-- Username -->
+                <div>
+                    <label class="modal-field-label" for="edit_username">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
                         Username <span style="color: #ef4444;">*</span>
                     </label>
-                    <input type="text" id="edit_username" name="username" class="form-input" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                    <input type="text" id="edit_username" name="username" class="modal-field-input" placeholder="e.g. hema" required>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="edit_password" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
-                        New Password <span style="font-size: 0.72rem; color: #64748b; font-weight: normal;">(Optional)</span>
+                <!-- New Password -->
+                <div>
+                    <label class="modal-field-label" for="edit_password">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        New Password <span style="font-size: 0.72rem; color: #64748b; font-weight: normal; text-transform: none;">(Optional)</span>
                     </label>
-                    <input type="password" id="edit_password" name="password" class="form-input" placeholder="Leave blank to keep unchanged" style="height: 40px; border-radius: 8px; font-size: 0.85rem;">
+                    <input type="password" id="edit_password" name="password" class="modal-field-input" placeholder="Leave empty to keep current">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="edit_role" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                <!-- System Role -->
+                <div>
+                    <label class="modal-field-label" for="edit_role">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         System Role <span style="color: #ef4444;">*</span>
                     </label>
-                    <select id="edit_role" name="role" class="form-select" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
-                        <option value="coordinator">Coordinator (View registrations, papers)</option>
-                        <option value="admin">Administrator (Full Access)</option>
+                    <select id="edit_role" name="role" class="modal-field-select" required>
+                        <option value="coordinator">Coordinator (Registrations & Papers)</option>
+                        <option value="admin">Administrator (Full System Control)</option>
                     </select>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="edit_mobile" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                <!-- Phone Number -->
+                <div>
+                    <label class="modal-field-label" for="edit_mobile">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         Phone Number
                     </label>
-                    <input type="tel" id="edit_mobile" name="mobile" class="form-input" placeholder="10-digit mobile" pattern="[0-9]{10}" style="height: 40px; border-radius: 8px; font-size: 0.9rem;">
+                    <input type="tel" id="edit_mobile" name="mobile" class="modal-field-input" placeholder="10-digit mobile" pattern="[0-9]{10}">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="edit_is_active" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                <!-- Account Status -->
+                <div>
+                    <label class="modal-field-label" for="edit_is_active">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         Account Status <span style="color: #ef4444;">*</span>
                     </label>
-                    <select id="edit_is_active" name="is_active" class="form-select" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
-                        <option value="1">Active (Can Login)</option>
-                        <option value="0">Disabled (Access Blocked)</option>
+                    <select id="edit_is_active" name="is_active" class="modal-field-select" required>
+                        <option value="1">🟢 Active (Access Enabled)</option>
+                        <option value="0">🔴 Suspended (Access Blocked)</option>
                     </select>
                 </div>
 
-                <div class="form-group" style="grid-column: span 2; margin-bottom: 0;">
-                    <label class="form-label" for="edit_email" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                <!-- Email Address (Full Width) -->
+                <div style="grid-column: span 2;">
+                    <label class="modal-field-label" for="edit_email">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         Email Address
                     </label>
-                    <input type="email" id="edit_email" name="email" class="form-input" placeholder="user@example.com" style="height: 40px; border-radius: 8px; font-size: 0.9rem;">
+                    <input type="email" id="edit_email" name="email" class="modal-field-input" placeholder="user@example.com">
                 </div>
             </div>
 
-            <!-- Modal Action Buttons -->
-            <div style="display: flex; justify-content: flex-end; gap: 10px; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-                <button type="button" onclick="closeEditModal()" class="btn" style="height: 40px; padding: 0 1.25rem; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-weight: 600; border-radius: 8px; cursor: pointer;">
+            <!-- Modal Action Buttons Footer -->
+            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding-top: 1.25rem; border-top: 1px solid #edf2f7; margin-top: 0.5rem;">
+                <button type="button" onclick="closeEditModal()" style="height: 44px; padding: 0 1.4rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1'">
                     Cancel
                 </button>
-                <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 1.5rem; background: #2563eb; color: #ffffff; border: none; font-weight: 700; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
-                    💾 Save Changes
+                <button type="submit" style="height: 44px; padding: 0 1.75rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    Save Changes
                 </button>
             </div>
         </form>
@@ -469,7 +562,9 @@ function openEditModal(user) {
     document.getElementById('edit_email').value = (user.email && user.email !== 'N/A') ? user.email : '';
     document.getElementById('edit_mobile').value = (user.mobile && user.mobile !== 'N/A') ? user.mobile : '';
     document.getElementById('edit_is_active').value = (user.is_active !== undefined) ? user.is_active : 1;
-    document.getElementById('modalUserSubtitle').textContent = 'Editing @' + user.username + ' (' + user.role + ')';
+    
+    document.getElementById('modalUsernameBadge').textContent = '@' + (user.username || '');
+    document.getElementById('modalRoleBadge').textContent = (user.role === 'admin' ? 'State Administrator' : 'Staff Coordinator');
     
     const modal = document.getElementById('editUserModal');
     modal.style.display = 'flex';
