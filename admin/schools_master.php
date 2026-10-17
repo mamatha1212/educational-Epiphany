@@ -1160,15 +1160,16 @@ require_once __DIR__ . '/includes/admin_header.php';
     ?>
 
     <!-- Schools Filter Toolbar -->
-    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.15rem 1.5rem; margin-bottom: 1.5rem;">
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
         <form method="GET" action="schools_master.php" id="schoolsFilterForm">
             <input type="hidden" name="view" value="schools">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; align-items: flex-end;">
+            <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
                 
-                <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District (28)</label>
+                <!-- District -->
+                <div style="flex: 1 1 180px; min-width: 170px;">
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 6px;">District</label>
                     <select name="district" class="sm-select" onchange="onSchoolsDistrictChange(this.value)">
-                        <option value="">All Districts</option>
+                        <option value="">All Districts (28)</option>
                         <?php foreach ($districtsList as $d): ?>
                             <option value="<?php echo htmlspecialchars($d); ?>" <?php echo $selectedDistrict === $d ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($d); ?>
@@ -1177,8 +1178,9 @@ require_once __DIR__ . '/includes/admin_header.php';
                     </select>
                 </div>
 
-                <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal (Search / Select)</label>
+                <!-- Mandal -->
+                <div style="flex: 1 1 190px; min-width: 180px;">
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Mandal</label>
                     <div id="mandalSelectWrapper">
                         <?php if (!empty($selectedDistrict)): ?>
                             <select id="schoolsMandalSelect" name="mandal" class="sm-select">
@@ -1195,23 +1197,27 @@ require_once __DIR__ . '/includes/admin_header.php';
                     </div>
                 </div>
 
-                <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Status</label>
+                <!-- Status -->
+                <div style="flex: 0 1 140px; min-width: 130px;">
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Status</label>
                     <select name="status" class="sm-select">
                         <option value="">All Status</option>
-                        <option value="registered" <?php echo $statusFilter === 'registered' ? 'selected' : ''; ?>>Registered</option>
+                        <option value="registered" <?php echo $statusFilter === 'registered' ? 'selected' : ''; ?>>Enrolled</option>
                         <option value="unregistered" <?php echo $statusFilter === 'unregistered' ? 'selected' : ''; ?>>Available</option>
                     </select>
                 </div>
 
-                <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Search School / Code / Mandal / District</label>
-                    <input type="text" name="search" class="sm-input" placeholder="e.g. 281425..., ZPHS, Chimakurthi..." value="<?php echo htmlspecialchars($search); ?>">
+                <!-- Search School / Code -->
+                <div style="flex: 2 1 240px; min-width: 220px;">
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Search School / Code</label>
+                    <input type="text" name="search" class="sm-input" placeholder="Search school name or 11-digit UDISE..." value="<?php echo htmlspecialchars($search); ?>">
                 </div>
 
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="submit" class="btn" style="height: 42px; background: #2563eb; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
-                        🔍 Filter Schools
+                <!-- Action Buttons -->
+                <div style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: nowrap; flex-shrink: 0;">
+                    <button type="submit" class="btn" style="height: 42px; background: #2563eb; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        Filter
                     </button>
                     <?php if ($selectedDistrict || $selectedMandal || $statusFilter || $search): ?>
                         <a href="schools_master.php?view=schools" class="btn" style="height: 42px; background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;">Reset</a>
