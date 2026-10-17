@@ -480,13 +480,6 @@ $totalSchoolsBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM school_registr
                     <span class="sidebar-badge"><?php echo $totalPapersBadge; ?></span>
                 </a>
 
-                <a href="export.php" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">📥</span>
-                        <span>Export Data (CSV)</span>
-                    </div>
-                </a>
-
                 <div class="nav-section-title" style="margin-top: 0.5rem;">Shortcuts & Views</div>
 
                 <a href="../staff/dashboard.php" class="sidebar-item">
