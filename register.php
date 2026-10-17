@@ -108,8 +108,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
                         $ip_address
                     ]);
 
-                    // Mark school as registered
-                    $pdo->prepare("UPDATE schools_master SET is_registered = 1 WHERE id = ?")->execute([$schoolRecord['id']]);
+                    // Mark school as registered (sync across unique_code aliases)
+                    $pdo->prepare("UPDATE schools_master SET is_registered = 1 WHERE unique_code = ? OR id = ?")->execute([$schoolRecord['unique_code'], $schoolRecord['id']]);
 
                     // Send Confirmation Email
                     sendRegistrationEmail($email, [
