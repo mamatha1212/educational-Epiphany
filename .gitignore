@@ -1,0 +1,23 @@
+# Environment & Local Overrides (Never commit secrets!)
+.env
+config/config.local.php
+
+# Backups & Logs
+*.bak
+*.log
+error_log
+database/*.bak
+
+# Uploads & Temporary files
+uploads/question_papers/*.pdf
+uploads/temp/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

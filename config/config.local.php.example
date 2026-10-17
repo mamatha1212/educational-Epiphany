@@ -1,0 +1,29 @@
+<?php
+/**
+ * EEMT 2027 - Shared Hosting / cPanel Quick Config Override
+ * 
+ * Instructions for Shared Hosting (cPanel / Hostinger / GoDaddy):
+ * 1. Copy this file to: config.local.php (in the same directory)
+ * 2. Update your MySQL database name, username, and password below.
+ * 3. Change 'DB_DRIVER' to 'mysql'.
+ */
+
+return [
+    'APP_ENV'      => 'production',
+    'APP_DEBUG'    => false,
+    
+    // Choose: 'mysql' (recommended for cPanel) or 'sqlite'
+    'DB_DRIVER'    => 'mysql',
+
+    // cPanel MySQL Credentials
+    'DB_HOST'      => 'localhost',
+    'DB_PORT'      => 3306,
+    'DB_DATABASE'  => 'cpaneluser_eemt2027',
+    'DB_USERNAME'  => 'cpaneluser_eemtadmin',
+    'DB_PASSWORD'  => 'your_strong_password_here',
+
+    // Email Settings
+    'MAIL_FROM_EMAIL' => 'no-reply@educationalepiphany.org',
+    'MAIL_FROM_NAME'  => 'EEMT 2027',
+    'MAIL_REPLY_TO'   => 'support@educationalepiphany.org',
+];

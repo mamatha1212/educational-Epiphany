@@ -1,0 +1,86 @@
+# =====================================================================
+# EEMT 2027 - Nginx Server Configuration (for Linux VPS)
+# Tested on: Ubuntu 22.04 / 24.04, Debian 12, AlmaLinux 9 / Rocky Linux
+# =====================================================================
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name eemt2027.educationalepiphany.org your-domain.com;
+
+    # Document Root (Update this to your actual VPS deployment folder)
+    root /var/www/eemt2027_app;
+    index index.php index.html;
+
+    # Character Set
+    charset utf-8;
+
+    # Maximum file upload size (for question papers PDF uploads)
+    client_max_body_size 50M;
+
+    # Access and Error Logs
+    access_log /var/log/nginx/eemt2027_access.log;
+    error_log  /var/log/nginx/eemt2027_error.log warn;
+
+    # Primary Location
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Pass PHP scripts to FastCGI server (PHP-FPM)
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        
+        # Adjust PHP-FPM socket path to match your installed PHP version:
+        # Ubuntu/Debian PHP 8.2: unix:/run/php/php8.2-fpm.sock
+        # Ubuntu/Debian PHP 8.3: unix:/run/php/php8.3-fpm.sock
+        # AlmaLinux/RHEL:        unix:/run/php-fpm/www.sock
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_read_timeout 300;
+    }
+
+    # =================================================================
+    # Security: Deny direct HTTP access to sensitive files
+    # =================================================================
+    
+    # Block access to SQLite databases, SQL dumps, and env files
+    location ~* \.(sqlite|sql|env|bak|log|md)$ {
+        deny all;
+        return 404;
+    }
+
+    # Block access to database and config directories
+    location ^~ /database/ {
+        deny all;
+        return 404;
+    }
+
+    location ^~ /config/ {
+        deny all;
+        return 404;
+    }
+
+    # Block hidden files (e.g. .git, .env)
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # Static Assets Caching & Compression
+    location ~* \.(css|js|jpg|jpeg|png|gif|ico|svg|webp|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+        access_log off;
+    }
+
+    # Gzip Compression
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
+}
