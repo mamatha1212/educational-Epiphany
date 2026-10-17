@@ -54,6 +54,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $messageType = 'success';
             }
         }
+    } elseif ($action === 'edit_user') {
+        $userId = (int)($_POST['user_id'] ?? 0);
+        $name = trim($_POST['name'] ?? '');
+        $username = trim($_POST['username'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $mobile = trim($_POST['mobile'] ?? '');
+        $role = trim($_POST['role'] ?? 'coordinator');
+        $isActive = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
+
+        if (empty($name) || empty($username) || $userId <= 0) {
+            $message = "Full name and username are required.";
+            $messageType = 'error';
+        } else {
+            // Check if username is already taken by another user
+            $chkStmt = $pdo->prepare("SELECT id FROM users WHERE username = :u AND id != :id");
+            $chkStmt->execute([':u' => $username, ':id' => $userId]);
+            if ($chkStmt->fetch()) {
+                $message = "Username '$username' is already in use by another account.";
+                $messageType = 'error';
+            } else {
+                if (!empty($password)) {
+                    if (strlen($password) < 6) {
+                        $message = "New password must be at least 6 characters long.";
+                        $messageType = 'error';
+                    } else {
+                        $hash = password_hash($password, PASSWORD_DEFAULT);
+                        $updStmt = $pdo->prepare("
+                            UPDATE users 
+                            SET name = :n, username = :u, password_hash = :p, role = :r, email = :em, mobile = :mob, is_active = :act
+                            WHERE id = :id
+                        ");
+                        $updStmt->execute([
+                            ':n' => $name,
+                            ':u' => $username,
+                            ':p' => $hash,
+                            ':r' => $role,
+                            ':em' => $email,
+                            ':mob' => $mobile,
+                            ':act' => $isActive,
+                            ':id' => $userId
+                        ]);
+                        $message = "Account for '$name' (@$username) updated successfully.";
+                        $messageType = 'success';
+                    }
+                } else {
+                    $updStmt = $pdo->prepare("
+                        UPDATE users 
+                        SET name = :n, username = :u, role = :r, email = :em, mobile = :mob, is_active = :act
+                        WHERE id = :id
+                    ");
+                    $updStmt->execute([
+                        ':n' => $name,
+                        ':u' => $username,
+                        ':r' => $role,
+                        ':em' => $email,
+                        ':mob' => $mobile,
+                        ':act' => $isActive,
+                        ':id' => $userId
+                    ]);
+                    $message = "Account for '$name' (@$username) updated successfully.";
+                    $messageType = 'success';
+                }
+            }
+        }
     } elseif ($action === 'delete_user') {
         $userId = (int)($_POST['user_id'] ?? 0);
         $currUser = currentUser();
@@ -206,19 +271,24 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 <?php echo date('d M Y', strtotime($u['created_at'])); ?>
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle; text-align: right; white-space: nowrap;">
-                                <?php if (!$isCurrent): ?>
-                                    <form method="POST" style="display: inline;" onsubmit="return confirm('Permanently delete staff account @<?php echo htmlspecialchars(addslashes($u['username'])); ?>?');">
-                                        <input type="hidden" name="action" value="delete_user">
-                                        <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
-                                        <button type="submit" class="btn" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Delete Staff Account">
-                                            🗑️ Delete
-                                        </button>
-                                    </form>
-                                <?php else: ?>
-                                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                                        👤 Current User
-                                    </span>
-                                <?php endif; ?>
+                                <div style="display: flex; gap: 6px; justify-content: flex-end; align-items: center;">
+                                    <button type="button" class="btn" onclick="openEditModal(<?php echo htmlspecialchars(json_encode($u), ENT_QUOTES, 'UTF-8'); ?>)" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Edit Staff Details">
+                                        ✏️ Edit
+                                    </button>
+                                    <?php if (!$isCurrent): ?>
+                                        <form method="POST" style="display: inline;" onsubmit="return confirm('Permanently delete staff account @<?php echo htmlspecialchars(addslashes($u['username'])); ?>?');">
+                                            <input type="hidden" name="action" value="delete_user">
+                                            <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                            <button type="submit" class="btn" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Delete Staff Account">
+                                                🗑️ Delete
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <span style="font-size: 0.75rem; color: #64748b; font-weight: 600; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                            (You)
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -298,6 +368,125 @@ require_once __DIR__ . '/includes/admin_header.php';
         </form>
     </div>
 </div>
+
+<!-- Edit User Modal -->
+<div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem;">
+    <div style="background: #ffffff; border-radius: 16px; max-width: 580px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); border: 1px solid #e2e8f0; overflow: hidden;">
+        <!-- Modal Header -->
+        <div style="padding: 1.25rem 1.75rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.35rem;">✏️</span>
+                <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Edit Staff Account</h3>
+                    <span id="modalUserSubtitle" style="font-size: 0.8rem; color: #64748b;">Update account details and permissions</span>
+                </div>
+            </div>
+            <button type="button" onclick="closeEditModal()" style="background: none; border: none; font-size: 1.25rem; color: #64748b; cursor: pointer; padding: 4px 8px; border-radius: 6px;" title="Close">✕</button>
+        </div>
+
+        <!-- Modal Form -->
+        <form method="POST" action="coordinators.php" style="padding: 1.5rem 1.75rem;">
+            <input type="hidden" name="action" value="edit_user">
+            <input type="hidden" name="user_id" id="edit_user_id" value="">
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.15rem; margin-bottom: 1.25rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="edit_name" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        Full Name <span style="color: #ef4444;">*</span>
+                    </label>
+                    <input type="text" id="edit_name" name="name" class="form-input" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="edit_username" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        Username <span style="color: #ef4444;">*</span>
+                    </label>
+                    <input type="text" id="edit_username" name="username" class="form-input" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="edit_password" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        New Password <span style="font-size: 0.72rem; color: #64748b; font-weight: normal;">(Optional)</span>
+                    </label>
+                    <input type="password" id="edit_password" name="password" class="form-input" placeholder="Leave blank to keep unchanged" style="height: 40px; border-radius: 8px; font-size: 0.85rem;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="edit_role" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        System Role <span style="color: #ef4444;">*</span>
+                    </label>
+                    <select id="edit_role" name="role" class="form-select" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                        <option value="coordinator">Coordinator (View registrations, papers)</option>
+                        <option value="admin">Administrator (Full Access)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="edit_mobile" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        Phone Number
+                    </label>
+                    <input type="tel" id="edit_mobile" name="mobile" class="form-input" placeholder="10-digit mobile" pattern="[0-9]{10}" style="height: 40px; border-radius: 8px; font-size: 0.9rem;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="edit_is_active" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        Account Status <span style="color: #ef4444;">*</span>
+                    </label>
+                    <select id="edit_is_active" name="is_active" class="form-select" style="height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                        <option value="1">Active (Can Login)</option>
+                        <option value="0">Disabled (Access Blocked)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="grid-column: span 2; margin-bottom: 0;">
+                    <label class="form-label" for="edit_email" style="font-weight: 700; font-size: 0.82rem; color: #334155; margin-bottom: 0.35rem; display: block;">
+                        Email Address
+                    </label>
+                    <input type="email" id="edit_email" name="email" class="form-input" placeholder="user@example.com" style="height: 40px; border-radius: 8px; font-size: 0.9rem;">
+                </div>
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                <button type="button" onclick="closeEditModal()" class="btn" style="height: 40px; padding: 0 1.25rem; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; font-weight: 600; border-radius: 8px; cursor: pointer;">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 1.5rem; background: #2563eb; color: #ffffff; border: none; font-weight: 700; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                    💾 Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openEditModal(user) {
+    document.getElementById('edit_user_id').value = user.id;
+    document.getElementById('edit_name').value = user.name || '';
+    document.getElementById('edit_username').value = user.username || '';
+    document.getElementById('edit_password').value = '';
+    document.getElementById('edit_role').value = user.role || 'coordinator';
+    document.getElementById('edit_email').value = (user.email && user.email !== 'N/A') ? user.email : '';
+    document.getElementById('edit_mobile').value = (user.mobile && user.mobile !== 'N/A') ? user.mobile : '';
+    document.getElementById('edit_is_active').value = (user.is_active !== undefined) ? user.is_active : 1;
+    document.getElementById('modalUserSubtitle').textContent = 'Editing @' + user.username + ' (' + user.role + ')';
+    
+    const modal = document.getElementById('editUserModal');
+    modal.style.display = 'flex';
+}
+
+function closeEditModal() {
+    document.getElementById('editUserModal').style.display = 'none';
+}
+
+// Close modal when clicking outside of modal box
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('editUserModal');
+    if (e.target === modal) {
+        closeEditModal();
+    }
+});
+</script>
 
 <?php require_once __DIR__ . '/includes/admin_footer.php'; ?>
 
