@@ -1259,36 +1259,52 @@ $totalPapersCount = count($questionPapers);
                                         <thead style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                                             <tr>
                                                 <th
-                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">
+                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em;">
                                                     Standard</th>
                                                 <th
-                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">
+                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em;">
                                                     Paper Title</th>
                                                 <th
-                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">
+                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em;">
                                                     Released At</th>
                                                 <th
-                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b; text-align: right;">
+                                                    style="padding: 0.85rem 1.25rem; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em; text-align: right;">
                                                     Download</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($questionPapers as $qp): ?>
                                                 <tr style="border-bottom: 1px solid #f1f5f9;">
-                                                    <td style="padding: 1rem 1.25rem; font-weight: 700; color: #1e293b;">
-                                                        <?php echo htmlspecialchars($qp['class_name'] ?? 'Class 8-10'); ?>
+                                                    <td style="padding: 1rem 1.25rem; vertical-align: middle;">
+                                                        <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                                            🎓 <?php echo htmlspecialchars($qp['class'] ?? 'Class 8-10'); ?>
+                                                        </span>
                                                     </td>
-                                                    <td style="padding: 1rem 1.25rem; color: #334155;">
-                                                        <?php echo htmlspecialchars($qp['title'] ?? 'EEMT 2027 Prelims Paper'); ?>
+                                                    <td style="padding: 1rem 1.25rem; vertical-align: middle;">
+                                                        <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">
+                                                            <?php echo htmlspecialchars($qp['title'] ?? 'EEMT 2027 Prelims Paper'); ?>
+                                                        </div>
+                                                        <div style="font-size: 0.78rem; color: #64748b; margin-top: 3px; display: flex; align-items: center; gap: 8px;">
+                                                            <span>Subject: <strong style="color: #334155;"><?php echo htmlspecialchars($qp['subject'] ?? 'General'); ?></strong></span>
+                                                            <?php if (!empty($qp['file_size'])): ?>
+                                                                <span style="color: #cbd5e1;">&bull;</span>
+                                                                <span><?php echo round($qp['file_size'] / 1024, 1); ?> KB</span>
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </td>
-                                                    <td style="padding: 1rem 1.25rem; color: #64748b; font-size: 0.85rem;">
-                                                        <?php echo htmlspecialchars(date('d M Y, h:i A', strtotime($qp['created_at'] ?? 'now'))); ?>
+                                                    <td style="padding: 1rem 1.25rem; vertical-align: middle;">
+                                                        <div style="color: #1e293b; font-size: 0.88rem; font-weight: 600;">
+                                                            <?php echo htmlspecialchars(date('d M Y,', strtotime($qp['published_at'] ?? $qp['created_at'] ?? 'now'))); ?>
+                                                        </div>
+                                                        <div style="color: #64748b; font-size: 0.78rem;">
+                                                            <?php echo htmlspecialchars(date('h:i A', strtotime($qp['published_at'] ?? $qp['created_at'] ?? 'now'))); ?>
+                                                        </div>
                                                     </td>
-                                                    <td style="padding: 1rem 1.25rem; text-align: right;">
-                                                        <a href="<?php echo htmlspecialchars($qp['file_url']); ?>" download
+                                                    <td style="padding: 1rem 1.25rem; text-align: right; vertical-align: middle;">
+                                                        <a href="download_paper.php?id=<?php echo (int)$qp['id']; ?>" target="_blank"
                                                             class="btn"
-                                                            style="background: #2563eb; color: white; padding: 6px 14px; font-size: 0.82rem; font-weight: 700; border-radius: 6px; text-decoration: none;">
-                                                            📥 Download PDF
+                                                            style="background: #2563eb; color: white; padding: 8px 16px; font-size: 0.82rem; font-weight: 700; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(37,99,235,0.2); transition: all 0.2s;">
+                                                            <span>📥 Download PDF</span>
                                                         </a>
                                                     </td>
                                                 </tr>

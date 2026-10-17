@@ -2,7 +2,11 @@
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/auth.php';
 
-requireSchoolLogin();
+// Allow authenticated schools as well as staff/coordinators/admins
+if (!isSchoolLoggedIn() && !isStaffLoggedIn()) {
+    header('Location: ../school_login.php?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+    exit;
+}
 
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
@@ -19,6 +23,12 @@ if (!$paper) {
 }
 
 $filePath = dirname(__DIR__) . '/uploads/question_papers/' . basename($paper['file_path']);
+if (!file_exists($filePath)) {
+    $altPath = dirname(__DIR__) . '/' . ltrim($paper['file_path'], '/');
+    if (file_exists($altPath)) {
+        $filePath = $altPath;
+    }
+}
 
 if (!file_exists($filePath)) {
     die("File not found on server storage: " . htmlspecialchars($paper['file_path']));
