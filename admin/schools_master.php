@@ -745,38 +745,6 @@ require_once __DIR__ . '/includes/admin_header.php';
     </div>
 </div>
 
-<!-- GLOBAL SEARCH BAR ACROSS DISTRICTS, MANDALS & SCHOOLS -->
-<div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-    <form method="GET" action="schools_master.php" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-        <div style="display: flex; align-items: center; gap: 8px; color: #2563eb; font-weight: 800; font-size: 0.92rem; white-space: nowrap;">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <span>Search Master:</span>
-        </div>
-        
-        <div style="flex: 1; min-width: 260px; position: relative;">
-            <input type="text" name="search" class="sm-input" list="search_suggestions_datalist" placeholder="Search any School Name, UDISE Code, Mandal, or District..." value="<?php echo htmlspecialchars($search); ?>">
-        </div>
-
-        <div style="min-width: 170px;">
-            <select name="view" class="sm-select" style="font-weight: 700; color: #1e293b;">
-                <option value="schools" <?php echo $view === 'schools' ? 'selected' : ''; ?>>🏫 in Schools Directory</option>
-                <option value="mandals" <?php echo $view === 'mandals' ? 'selected' : ''; ?>>🗺️ in Mandals (672)</option>
-                <option value="districts" <?php echo $view === 'districts' ? 'selected' : ''; ?>>🏛️ in Districts (28)</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn" style="background: #2563eb; color: white; border: none; padding: 0 1.4rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">
-            🔍 Search
-        </button>
-
-        <?php if (!empty($search)): ?>
-            <a href="schools_master.php?view=<?php echo htmlspecialchars($view); ?>" class="btn" style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;">
-                Clear Search
-            </a>
-        <?php endif; ?>
-    </form>
-</div>
-
 <!-- 3-TIER HIERARCHY NAVIGATION TABS -->
 <div class="sm-nav-tab-container">
     <a href="schools_master.php?view=districts" class="hierarchy-tab <?php echo $view === 'districts' ? 'active' : ''; ?>">
