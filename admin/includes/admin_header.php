@@ -3,10 +3,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/../../includes/auth.php';
-requireAdmin();
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+if ($currentPage === 'schools_master.php') {
+    requireSchoolMasterAccess();
+} else {
+    requireAdmin();
+}
 
 $user = currentUser();
-$currentPage = basename($_SERVER['PHP_SELF']);
 
 // Calculate counts for badges
 $badgePDO = getDB();
@@ -442,12 +447,15 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
 
             <!-- User Info Snippet -->
             <div class="sidebar-user">
-                <div class="user-avatar">
-                    🛡️
+                <div class="user-avatar" style="background: <?php echo isAdmin() ? 'linear-gradient(135deg, #2563eb, #1d4ed8)' : 'linear-gradient(135deg, #059669, #047857)'; ?>;">
+                    <?php echo isAdmin() ? '🛡️' : '👔'; ?>
                 </div>
                 <div class="user-meta">
-                    <div class="user-name"><?php echo htmlspecialchars($user['name'] ?? 'State Admin'); ?></div>
-                    <div class="user-role"><span class="status-dot"></span> State Administrator</div>
+                    <div class="user-name"><?php echo htmlspecialchars($user['name'] ?? ($user['username'] ?? 'User')); ?></div>
+                    <div class="user-role" style="color: <?php echo isAdmin() ? '#60a5fa' : '#34d399'; ?>;">
+                        <span class="status-dot"></span> 
+                        <?php echo isAdmin() ? 'State Administrator' : 'Staff Coordinator'; ?>
+                    </div>
                 </div>
             </div>
 
@@ -455,14 +463,16 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
             <nav class="sidebar-nav">
                 <div class="nav-section-title">Core Management</div>
 
-                <a href="dashboard.php"
-                    class="sidebar-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">📊</span>
-                        <span>State Dashboard</span>
-                    </div>
-                    <span class="sidebar-badge"><?php echo $totalSchoolsBadge; ?></span>
-                </a>
+                <?php if (isAdmin()): ?>
+                    <a href="dashboard.php"
+                        class="sidebar-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">📊</span>
+                            <span>State Dashboard</span>
+                        </div>
+                        <span class="sidebar-badge"><?php echo $totalSchoolsBadge; ?></span>
+                    </a>
+                <?php endif; ?>
 
                 <a href="schools_master.php"
                     class="sidebar-item <?php echo $currentPage === 'schools_master.php' ? 'active' : ''; ?>">
@@ -473,23 +483,25 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                     <span class="sidebar-badge"><?php echo $totalMasterBadge; ?></span>
                 </a>
 
-                <a href="coordinators.php"
-                    class="sidebar-item <?php echo $currentPage === 'coordinators.php' ? 'active' : ''; ?>">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">👥</span>
-                        <span>Staff & Coordinators</span>
-                    </div>
-                    <span class="sidebar-badge"><?php echo $totalStaffBadge; ?></span>
-                </a>
+                <?php if (isAdmin()): ?>
+                    <a href="coordinators.php"
+                        class="sidebar-item <?php echo $currentPage === 'coordinators.php' ? 'active' : ''; ?>">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">👥</span>
+                            <span>Staff & Coordinators</span>
+                        </div>
+                        <span class="sidebar-badge"><?php echo $totalStaffBadge; ?></span>
+                    </a>
 
-                <a href="question_papers.php"
-                    class="sidebar-item <?php echo $currentPage === 'question_papers.php' ? 'active' : ''; ?>">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">📄</span>
-                        <span>Question Papers</span>
-                    </div>
-                    <span class="sidebar-badge"><?php echo $totalPapersBadge; ?></span>
-                </a>
+                    <a href="question_papers.php"
+                        class="sidebar-item <?php echo $currentPage === 'question_papers.php' ? 'active' : ''; ?>">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">📄</span>
+                            <span>Question Papers</span>
+                        </div>
+                        <span class="sidebar-badge"><?php echo $totalPapersBadge; ?></span>
+                    </a>
+                <?php endif; ?>
 
                 <div class="nav-section-title" style="margin-top: 0.5rem;">Shortcuts & Views</div>
 

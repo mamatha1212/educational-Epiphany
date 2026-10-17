@@ -83,5 +83,47 @@ function requireAdmin(): void {
     }
 }
 
+/**
+ * Check if current user has permission to manage schools, mandals and districts
+ */
+function canManageSchools(): bool {
+    if (!isStaffLoggedIn()) {
+        return false;
+    }
+    if (isAdmin()) {
+        return true;
+    }
+    $user = currentUser();
+    // Live lookup from database to ensure admin changes take effect immediately
+    if (!empty($user['id'])) {
+        try {
+            $pdo = getDB();
+            $stmt = $pdo->prepare("SELECT can_manage_schools FROM users WHERE id = ?");
+            $stmt->execute([$user['id']]);
+            $can = (int)$stmt->fetchColumn();
+            $_SESSION['user']['can_manage_schools'] = $can;
+            return $can === 1;
+        } catch (Exception $e) {
+            return !empty($user['can_manage_schools']);
+        }
+    }
+    return !empty($user['can_manage_schools']);
+}
+
+/**
+ * Protect pages that require school/district/mandal directory management access
+ */
+function requireSchoolMasterAccess(): void {
+    if (!isStaffLoggedIn()) {
+        header('Location: ../staff_login.php?type=coordinator&redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        exit;
+    }
+    if (!canManageSchools()) {
+        header('Location: ../staff/dashboard.php?notice=' . urlencode('Access Restricted: You do not have permission to manage schools, mandals and districts. Please contact the administrator.'));
+        exit;
+    }
+}
+
 function getLoggedInSchool(): ?array { return currentSchool(); }
 function getLoggedInUser(): ?array { return currentUser(); }
+

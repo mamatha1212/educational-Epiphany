@@ -11,7 +11,7 @@ $pdo = getDB();
 $message = '';
 $messageType = '';
 
-// Handle Account Creation
+// Handle Account Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email'] ?? '');
         $mobile = trim($_POST['mobile'] ?? '');
         $role = trim($_POST['role'] ?? 'coordinator');
+        $canManageSchools = isset($_POST['can_manage_schools']) ? 1 : 0;
 
         if (empty($username) || empty($password) || empty($name)) {
             $message = "Username, password, and full name are required.";
@@ -39,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hash = password_hash($password, PASSWORD_DEFAULT);
                 $insStmt = $pdo->prepare("
-                    INSERT INTO users (username, password_hash, role, name, email, mobile, is_active)
-                    VALUES (:u, :p, :r, :n, :em, :mob, 1)
+                    INSERT INTO users (username, password_hash, role, name, email, mobile, is_active, can_manage_schools)
+                    VALUES (:u, :p, :r, :n, :em, :mob, 1, :cms)
                 ");
                 $insStmt->execute([
                     ':u' => $username,
@@ -48,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':r' => $role,
                     ':n' => $name,
                     ':em' => $email,
-                    ':mob' => $mobile
+                    ':mob' => $mobile,
+                    ':cms' => $canManageSchools
                 ]);
                 $message = "Staff account created successfully for '$username' ($role).";
                 $messageType = 'success';
@@ -63,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mobile = trim($_POST['mobile'] ?? '');
         $role = trim($_POST['role'] ?? 'coordinator');
         $isActive = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
+        $canManageSchools = isset($_POST['can_manage_schools']) ? 1 : 0;
 
         if (empty($name) || empty($username) || $userId <= 0) {
             $message = "Full name and username are required.";
@@ -83,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $hash = password_hash($password, PASSWORD_DEFAULT);
                         $updStmt = $pdo->prepare("
                             UPDATE users 
-                            SET name = :n, username = :u, password_hash = :p, role = :r, email = :em, mobile = :mob, is_active = :act
+                            SET name = :n, username = :u, password_hash = :p, role = :r, email = :em, mobile = :mob, is_active = :act, can_manage_schools = :cms
                             WHERE id = :id
                         ");
                         $updStmt->execute([
@@ -94,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ':em' => $email,
                             ':mob' => $mobile,
                             ':act' => $isActive,
+                            ':cms' => $canManageSchools,
                             ':id' => $userId
                         ]);
                         $message = "Account for '$name' (@$username) updated successfully.";
@@ -102,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $updStmt = $pdo->prepare("
                         UPDATE users 
-                        SET name = :n, username = :u, role = :r, email = :em, mobile = :mob, is_active = :act
+                        SET name = :n, username = :u, role = :r, email = :em, mobile = :mob, is_active = :act, can_manage_schools = :cms
                         WHERE id = :id
                     ");
                     $updStmt->execute([
@@ -112,12 +116,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ':em' => $email,
                         ':mob' => $mobile,
                         ':act' => $isActive,
+                        ':cms' => $canManageSchools,
                         ':id' => $userId
                     ]);
                     $message = "Account for '$name' (@$username) updated successfully.";
                     $messageType = 'success';
                 }
             }
+        }
+    } elseif ($action === 'toggle_permission') {
+        $userId = (int)($_POST['user_id'] ?? 0);
+        if ($userId > 0) {
+            $tglStmt = $pdo->prepare("UPDATE users SET can_manage_schools = CASE WHEN can_manage_schools = 1 THEN 0 ELSE 1 END WHERE id = ?");
+            $tglStmt->execute([$userId]);
+            $message = "Directory management permission toggled successfully.";
+            $messageType = 'success';
         }
     } elseif ($action === 'delete_user') {
         $userId = (int)($_POST['user_id'] ?? 0);
@@ -136,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch all staff users
-$stmt = $pdo->query("SELECT id, username, role, name, email, mobile, is_active, created_at FROM users ORDER BY id ASC");
+$stmt = $pdo->query("SELECT id, username, role, name, email, mobile, assigned_district, is_active, can_manage_schools, created_at FROM users ORDER BY id ASC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Metrics calculation
@@ -277,10 +290,11 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <tr>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 70px;">ID</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 250px;">Staff Member</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 170px;">Role</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 240px;">Contact Details</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 130px;">Status</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 140px;">Created On</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 150px;">Role</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 220px;">Directory Permission</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 210px;">Contact Details</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 110px;">Status</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 130px;">Created On</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 150px; text-align: right;">Action</th>
                     </tr>
                 </thead>
@@ -294,6 +308,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                         }
                         if ($initials === '') $initials = 'ST';
                         $isCurrent = ($u['id'] == ($_SESSION['user']['id'] ?? 0));
+                        $canManage = !empty($u['can_manage_schools']);
                     ?>
                         <tr class="staff-row" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
                             <td style="padding: 14px 18px; vertical-align: middle; font-weight: 700; color: #94a3b8; font-size: 0.85rem;">
@@ -325,6 +340,38 @@ require_once __DIR__ . '/includes/admin_header.php';
                                         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                         Coordinator
                                     </span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <?php if ($u['role'] === 'admin'): ?>
+                                    <span style="font-size: 0.78rem; color: #1e40af; font-weight: 700; background: #dbeafe; padding: 3px 9px; border-radius: 6px; border: 1px solid #bfdbfe;">
+                                        👑 Root Master (Full Access)
+                                    </span>
+                                <?php else: ?>
+                                    <?php if ($canManage): ?>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                                                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
+                                                Permitted
+                                            </span>
+                                            <form method="POST" style="display:inline; margin:0;">
+                                                <input type="hidden" name="action" value="toggle_permission">
+                                                <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                <button type="submit" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" title="Revoke Directory Access">Revoke</button>
+                                            </form>
+                                        </div>
+                                    <?php else: ?>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; font-size: 0.76rem; font-weight: 600; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                                                🔒 No Access
+                                            </span>
+                                            <form method="POST" style="display:inline; margin:0;">
+                                                <input type="hidden" name="action" value="toggle_permission">
+                                                <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                <button type="submit" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" title="Grant access to manage Schools, Mandals & Districts">Permit</button>
+                                            </form>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
@@ -468,6 +515,19 @@ require_once __DIR__ . '/includes/admin_header.php';
                         Email Address
                     </label>
                     <input type="email" id="email" name="email" class="modal-field-input" placeholder="e.g. suresh@example.com">
+                </div>
+
+                <!-- Directory Management Permission Checkbox -->
+                <div style="grid-column: span 3; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 14px 18px; margin-top: 4px;">
+                    <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin: 0;">
+                        <input type="checkbox" name="can_manage_schools" value="1" style="width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; margin-top: 2px;">
+                        <div>
+                            <strong style="color: #0f172a; font-size: 0.94rem; display: block;">🏛️ Permit Directory Management (Schools, Mandals & Districts)</strong>
+                            <span style="color: #64748b; font-size: 0.82rem; line-height: 1.4; display: block; margin-top: 2px;">
+                                If checked, this coordinator will be granted access to the master directory dashboard to add, edit, or manage schools, mandals and districts. (Leave unchecked for standard coordinators).
+                            </span>
+                        </div>
+                    </label>
                 </div>
             </div>
 
@@ -669,6 +729,19 @@ function filterStaffTable() {
                     </label>
                     <input type="email" id="edit_email" name="email" class="modal-field-input" placeholder="user@example.com">
                 </div>
+
+                <!-- Directory Management Permission Checkbox -->
+                <div style="grid-column: span 2; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 14px 18px; margin-top: 4px;">
+                    <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin: 0;">
+                        <input type="checkbox" id="edit_can_manage_schools" name="can_manage_schools" value="1" style="width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; margin-top: 2px;">
+                        <div>
+                            <strong style="color: #0f172a; font-size: 0.94rem; display: block;">🏛️ Permit Directory Management (Schools, Mandals & Districts)</strong>
+                            <span style="color: #64748b; font-size: 0.82rem; line-height: 1.4; display: block; margin-top: 2px;">
+                                Allow this coordinator to access the Directory Manager to view, add, edit, or delete schools, mandals and districts across Andhra Pradesh.
+                            </span>
+                        </div>
+                    </label>
+                </div>
             </div>
 
             <!-- Modal Action Buttons Footer -->
@@ -695,6 +768,7 @@ function openEditModal(user) {
     document.getElementById('edit_email').value = (user.email && user.email !== 'N/A') ? user.email : '';
     document.getElementById('edit_mobile').value = (user.mobile && user.mobile !== 'N/A') ? user.mobile : '';
     document.getElementById('edit_is_active').value = (user.is_active !== undefined) ? user.is_active : 1;
+    document.getElementById('edit_can_manage_schools').checked = (parseInt(user.can_manage_schools) === 1);
     
     document.getElementById('modalUsernameBadge').textContent = '@' + (user.username || '');
     document.getElementById('modalRoleBadge').textContent = (user.role === 'admin' ? 'State Administrator' : 'Staff Coordinator');

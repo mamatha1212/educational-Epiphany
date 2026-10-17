@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(150) NULL,
     mobile VARCHAR(20) NULL,
     is_active TINYINT DEFAULT 1,
+    can_manage_schools TINYINT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

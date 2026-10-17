@@ -636,6 +636,18 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 <span class="sidebar-badge"><?php echo count($questionPapers); ?></span>
             </a>
 
+            <?php if (canManageSchools()): ?>
+                <div class="nav-section-title">Directory Management</div>
+
+                <a href="../admin/schools_master.php" class="sidebar-item" style="color: #6ee7b7;">
+                    <div class="sidebar-item-content">
+                        <div class="sidebar-icon">🏛️</div>
+                        <span>Schools & Districts</span>
+                    </div>
+                    <span class="sidebar-badge" style="background: rgba(16, 185, 129, 0.25); color: #34d399; font-size: 0.7rem; font-weight: 700;">Permitted</span>
+                </a>
+            <?php endif; ?>
+
             <div class="nav-section-title">Data & Outreach</div>
 
             <a href="../admin/export.php?district=<?php echo urlencode($districtFilter); ?>&mandal=<?php echo urlencode($mandalFilter); ?>&search=<?php echo urlencode($search); ?>" class="sidebar-item">
@@ -698,6 +710,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     Scope: <?php echo htmlspecialchars($user['assigned_district'] ?: 'All AP Districts'); ?>
                 </span>
                 
+                <?php if (canManageSchools()): ?>
+                    <a href="../admin/schools_master.php" class="btn" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.85rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                        🏛️ Manage Schools & Districts
+                    </a>
+                <?php endif; ?>
+
                 <a href="#papers-section" class="btn" style="background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; font-size: 0.85rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
                     📄 Prelims QP (<?php echo count($questionPapers); ?>)
                 </a>
@@ -711,6 +729,13 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
         <!-- Main Content Canvas -->
         <div class="admin-content">
             
+            <?php $noticeMsg = trim($_GET['notice'] ?? ''); if ($noticeMsg): ?>
+                <div class="alert alert-warning" style="margin-bottom: 1.5rem; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 10px;">
+                    <span>⚠️</span>
+                    <span><?php echo htmlspecialchars($noticeMsg); ?></span>
+                </div>
+            <?php endif; ?>
+
             <?php if ($statusMessage): ?>
                 <div class="alert alert-success" style="margin-bottom: 1.5rem; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 12px 16px; border-radius: 8px;">
                     <span>✅</span>
