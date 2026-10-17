@@ -24,6 +24,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_reg'])) {
     }
 }
 
+// Handle Admin Actions (Edit registration record)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_reg'])) {
+    $regId = (int)($_POST['reg_id'] ?? 0);
+    $schoolName = trim($_POST['school_name'] ?? '');
+    $uniqueCode = trim($_POST['unique_code'] ?? '');
+    $contactPerson = trim($_POST['contact_person'] ?? '');
+    $designation = trim($_POST['designation'] ?? '');
+    $mobile = trim($_POST['mobile'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $status = trim($_POST['status'] ?? 'submitted');
+    $mandal = trim($_POST['mandal'] ?? '');
+    $district = trim($_POST['district'] ?? '');
+
+    if ($regId > 0 && !empty($schoolName) && !empty($mobile)) {
+        $upd = $pdo->prepare("UPDATE school_registrations_2027 SET school_name = ?, unique_code = ?, contact_person = ?, designation = ?, mobile = ?, email = ?, status = ?, mandal = ?, district = ? WHERE id = ?");
+        $upd->execute([$schoolName, $uniqueCode, $contactPerson, $designation, $mobile, $email, $status, $mandal, $district, $regId]);
+        $message = "Registration record for '$schoolName' updated successfully.";
+        $messageType = 'success';
+    } else {
+        $message = "School name and contact phone number are required.";
+        $messageType = 'error';
+    }
+}
+
 // Handle search and filters
 $districtFilter = trim($_GET['district'] ?? '');
 $mandalFilter = trim($_GET['mandal'] ?? '');
@@ -421,15 +445,23 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 <?php echo date('d M Y, h:i A', strtotime($row['created_at'])); ?>
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle; text-align: right; white-space: nowrap;">
-                                <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="btn" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none;" title="View Registration Slip">
-                                    📄 Slip
-                                </a>
-                                <form method="POST" action="dashboard.php" style="display: inline-block;" onsubmit="return confirm('Permanently delete registration for <?php echo htmlspecialchars(addslashes($row['school_name'])); ?> (<?php echo $row['reference_id']; ?>)?');">
-                                    <input type="hidden" name="reg_id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" name="delete_reg" value="1" class="btn" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 600; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-left: 4px;" title="Delete Record">
-                                        🗑️
+                                <div style="display: inline-flex; align-items: center; gap: 5px;">
+                                    <button type="button" class="btn" onclick='openViewRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 6px; cursor: pointer;" title="View Registration Full Details">
+                                        👁️ View
                                     </button>
-                                </form>
+                                    <button type="button" class="btn" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Edit Registration Details">
+                                        ✏️ Edit
+                                    </button>
+                                    <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="btn" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 600; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; text-decoration: none;" title="View Official Registration Slip">
+                                        📄 Slip
+                                    </a>
+                                    <form method="POST" action="dashboard.php" style="display: inline-block; margin: 0;" onsubmit="return confirm('Permanently delete registration for <?php echo htmlspecialchars(addslashes($row['school_name'])); ?> (<?php echo $row['reference_id']; ?>)?');">
+                                        <input type="hidden" name="reg_id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" name="delete_reg" value="1" class="btn" style="padding: 5px 8px; font-size: 0.76rem; font-weight: 600; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer;" title="Delete Record">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -498,5 +530,242 @@ require_once __DIR__ . '/includes/admin_header.php';
         </div>
     <?php endif; ?>
 </div>
+
+<!-- MODAL: VIEW SCHOOL REGISTRATION DETAILS -->
+<div id="viewRegModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #ffffff; border-radius: 18px; width: 100%; max-width: 650px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.2s ease-out;">
+        <!-- Header -->
+        <div style="padding: 1.25rem 1.75rem; background: linear-gradient(135deg, #f8fafc, #eff6ff); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+                    🏫
+                </div>
+                <div>
+                    <h3 id="view_school_title" style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #0f172a; line-height: 1.3;">School Details</h3>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
+                        <span id="view_ref_badge" class="badge" style="background: #dbeafe; color: #1e40af; font-weight: 700; font-family: monospace; font-size: 0.78rem;"></span>
+                        <span id="view_status_badge" class="badge" style="font-size: 0.75rem; text-transform: uppercase;"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" onclick="closeViewRegModal()" style="background: transparent; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; padding: 4px; line-height: 1;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#94a3b8'">&times;</button>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 1.5rem 1.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-height: 70vh; overflow-y: auto;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">UDISE Code</div>
+                <div id="view_udise" style="font-weight: 700; color: #0284c7; font-size: 0.95rem; margin-top: 2px;"></div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Location</div>
+                <div id="view_location" style="font-weight: 700; color: #334155; font-size: 0.92rem; margin-top: 2px;"></div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Contact Person</div>
+                <div id="view_contact_person" style="font-weight: 700; color: #0f172a; font-size: 0.92rem; margin-top: 2px;"></div>
+                <div id="view_designation" style="font-size: 0.78rem; color: #64748b; margin-top: 2px;"></div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Phone Number</div>
+                <div style="margin-top: 3px;">
+                    <a id="view_phone_link" href="#" style="font-weight: 700; color: #2563eb; text-decoration: none; font-size: 0.95rem;"></a>
+                </div>
+                <div style="margin-top: 4px;">
+                    <a id="view_wa_link" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #25d366; color: #fff; border-radius: 6px; text-decoration: none;">💬 WhatsApp</a>
+                </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; grid-column: span 2;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Email Address</div>
+                <div id="view_email" style="font-weight: 600; color: #334155; font-size: 0.9rem; margin-top: 2px;"></div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; grid-column: span 2;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Registration Timestamp</div>
+                <div id="view_created_at" style="font-size: 0.85rem; color: #64748b; margin-top: 2px;"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 1rem 1.75rem; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+            <a id="view_slip_link" href="#" target="_blank" class="btn" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none; border-radius: 8px;">
+                📄 View Official Slip
+            </a>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" id="view_to_edit_btn" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.82rem; font-weight: 700; border-radius: 8px;">
+                    ✏️ Edit Record
+                </button>
+                <button type="button" onclick="closeViewRegModal()" class="btn" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 600; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: EDIT SCHOOL REGISTRATION -->
+<div id="editRegModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #ffffff; border-radius: 18px; width: 100%; max-width: 650px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.2s ease-out;">
+        <div style="padding: 1.25rem 1.75rem; background: linear-gradient(135deg, #f8fafc, #eff6ff); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.25rem;">✏️</span>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #0f172a;">Edit School Registration</h3>
+                    <span id="edit_reg_ref_display" style="font-size: 0.78rem; font-family: monospace; color: #2563eb; font-weight: 700;"></span>
+                </div>
+            </div>
+            <button type="button" onclick="closeEditRegModal()" style="background: transparent; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; padding: 4px; line-height: 1;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#94a3b8'">&times;</button>
+        </div>
+
+        <form method="POST" action="dashboard.php" style="padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 14px; max-height: 75vh; overflow-y: auto;">
+            <input type="hidden" name="edit_reg" value="1">
+            <input type="hidden" id="edit_reg_id" name="reg_id" value="">
+
+            <div>
+                <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">School Name *</label>
+                <input type="text" id="edit_reg_school_name" name="school_name" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">UDISE Code *</label>
+                    <input type="text" id="edit_reg_unique_code" name="unique_code" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Status *</label>
+                    <select id="edit_reg_status" name="status" class="form-select" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem; font-weight: 700;">
+                        <option value="submitted">Submitted</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="verified">Verified</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">District *</label>
+                    <input type="text" id="edit_reg_district" name="district" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Mandal *</label>
+                    <input type="text" id="edit_reg_mandal" name="mandal" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Contact Person *</label>
+                    <input type="text" id="edit_reg_contact_person" name="contact_person" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Designation</label>
+                    <input type="text" id="edit_reg_designation" name="designation" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Mobile Number *</label>
+                    <input type="tel" id="edit_reg_mobile" name="mobile" pattern="[0-9]{10}" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;" required>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Email Address</label>
+                    <input type="email" id="edit_reg_email" name="email" class="form-input" style="width: 100%; height: 40px; border-radius: 8px; font-size: 0.9rem;">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                <button type="button" onclick="closeEditRegModal()" class="btn" style="height: 40px; padding: 0 16px; font-size: 0.85rem; font-weight: 600; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 20px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; background: #2563eb; color: #ffffff; border: none;">
+                    💾 Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+let currentViewingRow = null;
+
+function openViewRegModal(row) {
+    currentViewingRow = row;
+    document.getElementById('view_school_title').textContent = row.school_name || 'School Record';
+    document.getElementById('view_ref_badge').textContent = row.reference_id || '';
+    
+    const stBadge = document.getElementById('view_status_badge');
+    const st = (row.status || 'submitted').toLowerCase();
+    stBadge.textContent = st;
+    if (st === 'verified') {
+        stBadge.style.background = '#ecfdf5'; stBadge.style.color = '#047857'; stBadge.style.border = '1px solid #a7f3d0';
+    } else if (st === 'contacted') {
+        stBadge.style.background = '#eff6ff'; stBadge.style.color = '#1d4ed8'; stBadge.style.border = '1px solid #bfdbfe';
+    } else if (st === 'completed') {
+        stBadge.style.background = '#f5f3ff'; stBadge.style.color = '#7c3aed'; stBadge.style.border = '1px solid #ddd6fe';
+    } else {
+        stBadge.style.background = '#f8fafc'; stBadge.style.color = '#475569'; stBadge.style.border = '1px solid #cbd5e1';
+    }
+    
+    document.getElementById('view_udise').textContent = row.unique_code || 'N/A';
+    document.getElementById('view_location').textContent = (row.district || '') + ' • ' + (row.mandal || '');
+    document.getElementById('view_contact_person').textContent = row.contact_person || 'N/A';
+    document.getElementById('view_designation').textContent = row.designation || 'Headmaster';
+    
+    const phoneEl = document.getElementById('view_phone_link');
+    phoneEl.textContent = row.mobile || 'No phone';
+    phoneEl.href = 'tel:' + (row.mobile || '');
+    
+    const rawDigits = (row.mobile || '').replace(/[^0-9]/g, '');
+    const cleanPhone = rawDigits.length === 10 ? '91' + rawDigits : rawDigits;
+    const waText = encodeURIComponent("Respected Headmaster, Greetings from EEMT 2027 Admin Team regarding your registration (" + (row.reference_id || '') + ").");
+    document.getElementById('view_wa_link').href = 'https://api.whatsapp.com/send?phone=' + cleanPhone + '&text=' + waText;
+    
+    document.getElementById('view_email').textContent = row.email || 'N/A';
+    document.getElementById('view_created_at').textContent = row.created_at || 'N/A';
+    document.getElementById('view_slip_link').href = '../register_success.php?ref=' + encodeURIComponent(row.reference_id || '');
+    
+    document.getElementById('view_to_edit_btn').onclick = function() {
+        closeViewRegModal();
+        openEditRegModal(row);
+    };
+
+    document.getElementById('viewRegModal').style.display = 'flex';
+}
+
+function closeViewRegModal() {
+    document.getElementById('viewRegModal').style.display = 'none';
+}
+
+function openEditRegModal(row) {
+    document.getElementById('edit_reg_id').value = row.id || '';
+    document.getElementById('edit_reg_ref_display').textContent = 'Ref ID: ' + (row.reference_id || '');
+    document.getElementById('edit_reg_school_name').value = row.school_name || '';
+    document.getElementById('edit_reg_unique_code').value = row.unique_code || '';
+    document.getElementById('edit_reg_status').value = row.status || 'submitted';
+    document.getElementById('edit_reg_district').value = row.district || '';
+    document.getElementById('edit_reg_mandal').value = row.mandal || '';
+    document.getElementById('edit_reg_contact_person').value = row.contact_person || '';
+    document.getElementById('edit_reg_designation').value = row.designation || '';
+    document.getElementById('edit_reg_mobile').value = row.mobile || '';
+    document.getElementById('edit_reg_email').value = row.email || '';
+
+    document.getElementById('editRegModal').style.display = 'flex';
+}
+
+function closeEditRegModal() {
+    document.getElementById('editRegModal').style.display = 'none';
+}
+
+window.addEventListener('click', function(e) {
+    if (e.target.id === 'viewRegModal') closeViewRegModal();
+    if (e.target.id === 'editRegModal') closeEditRegModal();
+});
+</script>
 
 <?php require_once __DIR__ . '/includes/admin_footer.php'; ?>

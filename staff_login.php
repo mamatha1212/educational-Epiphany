@@ -177,15 +177,7 @@ require_once __DIR__ . '/includes/header.php';
         </form>
     </div>
 
-    <!-- Quick Credentials Hint -->
-    <div
-        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; margin-top: 1.5rem; font-size: 0.8rem; color: #64748b;">
-        <div style="font-weight: 700; color: #334155; margin-bottom: 4px;">System Credentials Reference:</div>
-        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
-            <span>Admin: <code>admin</code> / <code>admin123</code></span>
-            <span>Coordinator: <code>coordinator</code> / <code>coord123</code></span>
-        </div>
-    </div>
+
 
     <!-- School Link -->
     <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--border);">

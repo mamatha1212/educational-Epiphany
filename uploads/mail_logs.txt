@@ -5,3 +5,5 @@
 [2026-10-15 18:58:08] Reference ID: 26275000003 | To: govt.samalkota@gmail.com | School: GOVT HS  SAMALKOTA
 [2026-10-16 06:44:52] Reference ID: 26275000004 | To: mamathasurekha8@gmail.com | School: ZPHS ROMPICHERLA(BOYS)
 [2026-10-16 13:45:05] Reference ID: 26275000005 | To: venkat.gunnam@gmail.com | School: MPPS  KONDRAJU KALVA
+[2026-10-17 12:25:47] Reference ID: 26275000008 | UDISE: 28141400104 | To: mamathasurekha14@gmail.com | School: ZPHS VETLAPALEM | File: uploads/sent_emails/26275000008_28141400104.html
+[2026-10-17 12:27:55] Reference ID: 26275000009 | UDISE: 28170000001 | To: test@example.com | School: TEST SCHOOL | File: uploads/sent_emails/26275000009_28170000001.html

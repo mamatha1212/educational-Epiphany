@@ -5,8 +5,10 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../../includes/auth.php';
 
 $currentPage = basename($_SERVER['PHP_SELF']);
-if ($currentPage === 'schools_master.php') {
+if ($currentPage === 'schools_master.php' || $currentPage === 'schools.php') {
     requireSchoolMasterAccess();
+} elseif ($currentPage === 'question_papers.php') {
+    requireQuestionPapersAccess();
 } else {
     requireAdmin();
 }
@@ -27,7 +29,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($pageTitle ?? 'Admin Console - EEMT 2027'); ?></title>
+    <title><?php echo htmlspecialchars($pageTitle ?? (isAdmin() ? 'Admin Console - EEMT 2027' : 'Coordinator Portal - EEMT 2027')); ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -379,7 +381,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                 padding: 1.25rem 1rem;
             }
         }
-    
+
         .sidebar-header-row {
             display: flex;
             align-items: center;
@@ -419,7 +421,6 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                 display: inline-flex;
             }
         }
-
     </style>
 </head>
 
@@ -428,64 +429,61 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
     <div class="admin-shell">
         <!-- LEFT SIDEBAR PANEL -->
         <aside class="admin-sidebar" id="adminSidebar">
-            <!-- Brand with Official Logo -->
-            <div class="sidebar-header-row">
-            <a href="dashboard.php" class="sidebar-brand">
-                <div class="sidebar-logo-frame">
-                    <img src="../assets/images/logo.png" alt="EEMT Logo" class="sidebar-logo"
-                        onerror="this.src='../assets/images/logo.jpeg';">
+            <?php if (isAdmin()): ?>
+                <!-- ADMIN BRAND & PROFILE -->
+                <div class="sidebar-header-row">
+                    <a href="dashboard.php" class="sidebar-brand">
+                        <div class="sidebar-logo-frame">
+                            <img src="../assets/images/logo.png" alt="EEMT Logo" class="sidebar-logo"
+                                onerror="this.src='../assets/images/logo.jpeg';">
+                        </div>
+                        <div class="sidebar-brand-text">
+                            <h1>EEMT 2027</h1>
+                            <span>Admin Console</span>
+                        </div>
+                    </a>
+                    <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <div class="sidebar-brand-text">
-                    <h1>EEMT 2027</h1>
-                    <span>Admin Console</span>
-                </div>
-            </a>
-            <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
 
-            <!-- User Info Snippet -->
-            <div class="sidebar-user">
-                <div class="user-avatar" style="background: <?php echo isAdmin() ? 'linear-gradient(135deg, #2563eb, #1d4ed8)' : 'linear-gradient(135deg, #059669, #047857)'; ?>;">
-                    <?php echo isAdmin() ? '🛡️' : '👔'; ?>
-                </div>
-                <div class="user-meta">
-                    <div class="user-name"><?php echo htmlspecialchars($user['name'] ?? ($user['username'] ?? 'User')); ?></div>
-                    <div class="user-role" style="color: <?php echo isAdmin() ? '#60a5fa' : '#34d399'; ?>;">
-                        <span class="status-dot"></span> 
-                        <?php echo isAdmin() ? 'State Administrator' : 'Staff Coordinator'; ?>
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+                        🛡️
+                    </div>
+                    <div class="user-meta">
+                        <div class="user-name">
+                            <?php echo htmlspecialchars($user['name'] ?? ($user['username'] ?? 'Admin')); ?>
+                        </div>
+                        <div class="user-role" style="color: #60a5fa;">
+                            <span class="status-dot"></span> State Administrator
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Sidebar Navigation Menu -->
-            <nav class="sidebar-nav">
-                <div class="nav-section-title">Core Management</div>
+                <!-- Admin Navigation Menu -->
+                <nav class="sidebar-nav">
+                    <div class="nav-section-title">Core Management</div>
 
-                <?php if (isAdmin()): ?>
-                    <a href="dashboard.php"
-                        class="sidebar-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">
+                    <a href="dashboard.php" class="sidebar-item <?php echo $currentPage === 'dashboard.php' ? 'active' : ''; ?>">
                         <div class="sidebar-item-content">
                             <span class="sidebar-icon">📊</span>
-                            <span>State Dashboard</span>
+                            <span>Registrations Data</span>
                         </div>
                         <span class="sidebar-badge"><?php echo $totalSchoolsBadge; ?></span>
                     </a>
-                <?php endif; ?>
 
-                <a href="schools_master.php"
-                    class="sidebar-item <?php echo $currentPage === 'schools_master.php' ? 'active' : ''; ?>">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">🏫</span>
-                        <span>Schools & Directory</span>
-                    </div>
-                    <span class="sidebar-badge"><?php echo $totalMasterBadge; ?></span>
-                </a>
+                    <a href="schools_master.php" class="sidebar-item <?php echo ($currentPage === 'schools_master.php' || $currentPage === 'schools.php') ? 'active' : ''; ?>">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">🏫</span>
+                            <span>Schools, Mandals & Districts</span>
+                        </div>
+                        <span class="sidebar-badge"><?php echo $totalMasterBadge; ?></span>
+                    </a>
 
-                <?php if (isAdmin()): ?>
-                    <a href="coordinators.php"
-                        class="sidebar-item <?php echo $currentPage === 'coordinators.php' ? 'active' : ''; ?>">
+                    <a href="coordinators.php" class="sidebar-item <?php echo $currentPage === 'coordinators.php' ? 'active' : ''; ?>">
                         <div class="sidebar-item-content">
                             <span class="sidebar-icon">👥</span>
                             <span>Staff & Coordinators</span>
@@ -493,32 +491,101 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                         <span class="sidebar-badge"><?php echo $totalStaffBadge; ?></span>
                     </a>
 
-                    <a href="question_papers.php"
-                        class="sidebar-item <?php echo $currentPage === 'question_papers.php' ? 'active' : ''; ?>">
+                    <a href="question_papers.php" class="sidebar-item <?php echo $currentPage === 'question_papers.php' ? 'active' : ''; ?>">
                         <div class="sidebar-item-content">
                             <span class="sidebar-icon">📄</span>
                             <span>Question Papers</span>
                         </div>
                         <span class="sidebar-badge"><?php echo $totalPapersBadge; ?></span>
                     </a>
-                <?php endif; ?>
 
-                <div class="nav-section-title" style="margin-top: 0.5rem;">Shortcuts & Views</div>
+                    <div class="nav-section-title" style="margin-top: 0.5rem;">Shortcuts & Views</div>
 
-                <a href="../staff/dashboard.php" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">👔</span>
-                        <span>Coordinator View</span>
+                    <a href="../index.php" target="_blank" class="sidebar-item">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">🌐</span>
+                            <span>Public Website &nearr;</span>
+                        </div>
+                    </a>
+                </nav>
+            <?php else: ?>
+                <!-- COORDINATOR BRAND & PROFILE -->
+                <div class="sidebar-header-row">
+                    <a href="../staff/dashboard.php" class="sidebar-brand">
+                        <div class="sidebar-logo-frame">
+                            <img src="../assets/images/logo.png" alt="EEMT Logo" class="sidebar-logo"
+                                onerror="this.src='../assets/images/logo.jpeg';">
+                        </div>
+                        <div class="sidebar-brand-text">
+                            <h1>EEMT 2027</h1>
+                            <span>Coordinator Portal</span>
+                        </div>
+                    </a>
+                    <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close menu">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="sidebar-user">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #059669, #047857);">
+                        👔
                     </div>
-                </a>
-
-                <a href="../index.php" target="_blank" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <span class="sidebar-icon">🌐</span>
-                        <span>Public Website &nearr;</span>
+                    <div class="user-meta">
+                        <div class="user-name">
+                            <?php echo htmlspecialchars($user['name'] ?? ($user['username'] ?? 'Coordinator')); ?>
+                        </div>
+                        <div class="user-role" style="color: #34d399;">
+                            <span class="status-dot"></span> Staff Coordinator
+                        </div>
                     </div>
-                </a>
-            </nav>
+                </div>
+
+                <!-- Coordinator Navigation Menu -->
+                <nav class="sidebar-nav">
+                    <div class="nav-section-title">Field Operations</div>
+
+                    <a href="../staff/dashboard.php?tab=registrations" class="sidebar-item">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">📊</span>
+                            <span>Registrations Data</span>
+                        </div>
+                        <span class="sidebar-badge"><?php echo $totalSchoolsBadge; ?></span>
+                    </a>
+
+                    <a href="../staff/dashboard.php?tab=prelims" class="sidebar-item">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">📄</span>
+                            <span>Prelims QP Portal</span>
+                        </div>
+                        <span class="sidebar-badge"><?php echo $totalPapersBadge; ?></span>
+                    </a>
+
+                    <div class="nav-section-title">Directory Management</div>
+
+                    <a href="schools_master.php" class="sidebar-item active" style="color: #6ee7b7;">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">🏛️</span>
+                            <span>Schools, Mandals & Districts</span>
+                        </div>
+                        <span class="sidebar-badge" style="background: rgba(16, 185, 129, 0.25); color: #34d399; font-size: 0.7rem; font-weight: 700;">
+                            <?php echo canManageSchools() ? 'Manage' : 'View Only'; ?>
+                        </span>
+                    </a>
+
+                    <?php if (canManagePapers()): ?>
+                        <div class="nav-section-title">Exam Management</div>
+                        <a href="question_papers.php" class="sidebar-item" style="color: #c084fc;">
+                            <div class="sidebar-item-content">
+                                <span class="sidebar-icon">📝</span>
+                                <span>Manage Exam Papers</span>
+                            </div>
+                        </a>
+                    <?php endif; ?>
+
+                </nav>
+            <?php endif; ?>
 
             <!-- Sidebar Footer -->
             <div class="sidebar-footer">
@@ -545,7 +612,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                             style="height: 32px; width: 32px; object-fit: contain;"
                             onerror="this.src='../assets/images/logo.jpeg';">
                         <h2 class="topbar-title">
-                            <span><?php echo htmlspecialchars($pageTitle ?? 'State Administration'); ?></span>
+                            <span><?php echo htmlspecialchars($pageTitle ?? (isAdmin() ? 'State Administration' : 'Coordinator Portal')); ?></span>
                         </h2>
                     </div>
                 </div>
@@ -555,10 +622,12 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                         <?php echo date('D, d M Y'); ?>
                     </span>
 
-                    <a href="export.php" class="btn btn-outline"
-                        style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px;">
-                        📥 Export CSV
-                    </a>
+                    <?php if (isAdmin()): ?>
+                        <a href="export.php" class="btn btn-outline"
+                            style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px;">
+                            📥 Export CSV
+                        </a>
+                    <?php endif; ?>
 
                     <a href="../logout.php" class="btn"
                         style="background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px;">

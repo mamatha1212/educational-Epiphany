@@ -47,7 +47,13 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(150) NULL,
     mobile VARCHAR(20) NULL,
     is_active TINYINT DEFAULT 1,
+    can_view_schools TINYINT DEFAULT 1,
     can_manage_schools TINYINT DEFAULT 0,
+    can_view_papers TINYINT DEFAULT 1,
+    can_manage_papers TINYINT DEFAULT 0,
+    can_view_regs_only TINYINT DEFAULT 0,
+    can_view_registrations TINYINT DEFAULT 1,
+    can_edit_registrations TINYINT DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

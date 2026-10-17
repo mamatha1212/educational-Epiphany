@@ -73,7 +73,13 @@ CREATE TABLE `users` (
   `email` varchar(150) DEFAULT NULL,
   `mobile` varchar(20) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT 1,
+  `can_view_schools` tinyint(1) DEFAULT 1,
   `can_manage_schools` tinyint(1) DEFAULT 0,
+  `can_view_papers` tinyint(1) DEFAULT 1,
+  `can_manage_papers` tinyint(1) DEFAULT 0,
+  `can_view_regs_only` tinyint(1) DEFAULT 0,
+  `can_view_registrations` tinyint(1) DEFAULT 1,
+  `can_edit_registrations` tinyint(1) DEFAULT 1,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)

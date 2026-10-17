@@ -5,7 +5,13 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
 
-requireStaffLogin();
+requireQuestionPapersAccess();
+
+// If coordinator visits admin/question_papers.php, route to coordinator dashboard prelims tab
+if (!isAdmin()) {
+    header('Location: ../staff/dashboard.php?tab=prelims');
+    exit;
+}
 
 $pdo = getDB();
 $message = '';

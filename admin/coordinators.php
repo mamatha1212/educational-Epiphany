@@ -22,7 +22,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email'] ?? '');
         $mobile = trim($_POST['mobile'] ?? '');
         $role = trim($_POST['role'] ?? 'coordinator');
-        $canManageSchools = isset($_POST['can_manage_schools']) ? 1 : 0;
+        $canViewRegistrations = isset($_POST['can_view_registrations']) ? 1 : 0;
+        $canEditRegistrations = isset($_POST['can_edit_registrations']) ? 1 : 0;
+        if ($canEditRegistrations) {
+            $canViewRegistrations = 1;
+        }
+        $canViewSchools       = isset($_POST['can_view_schools']) ? 1 : 0;
+        $canManageSchools     = isset($_POST['can_manage_schools']) ? 1 : 0;
+        if ($canManageSchools) {
+            $canViewSchools = 1;
+        }
+        $canViewPapers        = isset($_POST['can_view_papers']) ? 1 : 0;
+        $canManagePapers      = isset($_POST['can_manage_papers']) ? 1 : 0;
+        if ($canManagePapers) {
+            $canViewPapers = 1;
+        }
+        $canViewRegsOnly      = ($canViewRegistrations && !$canEditRegistrations) ? 1 : 0;
 
         if (empty($username) || empty($password) || empty($name)) {
             $message = "Username, password, and full name are required.";
@@ -40,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hash = password_hash($password, PASSWORD_DEFAULT);
                 $insStmt = $pdo->prepare("
-                    INSERT INTO users (username, password_hash, role, name, email, mobile, is_active, can_manage_schools)
-                    VALUES (:u, :p, :r, :n, :em, :mob, 1, :cms)
+                    INSERT INTO users (username, password_hash, role, name, email, mobile, is_active, can_view_schools, can_manage_schools, can_view_papers, can_manage_papers, can_view_regs_only, can_view_registrations, can_edit_registrations)
+                    VALUES (:u, :p, :r, :n, :em, :mob, 1, :cvs, :cms, :cvp, :cmp, :cvro, :cvr, :cer)
                 ");
                 $insStmt->execute([
                     ':u' => $username,
@@ -50,7 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':n' => $name,
                     ':em' => $email,
                     ':mob' => $mobile,
-                    ':cms' => $canManageSchools
+                    ':cvs' => $canViewSchools,
+                    ':cms' => $canManageSchools,
+                    ':cvp' => $canViewPapers,
+                    ':cmp' => $canManagePapers,
+                    ':cvro' => $canViewRegsOnly,
+                    ':cvr' => $canViewRegistrations,
+                    ':cer' => $canEditRegistrations
                 ]);
                 $message = "Staff account created successfully for '$username' ($role).";
                 $messageType = 'success';
@@ -65,7 +86,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mobile = trim($_POST['mobile'] ?? '');
         $role = trim($_POST['role'] ?? 'coordinator');
         $isActive = isset($_POST['is_active']) ? (int)$_POST['is_active'] : 1;
-        $canManageSchools = isset($_POST['can_manage_schools']) ? 1 : 0;
+        $canViewRegistrations = isset($_POST['can_view_registrations']) ? 1 : 0;
+        $canEditRegistrations = isset($_POST['can_edit_registrations']) ? 1 : 0;
+        if ($canEditRegistrations) {
+            $canViewRegistrations = 1;
+        }
+        $canViewSchools       = isset($_POST['can_view_schools']) ? 1 : 0;
+        $canManageSchools     = isset($_POST['can_manage_schools']) ? 1 : 0;
+        if ($canManageSchools) {
+            $canViewSchools = 1;
+        }
+        $canViewPapers        = isset($_POST['can_view_papers']) ? 1 : 0;
+        $canManagePapers      = isset($_POST['can_manage_papers']) ? 1 : 0;
+        if ($canManagePapers) {
+            $canViewPapers = 1;
+        }
+        $canViewRegsOnly      = ($canViewRegistrations && !$canEditRegistrations) ? 1 : 0;
 
         if (empty($name) || empty($username) || $userId <= 0) {
             $message = "Full name and username are required.";
@@ -86,7 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $hash = password_hash($password, PASSWORD_DEFAULT);
                         $updStmt = $pdo->prepare("
                             UPDATE users 
-                            SET name = :n, username = :u, password_hash = :p, role = :r, email = :em, mobile = :mob, is_active = :act, can_manage_schools = :cms
+                            SET name = :n, username = :u, password_hash = :p, role = :r, email = :em, mobile = :mob, is_active = :act, 
+                                can_view_schools = :cvs, can_manage_schools = :cms, can_view_papers = :cvp, can_manage_papers = :cmp, 
+                                can_view_regs_only = :cvro, can_view_registrations = :cvr, can_edit_registrations = :cer
                             WHERE id = :id
                         ");
                         $updStmt->execute([
@@ -97,7 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ':em' => $email,
                             ':mob' => $mobile,
                             ':act' => $isActive,
+                            ':cvs' => $canViewSchools,
                             ':cms' => $canManageSchools,
+                            ':cvp' => $canViewPapers,
+                            ':cmp' => $canManagePapers,
+                            ':cvro' => $canViewRegsOnly,
+                            ':cvr' => $canViewRegistrations,
+                            ':cer' => $canEditRegistrations,
                             ':id' => $userId
                         ]);
                         $message = "Account for '$name' (@$username) updated successfully.";
@@ -106,7 +150,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $updStmt = $pdo->prepare("
                         UPDATE users 
-                        SET name = :n, username = :u, role = :r, email = :em, mobile = :mob, is_active = :act, can_manage_schools = :cms
+                        SET name = :n, username = :u, role = :r, email = :em, mobile = :mob, is_active = :act, 
+                            can_view_schools = :cvs, can_manage_schools = :cms, can_view_papers = :cvp, can_manage_papers = :cmp, 
+                            can_view_regs_only = :cvro, can_view_registrations = :cvr, can_edit_registrations = :cer
                         WHERE id = :id
                     ");
                     $updStmt->execute([
@@ -116,7 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ':em' => $email,
                         ':mob' => $mobile,
                         ':act' => $isActive,
+                        ':cvs' => $canViewSchools,
                         ':cms' => $canManageSchools,
+                        ':cvp' => $canViewPapers,
+                        ':cmp' => $canManagePapers,
+                        ':cvro' => $canViewRegsOnly,
+                        ':cvr' => $canViewRegistrations,
+                        ':cer' => $canEditRegistrations,
                         ':id' => $userId
                     ]);
                     $message = "Account for '$name' (@$username) updated successfully.";
@@ -126,10 +178,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'toggle_permission') {
         $userId = (int)($_POST['user_id'] ?? 0);
+        $permType = trim($_POST['perm_type'] ?? 'schools_edit');
         if ($userId > 0) {
-            $tglStmt = $pdo->prepare("UPDATE users SET can_manage_schools = CASE WHEN can_manage_schools = 1 THEN 0 ELSE 1 END WHERE id = ?");
-            $tglStmt->execute([$userId]);
-            $message = "Directory management permission toggled successfully.";
+            if ($permType === 'regs_view') {
+                $pdo->prepare("
+                    UPDATE users 
+                    SET can_view_registrations = CASE WHEN can_view_registrations = 1 THEN 0 ELSE 1 END,
+                        can_edit_registrations = CASE WHEN can_view_registrations = 1 THEN 0 ELSE can_edit_registrations END,
+                        can_view_regs_only = CASE WHEN can_view_registrations = 1 THEN 0 ELSE (CASE WHEN can_edit_registrations = 1 THEN 0 ELSE 1 END) END
+                    WHERE id = ?
+                ")->execute([$userId]);
+                $message = "School Registrations View permission updated successfully.";
+            } elseif ($permType === 'regs_edit') {
+                $pdo->prepare("
+                    UPDATE users 
+                    SET can_edit_registrations = CASE WHEN can_edit_registrations = 1 THEN 0 ELSE 1 END,
+                        can_view_registrations = 1,
+                        can_view_regs_only = CASE WHEN can_edit_registrations = 1 THEN 1 ELSE 0 END
+                    WHERE id = ?
+                ")->execute([$userId]);
+                $message = "School Registrations Edit permission updated successfully.";
+            } elseif ($permType === 'schools_view') {
+                $pdo->prepare("
+                    UPDATE users 
+                    SET can_view_schools = CASE WHEN can_view_schools = 1 THEN 0 ELSE 1 END,
+                        can_manage_schools = CASE WHEN can_view_schools = 1 THEN 0 ELSE can_manage_schools END
+                    WHERE id = ?
+                ")->execute([$userId]);
+                $message = "Schools Directory View permission updated successfully.";
+            } elseif ($permType === 'schools' || $permType === 'schools_edit') {
+                $pdo->prepare("UPDATE users SET can_manage_schools = CASE WHEN can_manage_schools = 1 THEN 0 ELSE 1 END, can_view_schools = 1 WHERE id = ?")->execute([$userId]);
+                $message = "Schools Directory Manage/Edit permission updated successfully.";
+            } elseif ($permType === 'papers_view') {
+                $pdo->prepare("
+                    UPDATE users 
+                    SET can_view_papers = CASE WHEN can_view_papers = 1 THEN 0 ELSE 1 END,
+                        can_manage_papers = CASE WHEN can_view_papers = 1 THEN 0 ELSE can_manage_papers END
+                    WHERE id = ?
+                ")->execute([$userId]);
+                $message = "Question Papers View permission updated successfully.";
+            } elseif ($permType === 'papers' || $permType === 'papers_edit' || $permType === 'papers_manage') {
+                $pdo->prepare("UPDATE users SET can_manage_papers = CASE WHEN can_manage_papers = 1 THEN 0 ELSE 1 END, can_view_papers = 1 WHERE id = ?")->execute([$userId]);
+                $message = "Question Papers Upload/Manage permission updated successfully.";
+            } elseif ($permType === 'view_only' || $permType === 'regs_view_only') {
+                $pdo->prepare("
+                    UPDATE users 
+                    SET can_view_regs_only = CASE WHEN can_view_regs_only = 1 THEN 0 ELSE 1 END,
+                        can_edit_registrations = CASE WHEN can_view_regs_only = 1 THEN 1 ELSE 0 END,
+                        can_view_registrations = 1 
+                    WHERE id = ?
+                ")->execute([$userId]);
+                $message = "School Registrations View-Only mode updated successfully.";
+            }
             $messageType = 'success';
         }
     } elseif ($action === 'delete_user') {
@@ -149,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch all staff users
-$stmt = $pdo->query("SELECT id, username, role, name, email, mobile, assigned_district, is_active, can_manage_schools, created_at FROM users ORDER BY id ASC");
+$stmt = $pdo->query("SELECT id, username, role, name, email, mobile, assigned_district, is_active, can_view_schools, can_manage_schools, can_view_papers, can_manage_papers, can_view_regs_only, can_view_registrations, can_edit_registrations, created_at FROM users ORDER BY id ASC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Metrics calculation
@@ -291,7 +391,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 70px;">ID</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 250px;">Staff Member</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 150px;">Role</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 220px;">Directory Permission</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 290px;">Permissions & Control</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; min-width: 210px;">Contact Details</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 110px;">Status</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.74rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 130px;">Created On</th>
@@ -308,7 +408,15 @@ require_once __DIR__ . '/includes/admin_header.php';
                         }
                         if ($initials === '') $initials = 'ST';
                         $isCurrent = ($u['id'] == ($_SESSION['user']['id'] ?? 0));
-                        $canManage = !empty($u['can_manage_schools']);
+                        $canViewSchools = isset($u['can_view_schools']) ? ((int)$u['can_view_schools'] === 1) : true;
+                        $canManageSchools = !empty($u['can_manage_schools']);
+                        $canViewPapers = isset($u['can_view_papers']) ? ((int)$u['can_view_papers'] === 1) : true;
+                        $canManagePapers = !empty($u['can_manage_papers']);
+                        $canViewRegs = isset($u['can_view_registrations']) ? ((int)$u['can_view_registrations'] === 1) : true;
+                        $canEditRegs = isset($u['can_edit_registrations']) ? ((int)$u['can_edit_registrations'] === 1) : false;
+                        if (!empty($u['can_view_regs_only'])) {
+                            $canEditRegs = false;
+                        }
                     ?>
                         <tr class="staff-row" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
                             <td style="padding: 14px 18px; vertical-align: middle; font-weight: 700; color: #94a3b8; font-size: 0.85rem;">
@@ -344,34 +452,98 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
                                 <?php if ($u['role'] === 'admin'): ?>
-                                    <span style="font-size: 0.78rem; color: #1e40af; font-weight: 700; background: #dbeafe; padding: 3px 9px; border-radius: 6px; border: 1px solid #bfdbfe;">
-                                        👑 Root Master (Full Access)
+                                    <span style="font-size: 0.78rem; color: #1e40af; font-weight: 700; background: #dbeafe; padding: 6px 12px; border-radius: 8px; border: 1px solid #bfdbfe; display: inline-flex; align-items: center; gap: 6px;">
+                                        👑 Root Master (Unrestricted Control)
                                     </span>
                                 <?php else: ?>
-                                    <?php if ($canManage): ?>
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <span style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.76rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
-                                                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
-                                                Permitted
-                                            </span>
-                                            <form method="POST" style="display:inline; margin:0;">
-                                                <input type="hidden" name="action" value="toggle_permission">
-                                                <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
-                                                <button type="submit" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" title="Revoke Directory Access">Revoke</button>
-                                            </form>
+                                    <div style="display: flex; flex-direction: column; gap: 6px; min-width: 300px;">
+                                        <!-- Module 1: School Registrations (View & Edit) -->
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                                            <span style="font-size: 0.73rem; color: #334155; font-weight: 700;">📋 School Regs:</span>
+                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                                <!-- View Toggle -->
+                                                <form method="POST" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="action" value="toggle_permission">
+                                                    <input type="hidden" name="perm_type" value="regs_view">
+                                                    <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                    <?php if ($canViewRegs): ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer;" title="Can View Regs. Click to Revoke">👁️ View</button>
+                                                    <?php else: ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="Cannot View Regs. Click to Grant">🔒 View</button>
+                                                    <?php endif; ?>
+                                                </form>
+                                                <!-- Edit Toggle -->
+                                                <form method="POST" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="action" value="toggle_permission">
+                                                    <input type="hidden" name="perm_type" value="regs_edit">
+                                                    <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                    <?php if ($canEditRegs): ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Can Edit & Verify. Click to Revoke">✏️ Edit</button>
+                                                    <?php else: ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="View Only (No Edit). Click to Grant Edit">🔒 Edit</button>
+                                                    <?php endif; ?>
+                                                </form>
+                                            </div>
                                         </div>
-                                    <?php else: ?>
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <span style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; font-size: 0.76rem; font-weight: 600; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
-                                                🔒 No Access
-                                            </span>
-                                            <form method="POST" style="display:inline; margin:0;">
-                                                <input type="hidden" name="action" value="toggle_permission">
-                                                <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
-                                                <button type="submit" style="padding: 3px 8px; font-size: 0.72rem; font-weight: 700; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" title="Grant access to manage Schools, Mandals & Districts">Permit</button>
-                                            </form>
+
+                                        <!-- Module 2: Schools & Directory (View & Edit) -->
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                                            <span style="font-size: 0.73rem; color: #334155; font-weight: 700;">🏛️ Schools Master:</span>
+                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                                <!-- View Toggle -->
+                                                <form method="POST" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="action" value="toggle_permission">
+                                                    <input type="hidden" name="perm_type" value="schools_view">
+                                                    <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                    <?php if ($canViewSchools): ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer;" title="Can View Directory. Click to Revoke">👁️ View</button>
+                                                    <?php else: ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="Cannot View Directory. Click to Grant">🔒 View</button>
+                                                    <?php endif; ?>
+                                                </form>
+                                                <!-- Edit Toggle -->
+                                                <form method="POST" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="action" value="toggle_permission">
+                                                    <input type="hidden" name="perm_type" value="schools_edit">
+                                                    <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                    <?php if ($canManageSchools): ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Can Manage/Edit Schools & Mandals. Click to Revoke">✏️ Edit</button>
+                                                    <?php else: ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="Cannot Manage Schools. Click to Grant">🔒 Edit</button>
+                                                    <?php endif; ?>
+                                                </form>
+                                            </div>
                                         </div>
-                                    <?php endif; ?>
+
+                                        <!-- Module 3: Question Papers (View & Upload) -->
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 5px 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                                            <span style="font-size: 0.73rem; color: #334155; font-weight: 700;">📄 Question Papers:</span>
+                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                                <!-- View Toggle -->
+                                                <form method="POST" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="action" value="toggle_permission">
+                                                    <input type="hidden" name="perm_type" value="papers_view">
+                                                    <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                    <?php if ($canViewPapers): ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #6b21a8; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 6px; cursor: pointer;" title="Can View & Download Papers. Click to Revoke">👁️ View</button>
+                                                    <?php else: ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="Cannot View Papers. Click to Grant">🔒 View</button>
+                                                    <?php endif; ?>
+                                                </form>
+                                                <!-- Upload Toggle -->
+                                                <form method="POST" style="display:inline; margin:0;">
+                                                    <input type="hidden" name="action" value="toggle_permission">
+                                                    <input type="hidden" name="perm_type" value="papers_edit">
+                                                    <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
+                                                    <?php if ($canManagePapers): ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #6b21a8; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 6px; cursor: pointer;" title="Can Upload & Manage Papers. Click to Revoke">✏️ Upload</button>
+                                                    <?php else: ?>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="Cannot Upload Papers. Click to Grant">🔒 Upload</button>
+                                                    <?php endif; ?>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 <?php endif; ?>
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
@@ -517,17 +689,119 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <input type="email" id="email" name="email" class="modal-field-input" placeholder="e.g. suresh@example.com">
                 </div>
 
-                <!-- Directory Management Permission Checkbox -->
-                <div style="grid-column: span 3; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 14px 18px; margin-top: 4px;">
-                    <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin: 0;">
-                        <input type="checkbox" name="can_manage_schools" value="1" style="width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; margin-top: 2px;">
-                        <div>
-                            <strong style="color: #0f172a; font-size: 0.94rem; display: block;">🏛️ Permit Directory Management (Schools, Mandals & Districts)</strong>
-                            <span style="color: #64748b; font-size: 0.82rem; line-height: 1.4; display: block; margin-top: 2px;">
-                                If checked, this coordinator will be granted access to the master directory dashboard to add, edit, or manage schools, mandals and districts. (Leave unchecked for standard coordinators).
-                            </span>
+                <!-- Granular Coordinator Permissions Multi-Select Box -->
+                <div style="grid-column: span 3; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px 20px; margin-top: 6px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2rem;">🛡️</span>
+                            <div>
+                                <strong style="color: #0f172a; font-size: 0.98rem; display: block;">Granular Coordinator Permissions (View & Edit Controls)</strong>
+                                <span style="font-size: 0.76rem; color: #64748b;">Specify exact read (view) and write (edit) capabilities for this coordinator</span>
+                            </div>
                         </div>
-                    </label>
+                        <span style="font-size: 0.74rem; color: #2563eb; font-weight: 700; background: #eff6ff; padding: 4px 10px; border-radius: 20px; border: 1px solid #bfdbfe;">Multi-Select Access Controls</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                        <!-- Card 1: School Registrations (View & Edit) -->
+                        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 1.05rem;">📋</span>
+                                    <strong style="font-size: 0.88rem; color: #0f172a;">School Registrations</strong>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #0284c7; background: #f0f9ff; font-weight: 700; padding: 2px 7px; border-radius: 10px; border: 1px solid #bae6fd;">Verification Roster</span>
+                            </div>
+                            
+                            <!-- View Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#0284c7';">
+                                <input type="checkbox" id="create_can_view_registrations" name="can_view_registrations" value="1" checked style="width: 18px; height: 18px; accent-color: #0284c7; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(!this.checked){document.getElementById('create_can_edit_registrations').checked=false;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">👁️ View Registrations</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits coordinator to browse and search registered schools.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Edit Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#2563eb';">
+                                <input type="checkbox" id="create_can_edit_registrations" name="can_edit_registrations" value="1" checked style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('create_can_view_registrations').checked=true;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Edit & Verify Status</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits coordinator to update school status and edit records.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Card 2: Schools Master Directory (View & Edit) -->
+                        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 1.05rem;">🏛️</span>
+                                    <strong style="font-size: 0.88rem; color: #0f172a;">Schools & Mandals</strong>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #047857; background: #ecfdf5; font-weight: 700; padding: 2px 7px; border-radius: 10px; border: 1px solid #a7f3d0;">Master Directory</span>
+                            </div>
+                            
+                            <!-- View Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#047857';">
+                                <input type="checkbox" id="create_can_view_schools" name="can_view_schools" value="1" checked style="width: 18px; height: 18px; accent-color: #047857; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(!this.checked){document.getElementById('create_can_manage_schools').checked=false;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">👁️ View Directory</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits browsing schools, mandals and districts directory.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Edit Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#059669';">
+                                <input type="checkbox" id="create_can_manage_schools" name="can_manage_schools" value="1" style="width: 18px; height: 18px; accent-color: #059669; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('create_can_view_schools').checked=true;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Manage & Edit Data</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits adding, editing, renaming & organizing master data.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Card 3: Question Papers Console (View & Upload) -->
+                        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 1.05rem;">📄</span>
+                                    <strong style="font-size: 0.88rem; color: #0f172a;">Prelims Papers</strong>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #7c3aed; background: #f5f3ff; font-weight: 700; padding: 2px 7px; border-radius: 10px; border: 1px solid #ddd6fe;">Exam Console</span>
+                            </div>
+                            
+                            <!-- View Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#7c3aed';">
+                                <input type="checkbox" id="create_can_view_papers" name="can_view_papers" value="1" checked style="width: 18px; height: 18px; accent-color: #7c3aed; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(!this.checked){document.getElementById('create_can_manage_papers').checked=false;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">👁️ View & Download</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits accessing and downloading prelims question papers.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Edit/Upload Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#6b21a8';">
+                                <input type="checkbox" id="create_can_manage_papers" name="can_manage_papers" value="1" style="width: 18px; height: 18px; accent-color: #6b21a8; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('create_can_view_papers').checked=true;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Upload & Manage</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits uploading, managing and publishing exam papers.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -631,20 +905,20 @@ function filterStaffTable() {
 }
 </style>
 
-<div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem;">
-    <div style="background: #ffffff; border-radius: 20px; max-width: 680px; width: 100%; box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(226, 232, 240, 0.8); overflow: hidden; animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1); position: relative;">
+<div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem; overflow-y: auto;">
+    <div style="background: #ffffff; border-radius: 20px; max-width: 950px; width: 95vw; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.4), 0 0 0 1px rgba(226, 232, 240, 0.8); overflow: hidden; animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1); position: relative; margin: auto;">
         <!-- Top Accent Gradient Line -->
-        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6);"></div>
+        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6); flex-shrink: 0;"></div>
 
         <!-- Modal Header -->
-        <div style="padding: 1.35rem 2rem; background: linear-gradient(to right, #f8fafc, #ffffff); border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center;">
+        <div style="padding: 1.2rem 2rem; background: linear-gradient(to right, #f8fafc, #ffffff); border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <div style="display: flex; align-items: center; gap: 14px;">
-                <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                 </div>
                 <div>
                     <h3 style="font-size: 1.22rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.02em;">Edit Staff Account</h3>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
                         <span id="modalUsernameBadge" style="display: inline-flex; align-items: center; gap: 4px; background: #e0e7ff; color: #3730a3; font-weight: 700; font-size: 0.76rem; padding: 2px 8px; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">@username</span>
                         <span id="modalRoleBadge" style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Coordinator</span>
                     </div>
@@ -655,101 +929,207 @@ function filterStaffTable() {
             </button>
         </div>
 
-        <!-- Modal Form -->
-        <form method="POST" action="coordinators.php" style="padding: 1.75rem 2rem 1.5rem 2rem;">
+        <!-- Modal Form (Flex Column with scrollable content & pinned footer) -->
+        <form method="POST" action="coordinators.php" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
             <input type="hidden" name="action" value="edit_user">
             <input type="hidden" name="user_id" id="edit_user_id" value="">
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 1.25rem;">
-                <!-- Full Name -->
-                <div>
-                    <label class="modal-field-label" for="edit_name">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        Full Name <span style="color: #ef4444;">*</span>
-                    </label>
-                    <input type="text" id="edit_name" name="name" class="modal-field-input" placeholder="e.g. Hem Mohan" required>
+            <!-- Scrollable Body Content -->
+            <div style="padding: 1.4rem 2rem; overflow-y: auto; flex: 1;">
+                <!-- 3-Column Fields Grid -->
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.15rem; margin-bottom: 1.25rem;">
+                    <!-- Full Name -->
+                    <div>
+                        <label class="modal-field-label" for="edit_name">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                            Full Name <span style="color: #ef4444;">*</span>
+                        </label>
+                        <input type="text" id="edit_name" name="name" class="modal-field-input" placeholder="e.g. Hem Mohan" required>
+                    </div>
+
+                    <!-- Username -->
+                    <div>
+                        <label class="modal-field-label" for="edit_username">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
+                            Username <span style="color: #ef4444;">*</span>
+                        </label>
+                        <input type="text" id="edit_username" name="username" class="modal-field-input" placeholder="e.g. hema" required>
+                    </div>
+
+                    <!-- New Password -->
+                    <div>
+                        <label class="modal-field-label" for="edit_password">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                            New Password <span style="font-size: 0.72rem; color: #64748b; font-weight: normal; text-transform: none;">(Optional)</span>
+                        </label>
+                        <input type="password" id="edit_password" name="password" class="modal-field-input" placeholder="Leave empty to keep current">
+                    </div>
+
+                    <!-- System Role -->
+                    <div>
+                        <label class="modal-field-label" for="edit_role">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            System Role <span style="color: #ef4444;">*</span>
+                        </label>
+                        <select id="edit_role" name="role" class="modal-field-select" required>
+                            <option value="coordinator">Coordinator (Registrations & Papers)</option>
+                            <option value="admin">Administrator (Full System Control)</option>
+                        </select>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div>
+                        <label class="modal-field-label" for="edit_mobile">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            Phone Number
+                        </label>
+                        <input type="tel" id="edit_mobile" name="mobile" class="modal-field-input" placeholder="10-digit mobile" pattern="[0-9]{10}">
+                    </div>
+
+                    <!-- Account Status -->
+                    <div>
+                        <label class="modal-field-label" for="edit_is_active">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            Account Status <span style="color: #ef4444;">*</span>
+                        </label>
+                        <select id="edit_is_active" name="is_active" class="modal-field-select" required>
+                            <option value="1">🟢 Active (Access Enabled)</option>
+                            <option value="0">🔴 Suspended (Access Blocked)</option>
+                        </select>
+                    </div>
+
+                    <!-- Email Address (Spanning 3 columns) -->
+                    <div style="grid-column: span 3;">
+                        <label class="modal-field-label" for="edit_email">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            Email Address
+                        </label>
+                        <input type="email" id="edit_email" name="email" class="modal-field-input" placeholder="user@example.com">
+                    </div>
                 </div>
 
-                <!-- Username -->
-                <div>
-                    <label class="modal-field-label" for="edit_username">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
-                        Username <span style="color: #ef4444;">*</span>
-                    </label>
-                    <input type="text" id="edit_username" name="username" class="modal-field-input" placeholder="e.g. hema" required>
-                </div>
-
-                <!-- New Password -->
-                <div>
-                    <label class="modal-field-label" for="edit_password">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        New Password <span style="font-size: 0.72rem; color: #64748b; font-weight: normal; text-transform: none;">(Optional)</span>
-                    </label>
-                    <input type="password" id="edit_password" name="password" class="modal-field-input" placeholder="Leave empty to keep current">
-                </div>
-
-                <!-- System Role -->
-                <div>
-                    <label class="modal-field-label" for="edit_role">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        System Role <span style="color: #ef4444;">*</span>
-                    </label>
-                    <select id="edit_role" name="role" class="modal-field-select" required>
-                        <option value="coordinator">Coordinator (Registrations & Papers)</option>
-                        <option value="admin">Administrator (Full System Control)</option>
-                    </select>
-                </div>
-
-                <!-- Phone Number -->
-                <div>
-                    <label class="modal-field-label" for="edit_mobile">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                        Phone Number
-                    </label>
-                    <input type="tel" id="edit_mobile" name="mobile" class="modal-field-input" placeholder="10-digit mobile" pattern="[0-9]{10}">
-                </div>
-
-                <!-- Account Status -->
-                <div>
-                    <label class="modal-field-label" for="edit_is_active">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        Account Status <span style="color: #ef4444;">*</span>
-                    </label>
-                    <select id="edit_is_active" name="is_active" class="modal-field-select" required>
-                        <option value="1">🟢 Active (Access Enabled)</option>
-                        <option value="0">🔴 Suspended (Access Blocked)</option>
-                    </select>
-                </div>
-
-                <!-- Email Address (Full Width) -->
-                <div style="grid-column: span 2;">
-                    <label class="modal-field-label" for="edit_email">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        Email Address
-                    </label>
-                    <input type="email" id="edit_email" name="email" class="modal-field-input" placeholder="user@example.com">
-                </div>
-
-                <!-- Directory Management Permission Checkbox -->
-                <div style="grid-column: span 2; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 14px 18px; margin-top: 4px;">
-                    <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin: 0;">
-                        <input type="checkbox" id="edit_can_manage_schools" name="can_manage_schools" value="1" style="width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer; margin-top: 2px;">
-                        <div>
-                            <strong style="color: #0f172a; font-size: 0.94rem; display: block;">🏛️ Permit Directory Management (Schools, Mandals & Districts)</strong>
-                            <span style="color: #64748b; font-size: 0.82rem; line-height: 1.4; display: block; margin-top: 2px;">
-                                Allow this coordinator to access the Directory Manager to view, add, edit, or delete schools, mandals and districts across Andhra Pradesh.
-                            </span>
+                <!-- Granular Coordinator Permissions Multi-Select Box (3 Columns Horizontal) -->
+                <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px 20px; margin-top: 6px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.2rem;">🛡️</span>
+                            <div>
+                                <strong style="color: #0f172a; font-size: 0.98rem; display: block;">Granular Coordinator Permissions (View & Edit Controls)</strong>
+                                <span style="font-size: 0.76rem; color: #64748b;">Specify exact read (view) and write (edit) capabilities for this coordinator</span>
+                            </div>
                         </div>
-                    </label>
+                        <span style="font-size: 0.74rem; color: #2563eb; font-weight: 700; background: #eff6ff; padding: 4px 10px; border-radius: 20px; border: 1px solid #bfdbfe;">Multi-Select Access Controls</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                        <!-- Card 1: School Registrations (View & Edit) -->
+                        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 1.05rem;">📋</span>
+                                    <strong style="font-size: 0.88rem; color: #0f172a;">School Registrations</strong>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #0284c7; background: #f0f9ff; font-weight: 700; padding: 2px 7px; border-radius: 10px; border: 1px solid #bae6fd;">Verification Roster</span>
+                            </div>
+                            
+                            <!-- View Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#0284c7';">
+                                <input type="checkbox" id="edit_can_view_registrations" name="can_view_registrations" value="1" style="width: 18px; height: 18px; accent-color: #0284c7; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(!this.checked){document.getElementById('edit_can_edit_registrations').checked=false;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">👁️ View Registrations</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits coordinator to browse and search registered schools.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Edit Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#2563eb';">
+                                <input type="checkbox" id="edit_can_edit_registrations" name="can_edit_registrations" value="1" style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('edit_can_view_registrations').checked=true;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Edit & Verify Status</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits coordinator to update school status and edit records.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Card 2: Schools Master Directory (View & Edit) -->
+                        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 1.05rem;">🏛️</span>
+                                    <strong style="font-size: 0.88rem; color: #0f172a;">Schools & Mandals</strong>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #047857; background: #ecfdf5; font-weight: 700; padding: 2px 7px; border-radius: 10px; border: 1px solid #a7f3d0;">Master Directory</span>
+                            </div>
+                            
+                            <!-- View Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#047857';">
+                                <input type="checkbox" id="edit_can_view_schools" name="can_view_schools" value="1" style="width: 18px; height: 18px; accent-color: #047857; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(!this.checked){document.getElementById('edit_can_manage_schools').checked=false;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">👁️ View Directory</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits browsing schools, mandals and districts directory.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Edit Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#059669';">
+                                <input type="checkbox" id="edit_can_manage_schools" name="can_manage_schools" value="1" style="width: 18px; height: 18px; accent-color: #059669; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('edit_can_view_schools').checked=true;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Manage & Edit Data</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits adding, editing, renaming & organizing master data.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Card 3: Question Papers Console (View & Upload) -->
+                        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 1.05rem;">📄</span>
+                                    <strong style="font-size: 0.88rem; color: #0f172a;">Prelims Papers</strong>
+                                </div>
+                                <span style="font-size: 0.7rem; color: #7c3aed; background: #f5f3ff; font-weight: 700; padding: 2px 7px; border-radius: 10px; border: 1px solid #ddd6fe;">Exam Console</span>
+                            </div>
+                            
+                            <!-- View Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#7c3aed';">
+                                <input type="checkbox" id="edit_can_view_papers" name="can_view_papers" value="1" style="width: 18px; height: 18px; accent-color: #7c3aed; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(!this.checked){document.getElementById('edit_can_manage_papers').checked=false;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">👁️ View & Download</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits accessing and downloading prelims question papers.
+                                    </span>
+                                </div>
+                            </label>
+
+                            <!-- Edit/Upload Option -->
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#6b21a8';">
+                                <input type="checkbox" id="edit_can_manage_papers" name="can_manage_papers" value="1" style="width: 18px; height: 18px; accent-color: #6b21a8; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('edit_can_view_papers').checked=true;}">
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Upload & Manage</strong>
+                                    <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
+                                        Permits uploading, managing and publishing exam papers.
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Modal Action Buttons Footer -->
-            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding-top: 1.25rem; border-top: 1px solid #edf2f7; margin-top: 0.5rem;">
-                <button type="button" onclick="closeEditModal()" style="height: 44px; padding: 0 1.4rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1'">
+            <!-- Modal Action Buttons Footer (STICKY / FIXED AT BOTTOM ALWAYS VISIBLE) -->
+            <div style="padding: 1rem 2rem; background: #ffffff; border-top: 1px solid #edf2f7; display: flex; justify-content: flex-end; align-items: center; gap: 12px; flex-shrink: 0; box-shadow: 0 -4px 14px rgba(0,0,0,0.03);">
+                <button type="button" onclick="closeEditModal()" style="height: 44px; padding: 0 1.5rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1'">
                     Cancel
                 </button>
-                <button type="submit" style="height: 44px; padding: 0 1.75rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
+                <button type="submit" id="saveStaffChangesBtn" style="height: 44px; padding: 0 2rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     Save Changes
                 </button>
@@ -768,7 +1148,17 @@ function openEditModal(user) {
     document.getElementById('edit_email').value = (user.email && user.email !== 'N/A') ? user.email : '';
     document.getElementById('edit_mobile').value = (user.mobile && user.mobile !== 'N/A') ? user.mobile : '';
     document.getElementById('edit_is_active').value = (user.is_active !== undefined) ? user.is_active : 1;
+    
+    // Set granular View and Edit permissions
+    document.getElementById('edit_can_view_registrations').checked = (user.can_view_registrations === undefined || parseInt(user.can_view_registrations) === 1);
+    const isViewOnly = (parseInt(user.can_view_regs_only) === 1 || (user.can_edit_registrations !== undefined && parseInt(user.can_edit_registrations) === 0));
+    document.getElementById('edit_can_edit_registrations').checked = !isViewOnly;
+    
+    document.getElementById('edit_can_view_schools').checked = (user.can_view_schools === undefined || parseInt(user.can_view_schools) === 1);
     document.getElementById('edit_can_manage_schools').checked = (parseInt(user.can_manage_schools) === 1);
+    
+    document.getElementById('edit_can_view_papers').checked = (user.can_view_papers === undefined || parseInt(user.can_view_papers) === 1);
+    document.getElementById('edit_can_manage_papers').checked = (parseInt(user.can_manage_papers) === 1);
     
     document.getElementById('modalUsernameBadge').textContent = '@' + (user.username || '');
     document.getElementById('modalRoleBadge').textContent = (user.role === 'admin' ? 'State Administrator' : 'Staff Coordinator');
