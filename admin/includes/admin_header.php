@@ -320,14 +320,14 @@ $totalSchoolsBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM school_registr
         }
 
         .topbar-title {
-            font-size: 1.15rem;
-            font-weight: 800;
+            font-size: 1.05rem;
+            font-weight: 700;
             color: #0f172a;
             margin: 0;
             display: flex;
             align-items: center;
-            flex-direction: column !important;
             gap: 8px;
+            letter-spacing: -0.01em;
         }
 
         .topbar-right {
