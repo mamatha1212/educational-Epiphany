@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = "Login Portals - EEMT 2027";
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/auth.php';

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 /**
  * Vercel Serverless Entry Point & Front-Controller for EEMT 2027
  */

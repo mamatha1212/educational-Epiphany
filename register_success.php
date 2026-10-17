@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = "Registration Confirmation - EEMT 2027";
 require_once __DIR__ . '/config/database.php';
 

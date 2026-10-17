@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $inSubdir = in_array(basename(dirname($_SERVER['PHP_SELF'])), ['school', 'admin', 'staff']);
 $rootPath = $inSubdir ? '../' : './';
 ?>

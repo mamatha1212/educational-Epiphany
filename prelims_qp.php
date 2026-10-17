@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * EEMT 2027 - Prelims Question Papers (QP) Verification & Download Portal
  * Mandatory validation: 1. UDISE Code, 2. EEMTSRC (EEMT School Registration Code - Format: 26275XXXXXX)

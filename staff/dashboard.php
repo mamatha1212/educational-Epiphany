@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * EEMT 2027 - Staff & Coordinator Dashboard
  */
