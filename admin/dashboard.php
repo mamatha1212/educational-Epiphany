@@ -372,61 +372,61 @@ require_once __DIR__ . '/includes/admin_header.php';
             <p style="font-size: 0.9rem; margin: 0;">No school records match your current filter parameters.</p>
         </div>
     <?php else: ?>
-        <div class="table-responsive">
-            <table class="table" style="margin-bottom: 0;">
+        <div class="table-responsive" style="overflow-x: auto; width: 100%;">
+            <table class="table" style="margin-bottom: 0; width: 100%; min-width: 1450px; border-collapse: collapse;">
                 <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                     <tr>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">Ref ID (EEMTSRC)</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">School Name</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">District / Mandal</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">UDISE Code</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">In-Charge Person</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">Mobile / Email</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px;">Registered On</th>
-                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 12px 16px; text-align: right;">Admin Action</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 160px; min-width: 160px;">Ref ID (EEMTSRC)</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 340px; min-width: 300px;">School Name</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 220px; min-width: 200px;">District / Mandal</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 140px; min-width: 130px;">UDISE Code</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 200px; min-width: 180px;">In-Charge Person</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 220px; min-width: 200px;">Mobile / Email</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 180px; min-width: 160px;">Registered On</th>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 130px; min-width: 120px; text-align: right;">Admin Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($registrations as $row): ?>
                         <tr style="border-bottom: 1px solid #f1f5f9;">
-                            <td style="padding: 12px 16px; vertical-align: middle;">
-                                <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-family: monospace; font-size: 0.88rem; font-weight: 700; border: 1px solid #bfdbfe;">
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-family: monospace; font-size: 0.88rem; font-weight: 700; border: 1px solid #bfdbfe; white-space: nowrap;">
                                     <?php echo htmlspecialchars($row['reference_id']); ?>
                                 </span>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle;">
-                                <strong style="color: #0f172a; display: block; max-width: 260px; font-size: 0.92rem; line-height: 1.3;">
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <strong style="color: #0f172a; display: block; font-size: 0.94rem; line-height: 1.4;">
                                     <?php echo htmlspecialchars($row['school_name']); ?>
                                 </strong>
                                 <span style="font-size: 0.75rem; color: #64748b;">EEMT 2027 Prelims</span>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle;">
-                                <div style="font-weight: 700; color: #334155; font-size: 0.88rem;"><?php echo htmlspecialchars($row['district']); ?></div>
-                                <div style="font-size: 0.8rem; color: #64748b;"><?php echo htmlspecialchars($row['mandal']); ?></div>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <div style="font-weight: 700; color: #334155; font-size: 0.88rem; white-space: nowrap;"><?php echo htmlspecialchars($row['district']); ?></div>
+                                <div style="font-size: 0.8rem; color: #64748b; white-space: nowrap;"><?php echo htmlspecialchars($row['mandal']); ?></div>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle;">
-                                <code style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; color: #0284c7; font-weight: 600;">
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <code style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; color: #0284c7; font-weight: 600; white-space: nowrap;">
                                     <?php echo htmlspecialchars($row['unique_code']); ?>
                                 </code>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle;">
-                                <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;"><?php echo htmlspecialchars($row['contact_person']); ?></div>
-                                <span class="badge badge-info" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; font-weight: 600;"><?php echo htmlspecialchars($row['designation']); ?></span>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem; white-space: nowrap;"><?php echo htmlspecialchars($row['contact_person']); ?></div>
+                                <span class="badge badge-info" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; font-weight: 600; white-space: nowrap;"><?php echo htmlspecialchars($row['designation']); ?></span>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle;">
-                                <div><a href="tel:<?php echo htmlspecialchars($row['mobile']); ?>" style="color: #2563eb; font-weight: 600; font-size: 0.85rem; text-decoration: none;"><?php echo htmlspecialchars($row['mobile']); ?></a></div>
-                                <div style="font-size: 0.75rem; color: #64748b; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><?php echo htmlspecialchars($row['email']); ?></div>
+                            <td style="padding: 14px 18px; vertical-align: middle;">
+                                <div><a href="tel:<?php echo htmlspecialchars($row['mobile']); ?>" style="color: #2563eb; font-weight: 600; font-size: 0.85rem; text-decoration: none; white-space: nowrap;"><?php echo htmlspecialchars($row['mobile']); ?></a></div>
+                                <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;"><?php echo htmlspecialchars($row['email']); ?></div>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle; font-size: 0.8rem; color: #64748b; white-space: nowrap;">
+                            <td style="padding: 14px 18px; vertical-align: middle; font-size: 0.8rem; color: #64748b; white-space: nowrap;">
                                 <?php echo date('d M Y, h:i A', strtotime($row['created_at'])); ?>
                             </td>
-                            <td style="padding: 12px 16px; vertical-align: middle; text-align: right; white-space: nowrap;">
-                                <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="btn" style="padding: 5px 10px; font-size: 0.75rem; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none;" title="View Registration Slip">
+                            <td style="padding: 14px 18px; vertical-align: middle; text-align: right; white-space: nowrap;">
+                                <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="btn" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 600; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none;" title="View Registration Slip">
                                     📄 Slip
                                 </a>
                                 <form method="POST" action="dashboard.php" style="display: inline-block;" onsubmit="return confirm('Permanently delete registration for <?php echo htmlspecialchars(addslashes($row['school_name'])); ?> (<?php echo $row['reference_id']; ?>)?');">
                                     <input type="hidden" name="reg_id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" name="delete_reg" value="1" class="btn" style="padding: 5px 10px; font-size: 0.75rem; font-weight: 600; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-left: 4px;" title="Delete Record">
+                                    <button type="submit" name="delete_reg" value="1" class="btn" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 600; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; margin-left: 4px;" title="Delete Record">
                                         🗑️
                                     </button>
                                 </form>

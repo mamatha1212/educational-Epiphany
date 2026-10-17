@@ -239,16 +239,16 @@ require_once __DIR__ . '/../includes/header.php';
                 <p style="font-size: 0.9rem; margin: 0;">Try adjusting your search or filters.</p>
             </div>
         <?php else: ?>
-            <div class="table-responsive">
-                <table class="table">
+        <div class="table-responsive" style="overflow-x: auto; width: 100%;">
+                <table class="table" style="width: 100%; min-width: 1150px; border-collapse: collapse;">
                     <thead>
                         <tr>
-                            <th>EEMTSRC (Ref ID)</th>
-                            <th>School Details</th>
-                            <th>Location</th>
-                            <th>In-Charge Person</th>
-                            <th>Outreach / Actions</th>
-                            <th>Status Tracking</th>
+                            <th style="width: 160px; min-width: 160px; padding: 14px 16px;">EEMTSRC (Ref ID)</th>
+                            <th style="width: 340px; min-width: 280px; padding: 14px 16px;">School Details</th>
+                            <th style="width: 200px; min-width: 180px; padding: 14px 16px;">Location</th>
+                            <th style="width: 200px; min-width: 180px; padding: 14px 16px;">In-Charge Person</th>
+                            <th style="width: 200px; min-width: 180px; padding: 14px 16px;">Outreach / Actions</th>
+                            <th style="width: 160px; min-width: 150px; padding: 14px 16px;">Status Tracking</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -258,16 +258,16 @@ require_once __DIR__ . '/../includes/header.php';
                             $waText = rawurlencode("Respected Headmaster, Greetings from EEMT 2027 Coordinator Team.\nRegarding your registration for " . $row['school_name'] . " (EEMTSRC: " . $row['reference_id'] . "). Please let us know if you have received the Prelims Question Papers.");
                         ?>
                             <tr>
-                                <td>
-                                    <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-family: monospace; font-size: 0.9rem; font-weight: 700; border: 1px solid #bfdbfe;">
+                                <td style="padding: 14px 16px; vertical-align: middle;">
+                                    <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-family: monospace; font-size: 0.9rem; font-weight: 700; border: 1px solid #bfdbfe; white-space: nowrap;">
                                         <?php echo htmlspecialchars($row['reference_id']); ?>
                                     </span>
-                                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; white-space: nowrap;">
                                         Reg: <?php echo date('d M, h:i A', strtotime($row['created_at'])); ?>
                                     </div>
                                 </td>
-                                <td>
-                                    <strong style="color: #0f172a; display: block; max-width: 260px; font-size: 0.92rem;">
+                                <td style="padding: 14px 16px; vertical-align: middle;">
+                                    <strong style="color: #0f172a; display: block; font-size: 0.94rem; line-height: 1.4;">
                                         <?php echo htmlspecialchars($row['school_name']); ?>
                                     </strong>
                                     <span style="font-size: 0.78rem; color: #64748b;">
