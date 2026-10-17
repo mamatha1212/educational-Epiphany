@@ -96,6 +96,17 @@ if (!str_starts_with($sqliteFile, '/') && !preg_match('/^[A-Za-z]:\\\\/', $sqlit
     // Relative to root
     $sqliteFile = $rootDir . '/' . ltrim($sqliteFile, '/\\');
 }
+
+// In Vercel serverless environment, filesystem is read-only. Copy SQLite to /tmp so PDO can open it safely
+if (getenv('VERCEL') || isset($_ENV['VERCEL']) || (file_exists($sqliteFile) && !is_writable(dirname($sqliteFile)))) {
+    $tmpDb = sys_get_temp_dir() . '/eemt2027.sqlite';
+    if (!file_exists($tmpDb) && file_exists($sqliteFile)) {
+        @copy($sqliteFile, $tmpDb);
+    }
+    if (file_exists($tmpDb)) {
+        $sqliteFile = $tmpDb;
+    }
+}
 define('SQLITE_PATH', $sqliteFile);
 
 /**
@@ -124,7 +135,11 @@ function getDB(): PDO {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         $pdo->exec("PRAGMA foreign_keys = ON;");
-        $pdo->exec("PRAGMA journal_mode = WAL;");
+        try {
+            $pdo->exec("PRAGMA journal_mode = WAL;");
+        } catch (Exception $e) {
+            @$pdo->exec("PRAGMA journal_mode = DELETE;");
+        }
     } else {
         // MySQL / MariaDB (Standard for Shared Hosting cPanel & Production VPS)
         $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', MYSQL_HOST, MYSQL_PORT, MYSQL_NAME);
