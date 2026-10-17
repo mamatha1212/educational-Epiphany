@@ -315,6 +315,9 @@ $totalRegisteredSchools = (int)$pdo->query("SELECT COUNT(*) FROM schools_master 
 // Districts List for Selects & Autocomplete
 $districtsList = $pdo->query("SELECT DISTINCT district FROM schools_master WHERE district != '' ORDER BY district ASC")->fetchAll(PDO::FETCH_COLUMN);
 
+// All Mandals List for Global Autocomplete / Search
+$allMandalsList = $pdo->query("SELECT DISTINCT mandal FROM schools_master WHERE mandal != '' ORDER BY mandal ASC")->fetchAll(PDO::FETCH_COLUMN);
+
 // Pagination setup
 $reqPerPage = isset($_GET['per_page']) ? (int)$_GET['per_page'] : 25;
 $perPage = in_array($reqPerPage, [15, 25, 50, 100, 250], true) ? $reqPerPage : 25;
@@ -742,6 +745,38 @@ require_once __DIR__ . '/includes/admin_header.php';
     </div>
 </div>
 
+<!-- GLOBAL SEARCH BAR ACROSS DISTRICTS, MANDALS & SCHOOLS -->
+<div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+    <form method="GET" action="schools_master.php" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; color: #2563eb; font-weight: 800; font-size: 0.92rem; white-space: nowrap;">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <span>Search Master:</span>
+        </div>
+        
+        <div style="flex: 1; min-width: 260px; position: relative;">
+            <input type="text" name="search" class="sm-input" list="search_suggestions_datalist" placeholder="Search any School Name, UDISE Code, Mandal, or District..." value="<?php echo htmlspecialchars($search); ?>">
+        </div>
+
+        <div style="min-width: 170px;">
+            <select name="view" class="sm-select" style="font-weight: 700; color: #1e293b;">
+                <option value="schools" <?php echo $view === 'schools' ? 'selected' : ''; ?>>🏫 in Schools Directory</option>
+                <option value="mandals" <?php echo $view === 'mandals' ? 'selected' : ''; ?>>🗺️ in Mandals (672)</option>
+                <option value="districts" <?php echo $view === 'districts' ? 'selected' : ''; ?>>🏛️ in Districts (28)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn" style="background: #2563eb; color: white; border: none; padding: 0 1.4rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 6px rgba(37,99,235,0.25);">
+            🔍 Search
+        </button>
+
+        <?php if (!empty($search)): ?>
+            <a href="schools_master.php?view=<?php echo htmlspecialchars($view); ?>" class="btn" style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;">
+                Clear Search
+            </a>
+        <?php endif; ?>
+    </form>
+</div>
+
 <!-- 3-TIER HIERARCHY NAVIGATION TABS -->
 <div class="sm-nav-tab-container">
     <a href="schools_master.php?view=districts" class="hierarchy-tab <?php echo $view === 'districts' ? 'active' : ''; ?>">
@@ -764,7 +799,12 @@ require_once __DIR__ . '/includes/admin_header.php';
 <?php if ($view === 'districts'): ?>
     <?php
     $districtSearch = trim($_GET['search'] ?? '');
-    $whereD = $districtSearch ? "WHERE district LIKE " . $pdo->quote("%$districtSearch%") : "WHERE district != ''";
+    if ($districtSearch) {
+        $qS = $pdo->quote("%$districtSearch%");
+        $whereD = "WHERE (district LIKE {$qS} OR district IN (SELECT DISTINCT district FROM schools_master WHERE mandal LIKE {$qS} OR school_name LIKE {$qS}))";
+    } else {
+        $whereD = "WHERE district != ''";
+    }
     $dSql = "
         SELECT 
             district,
@@ -781,11 +821,11 @@ require_once __DIR__ . '/includes/admin_header.php';
 
     <!-- District Filter Toolbar -->
     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.15rem 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
-        <form method="GET" action="schools_master.php" style="display: flex; gap: 10px; align-items: center; flex: 1; max-width: 500px;">
+        <form method="GET" action="schools_master.php" style="display: flex; gap: 10px; align-items: center; flex: 1; max-width: 550px;">
             <input type="hidden" name="view" value="districts">
-            <input type="text" name="search" class="sm-input" placeholder="Search District by name..." value="<?php echo htmlspecialchars($districtSearch); ?>">
+            <input type="text" name="search" class="sm-input" list="all_districts_datalist" placeholder="Search District by name (or type a Mandal/School)..." value="<?php echo htmlspecialchars($districtSearch); ?>">
             <button type="submit" class="btn" style="background: #2563eb; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
-                Search
+                Search Districts
             </button>
             <?php if ($districtSearch): ?>
                 <a href="schools_master.php?view=districts" class="btn" style="background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; height: 42px; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center;">Reset</a>
@@ -793,6 +833,7 @@ require_once __DIR__ . '/includes/admin_header.php';
         </form>
 
         <div style="display: flex; align-items: center; gap: 12px; margin-left: auto;">
+            <input type="text" id="liveDistrictFilter" onkeyup="filterDistrictsLive(this.value)" placeholder="⚡ Instant filter table..." style="height: 38px; padding: 0 12px; font-size: 0.82rem; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #f8fafc; outline: none; width: 180px;">
             <div style="font-size: 0.88rem; color: #64748b; font-weight: 600;">
                 Showing <strong><?php echo count($districtsData); ?></strong> Revenue Districts
             </div>
@@ -944,11 +985,11 @@ require_once __DIR__ . '/includes/admin_header.php';
             </div>
 
             <div style="flex: 1; min-width: 200px;">
-                <input type="text" name="search" class="sm-input" placeholder="Search Mandal by name..." value="<?php echo htmlspecialchars($mandalSearch); ?>">
+                <input type="text" name="search" class="sm-input" list="all_mandals_datalist" placeholder="Search Mandal name or District..." value="<?php echo htmlspecialchars($mandalSearch); ?>">
             </div>
 
             <button type="submit" class="btn" style="background: #2563eb; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
-                Filter
+                Search Mandals
             </button>
 
             <?php if ($selectedDistrict || $mandalSearch): ?>
@@ -979,11 +1020,12 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <?php echo number_format($totalMandalsFiltered); ?> Mandals
                 </span>
             </div>
-            <div style="display: flex; align-items: center; gap: 1rem; font-size: 0.82rem; color: #64748b;">
+            <div style="display: flex; align-items: center; gap: 1rem; font-size: 0.82rem; color: #64748b; flex-wrap: wrap;">
+                <input type="text" id="liveMandalFilter" onkeyup="filterMandalsLive(this.value)" placeholder="⚡ Instant filter visible rows..." style="height: 36px; padding: 0 12px; font-size: 0.82rem; border: 1.5px solid #cbd5e1; border-radius: 8px; background: white; outline: none; width: 210px;">
                 <?php if ($totalMandalsFiltered > $mPerPage && $mPerPage < 10000): ?>
                     <span>Showing <?php echo number_format($mOffset + 1); ?> - <?php echo number_format(min($mOffset + $mPerPage, $totalMandalsFiltered)); ?></span>
                 <?php endif; ?>
-                <span>Click <strong>"View Schools"</strong> to see all schools in a mandal</span>
+                <span>Click <strong>"View Schools"</strong> to see all schools</span>
             </div>
         </div>
         <div style="overflow-x: auto;">
@@ -1116,7 +1158,7 @@ require_once __DIR__ . '/includes/admin_header.php';
         $whereS[] = "is_registered = 0";
     }
     if (!empty($search)) {
-        $whereS[] = "(school_name LIKE :s OR unique_code LIKE :s OR mandal LIKE :s)";
+        $whereS[] = "(school_name LIKE :s OR unique_code LIKE :s OR mandal LIKE :s OR district LIKE :s)";
         $paramsS[':s'] = "%$search%";
     }
 
@@ -1156,7 +1198,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; align-items: flex-end;">
                 
                 <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District</label>
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District (28)</label>
                     <select name="district" class="sm-select" onchange="onSchoolsDistrictChange(this.value)">
                         <option value="">All Districts</option>
                         <?php foreach ($districtsList as $d): ?>
@@ -1168,15 +1210,21 @@ require_once __DIR__ . '/includes/admin_header.php';
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal</label>
-                    <select id="schoolsMandalSelect" name="mandal" class="sm-select">
-                        <option value="">All Mandals</option>
-                        <?php foreach ($mandalsForDistrict as $m): ?>
-                            <option value="<?php echo htmlspecialchars($m); ?>" <?php echo $selectedMandal === $m ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($m); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal (Search / Select)</label>
+                    <div id="mandalSelectWrapper">
+                        <?php if (!empty($selectedDistrict)): ?>
+                            <select id="schoolsMandalSelect" name="mandal" class="sm-select">
+                                <option value="">All Mandals in <?php echo htmlspecialchars($selectedDistrict); ?></option>
+                                <?php foreach ($mandalsForDistrict as $m): ?>
+                                    <option value="<?php echo htmlspecialchars($m); ?>" <?php echo $selectedMandal === $m ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($m); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php else: ?>
+                            <input type="text" id="schoolsMandalSelect" name="mandal" list="all_mandals_datalist" class="sm-input" placeholder="Type or select Mandal..." value="<?php echo htmlspecialchars($selectedMandal); ?>">
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div>
@@ -1189,13 +1237,13 @@ require_once __DIR__ . '/includes/admin_header.php';
                 </div>
 
                 <div>
-                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Search Name or UDISE</label>
-                    <input type="text" name="search" class="sm-input" placeholder="e.g. 28142500311..." value="<?php echo htmlspecialchars($search); ?>">
+                    <label style="display: block; font-size: 0.78rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Search School / Code / Mandal / District</label>
+                    <input type="text" name="search" class="sm-input" placeholder="e.g. 281425..., ZPHS, Chimakurthi..." value="<?php echo htmlspecialchars($search); ?>">
                 </div>
 
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                     <button type="submit" class="btn" style="height: 42px; background: #2563eb; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
-                        Filter
+                        🔍 Filter Schools
                     </button>
                     <?php if ($selectedDistrict || $selectedMandal || $statusFilter || $search): ?>
                         <a href="schools_master.php?view=schools" class="btn" style="height: 42px; background: #f1f5f9; color: #475569; border: 1.5px solid #cbd5e1; padding: 0 1rem; font-weight: 700; border-radius: 9px; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap;">Reset</a>
@@ -1223,8 +1271,11 @@ require_once __DIR__ . '/includes/admin_header.php';
                 </span>
             </div>
             
-            <div style="font-size: 0.85rem; color: #64748b;">
-                Showing <?php echo $totalFiltered > 0 ? number_format($offset + 1) : 0; ?> to <?php echo number_format(min($offset + $perPage, $totalFiltered)); ?> of <?php echo number_format($totalFiltered); ?>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <input type="text" id="liveSchoolFilter" onkeyup="filterSchoolsLive(this.value)" placeholder="⚡ Instant filter visible rows..." style="height: 36px; padding: 0 12px; font-size: 0.82rem; border: 1.5px solid #cbd5e1; border-radius: 8px; background: white; outline: none; width: 220px;">
+                <div style="font-size: 0.85rem; color: #64748b;">
+                    Showing <?php echo $totalFiltered > 0 ? number_format($offset + 1) : 0; ?> to <?php echo number_format(min($offset + $perPage, $totalFiltered)); ?> of <?php echo number_format($totalFiltered); ?>
+                </div>
             </div>
         </div>
 
@@ -1620,18 +1671,28 @@ require_once __DIR__ . '/includes/admin_header.php';
 <script>
 // Dynamic Mandals for Schools Filter Toolbar
 function onSchoolsDistrictChange(district) {
-    const sel = document.getElementById('schoolsMandalSelect');
-    sel.innerHTML = '<option value="">All Mandals</option>';
-    if (!district) return;
+    const wrapper = document.getElementById('mandalSelectWrapper');
+    if (!wrapper) return;
+    
+    if (!district) {
+        wrapper.innerHTML = '<input type="text" id="schoolsMandalSelect" name="mandal" list="all_mandals_datalist" class="sm-input" placeholder="Type or select Mandal...">';
+        return;
+    }
+    
+    wrapper.innerHTML = '<select id="schoolsMandalSelect" name="mandal" class="sm-select"><option value="">Loading mandals...</option></select>';
     fetch('../api/get_mandals.php?district=' + encodeURIComponent(district))
         .then(r => r.json())
         .then(mandals => {
+            let html = '<select id="schoolsMandalSelect" name="mandal" class="sm-select">';
+            html += '<option value="">All Mandals in ' + district + ' (' + mandals.length + ')</option>';
             mandals.forEach(m => {
-                const opt = document.createElement('option');
-                opt.value = m;
-                opt.textContent = m;
-                sel.appendChild(opt);
+                html += '<option value="' + m.replace(/"/g, '&quot;') + '">' + m + '</option>';
             });
+            html += '</select>';
+            wrapper.innerHTML = html;
+        })
+        .catch(err => {
+            wrapper.innerHTML = '<input type="text" id="schoolsMandalSelect" name="mandal" list="all_mandals_datalist" class="sm-input" placeholder="Type or select Mandal...">';
         });
 }
 
@@ -1858,6 +1919,34 @@ function closeEditSchoolModal() {
     document.getElementById('editSchoolModal').style.display = 'none';
 }
 
+// Live Instant Filter Functions
+function filterDistrictsLive(query) {
+    const q = (query || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('.data-table-row');
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+
+function filterMandalsLive(query) {
+    const q = (query || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('.data-table-row');
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+
+function filterSchoolsLive(query) {
+    const q = (query || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('.data-table-row');
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(q) ? '' : 'none';
+    });
+}
+
 // Close on backdrop click
 window.addEventListener('click', function(e) {
     ['addDistrictModal', 'editDistrictModal', 'addMandalModal', 'editMandalModal', 'addSchoolModal', 'editSchoolModal'].forEach(id => {
@@ -1866,5 +1955,27 @@ window.addEventListener('click', function(e) {
     });
 });
 </script>
+
+<!-- REUSABLE DATALISTS FOR INSTANT SEARCH AUTOCOMPLETE -->
+<datalist id="all_districts_datalist">
+    <?php foreach ($districtsList as $d): ?>
+        <option value="<?php echo htmlspecialchars($d); ?>"></option>
+    <?php endforeach; ?>
+</datalist>
+
+<datalist id="all_mandals_datalist">
+    <?php foreach ($allMandalsList as $m): ?>
+        <option value="<?php echo htmlspecialchars($m); ?>"></option>
+    <?php endforeach; ?>
+</datalist>
+
+<datalist id="search_suggestions_datalist">
+    <?php foreach ($districtsList as $d): ?>
+        <option value="<?php echo htmlspecialchars($d); ?>">District (28)</option>
+    <?php endforeach; ?>
+    <?php foreach (array_slice($allMandalsList, 0, 150) as $m): ?>
+        <option value="<?php echo htmlspecialchars($m); ?>">Mandal</option>
+    <?php endforeach; ?>
+</datalist>
 
 <?php require_once __DIR__ . '/includes/admin_footer.php'; ?>
