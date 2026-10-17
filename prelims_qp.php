@@ -94,7 +94,7 @@ require_once __DIR__ . '/includes/header.php';
 <div class="card" style="max-width: 900px; margin: 0 auto;">
     <?php if ($error): ?>
         <div class="alert alert-danger" style="margin-bottom: 1.5rem;">
-            <span>âš ï¸</span>
+            <span>⚠️</span>
             <span><?php echo htmlspecialchars($error); ?></span>
         </div>
     <?php endif; ?>

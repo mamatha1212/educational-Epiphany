@@ -154,7 +154,7 @@ require_once __DIR__ . '/includes/header.php';
             onerror="this.src='assets/images/logo.jpeg';">
     </div>
     <h2 class="page-title">AP Government Schools Registration</h2>
-    <p class="page-subtitle">Educational Epiphany Merit Test (EEMT) 2027 â€” School Prelims Enrollment Portal</p>
+    <p class="page-subtitle">Educational Epiphany Merit Test (EEMT) 2027 &mdash; School Prelims Enrollment Portal</p>
 </div>
 
 <div class="card" style="max-width: 850px; margin: 0 auto;">
@@ -165,7 +165,7 @@ require_once __DIR__ . '/includes/header.php';
 
     <?php if ($error): ?>
         <div class="alert alert-danger">
-            <span>âš ï¸</span>
+            <span>⚠️ </span>
             <span><?php echo htmlspecialchars($error); ?></span>
         </div>
     <?php endif; ?>
@@ -238,7 +238,7 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
                 <span id="contact_lock_badge"
                     style="font-size: 0.8rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; <?php echo $isUnlocked ? 'background: #dcfce7; color: #15803d; border: 1px solid #86efac;' : 'background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1;'; ?>">
-                    <?php echo $isUnlocked ? 'Verified & Unlocked' : 'Locked Verify School Code First'; ?>
+                    <?php echo $isUnlocked ? '✓ Verified & Unlocked' : '🔒 Locked - Verify School Code First'; ?>
                 </span>
             </div>
 
@@ -276,7 +276,7 @@ require_once __DIR__ . '/includes/header.php';
                         placeholder="Enter 10-digit mobile number (digits only)"
                         inputmode="numeric" minlength="10" maxlength="10" pattern="[0-9]{10}"
                         oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
-                        value="<?php echo htmlspecialchars($_POST['mobile'] ?? ''); ?>" required <?php echo $contactDisabled; ?>>" required <?php echo $contactDisabled; ?>>
+                        value="<?php echo htmlspecialchars($_POST['mobile'] ?? ''); ?>" required <?php echo $contactDisabled; ?>>
                     <div class="form-hint">Reference ID and exam updates will be communicated to this number.</div>
                 </div>
 
@@ -288,7 +288,7 @@ require_once __DIR__ . '/includes/header.php';
                         placeholder="e.g. school@gmail.com"
                         pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
                         title="Please enter a valid email address containing @ and domain"
-                        value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required <?php echo $contactDisabled; ?>>" required <?php echo $contactDisabled; ?>>
+                        value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required <?php echo $contactDisabled; ?>>
                     <div class="form-hint">Reference ID confirmation slip is sent immediately to this email.</div>
                 </div>
             </div>

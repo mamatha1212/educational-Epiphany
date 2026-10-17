@@ -44,7 +44,7 @@ require_once __DIR__ . '/includes/header.php';
     <div class="slip-body">
         <?php if ($isExisting): ?>
             <div class="alert alert-info">
-                <span>â„¹ï¸</span>
+                <span>ℹ️</span>
                 <span>This school is already registered. Here are your official registration details and Reference
                     ID.</span>
             </div>
