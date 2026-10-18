@@ -4,6 +4,7 @@
  */
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/activity_logger.php';
 
 requireQuestionPapersAccess();
 
@@ -27,25 +28,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newStatus = $currentStatus === 1 ? 0 : 1;
         $publishedAt = $newStatus === 1 ? date('Y-m-d H:i:s') : null;
 
+        $pInfoStmt = $pdo->prepare("SELECT title, class, subject FROM question_papers WHERE id = ?");
+        $pInfoStmt->execute([$paperId]);
+        $pInfo = $pInfoStmt->fetch(PDO::FETCH_ASSOC);
+
         $stmt = $pdo->prepare("UPDATE question_papers SET is_published = :status, published_at = :pub_at WHERE id = :id");
         $stmt->execute([':status' => $newStatus, ':pub_at' => $publishedAt, ':id' => $paperId]);
+
+        logCoordinatorActivity(
+            'PAPER_STATUS',
+            ($newStatus === 1 ? "Published" : "Unpublished") . " Question Paper: '" . ($pInfo['title'] ?? "#$paperId") . "'",
+            "Target Class: Grade " . ($pInfo['class'] ?? 'N/A') . ", Subject: " . ($pInfo['subject'] ?? 'General')
+        );
 
         $message = "Question paper status updated successfully.";
         $messageType = 'success';
     } elseif ($action === 'delete') {
         $paperId = (int)($_POST['paper_id'] ?? 0);
         
-        $stmt = $pdo->prepare("SELECT file_path FROM question_papers WHERE id = :id");
+        $stmt = $pdo->prepare("SELECT title, class, subject, file_path FROM question_papers WHERE id = :id");
         $stmt->execute([':id' => $paperId]);
-        $filePath = $stmt->fetchColumn();
+        $paperRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($filePath) {
-            $fullPath = __DIR__ . '/../' . ltrim($filePath, '/');
+        if ($paperRow) {
+            $fullPath = __DIR__ . '/../' . ltrim($paperRow['file_path'], '/');
             if (file_exists($fullPath)) {
                 @unlink($fullPath);
             }
             $delStmt = $pdo->prepare("DELETE FROM question_papers WHERE id = :id");
             $delStmt->execute([':id' => $paperId]);
+
+            logCoordinatorActivity(
+                'PAPER_DELETE',
+                "Deleted Question Paper: '{$paperRow['title']}'",
+                "Class: Grade {$paperRow['class']}, Subject: {$paperRow['subject']}"
+            );
+
             $message = "Question paper deleted successfully.";
             $messageType = 'success';
         }
@@ -182,6 +200,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ':published_at' => $publishedAt,
                         ':uploaded_by' => $uploaderName
                     ]);
+
+                    logCoordinatorActivity(
+                        'PAPER_UPLOAD',
+                        "Uploaded Question Paper: '{$title}'",
+                        "Class: Grade {$classGrade}, Subject: {$subject}, File: {$file['name']} (" . round($fileSizeBytes / 1024) . " KB)"
+                    );
 
                     $message = "Question paper uploaded and saved successfully!";
                     $messageType = 'success';

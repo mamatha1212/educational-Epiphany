@@ -5,10 +5,11 @@
  */
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/activity_logger.php';
 
 requireSchoolMasterAccess();
 
-if (!isAdmin()) {
+if (!isAdmin() && !canManageSchools()) {
     $queryString = !empty($_SERVER['QUERY_STRING']) ? '&' . $_SERVER['QUERY_STRING'] : '';
     header('Location: ../staff/dashboard.php?tab=schools' . $queryString);
     exit;
@@ -99,6 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     $ins = $pdo->prepare("INSERT INTO schools_master (district, mandal, school_name, unique_code, is_registered, created_at) VALUES (?, ?, ?, ?, 0, CURRENT_TIMESTAMP)");
                     $ins->execute([$district, $initialMandal, $initialSchool, $initialCode]);
+                    logCoordinatorActivity(
+                        'DISTRICT_ADD',
+                        "Added new District: '{$district}'",
+                        "Initial Mandal: '{$initialMandal}', Initial School: '{$initialSchool}', Code: '{$initialCode}'"
+                    );
                     $message = "District '$district' created successfully with initial mandal '$initialMandal'.";
                     $messageType = 'success';
                     $view = 'districts';
@@ -127,6 +133,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $updUsers = $pdo->prepare("UPDATE users SET assigned_district = ? WHERE assigned_district = ?");
                 $updUsers->execute([$newDistrict, $oldDistrict]);
 
+                logCoordinatorActivity(
+                    'DISTRICT_RENAME',
+                    "Renamed District from '{$oldDistrict}' to '{$newDistrict}'",
+                    "District master name updated across directory, registered schools, and coordinator territorial assignments"
+                );
+
                 $message = "District renamed from '$oldDistrict' to '$newDistrict' across directory and registrations.";
                 $messageType = 'success';
                 if ($selectedDistrict === $oldDistrict) {
@@ -150,6 +162,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $del = $pdo->prepare("DELETE FROM schools_master WHERE district = ?");
                     $del->execute([$district]);
+                    logCoordinatorActivity(
+                        'DISTRICT_DELETE',
+                        "Deleted District: '{$district}'",
+                        "District and associated unassigned records removed from directory"
+                    );
                     $message = "District '$district' and its associated records have been removed.";
                     $messageType = 'success';
                     $view = 'districts';
@@ -179,6 +196,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     $ins = $pdo->prepare("INSERT INTO schools_master (district, mandal, school_name, unique_code, is_registered, created_at) VALUES (?, ?, ?, ?, 0, CURRENT_TIMESTAMP)");
                     $ins->execute([$district, $mandal, $initialSchool, $initialCode]);
+                    logCoordinatorActivity(
+                        'MANDAL_ADD',
+                        "Added new Mandal: '{$mandal}' in {$district}",
+                        "District: {$district}, Initial School: '{$initialSchool}', UDISE: {$initialCode}"
+                    );
                     $message = "Mandal '$mandal' created successfully under district '$district'.";
                     $messageType = 'success';
                     $view = 'mandals';
@@ -202,6 +224,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $updReg = $pdo->prepare("UPDATE school_registrations_2027 SET mandal = ? WHERE district = ? AND mandal = ?");
                 $updReg->execute([$newMandal, $district, $oldMandal]);
+
+                logCoordinatorActivity(
+                    'MANDAL_RENAME',
+                    "Renamed Mandal from '{$oldMandal}' to '{$newMandal}' in {$district}",
+                    "Updated in directory and registration records"
+                );
 
                 $message = "Mandal renamed from '$oldMandal' to '$newMandal' in district '$district'.";
                 $messageType = 'success';
@@ -227,6 +255,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $del = $pdo->prepare("DELETE FROM schools_master WHERE district = ? AND mandal = ?");
                     $del->execute([$district, $mandal]);
+                    logCoordinatorActivity(
+                        'MANDAL_DELETE',
+                        "Deleted Mandal: '{$mandal}' from {$district}",
+                        "Mandal and unassigned school entries removed"
+                    );
                     $message = "Mandal '$mandal' removed from district '$district'.";
                     $messageType = 'success';
                 }
@@ -254,6 +287,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $ins = $pdo->prepare("INSERT INTO schools_master (district, mandal, school_name, unique_code, is_registered, created_at) VALUES (?, ?, ?, ?, 0, CURRENT_TIMESTAMP)");
                     $ins->execute([$district, $mandal, $schoolName, $uniqueCode]);
+                    logCoordinatorActivity(
+                        'SCHOOL_ADD',
+                        "Added new School: '{$schoolName}'",
+                        "UDISE: {$uniqueCode}, District: {$district}, Mandal: {$mandal}"
+                    );
                     $message = "School '$schoolName' (UDISE: $uniqueCode) added to $mandal, $district.";
                     $messageType = 'success';
                     $view = 'schools';
@@ -284,12 +322,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $message = "Unique Code '$uniqueCode' already belongs to '{$conflict['school_name']}' (#{$conflict['id']}).";
                     $messageType = 'error';
                 } else {
+                    // Fetch old school record for diff
+                    $oldSchStmt = $pdo->prepare("SELECT * FROM schools_master WHERE id = ?");
+                    $oldSchStmt->execute([$schoolId]);
+                    $oldSchool = $oldSchStmt->fetch(PDO::FETCH_ASSOC);
+
                     $upd = $pdo->prepare("UPDATE schools_master SET district = ?, mandal = ?, school_name = ?, unique_code = ?, is_registered = ? WHERE id = ?");
                     $upd->execute([$district, $mandal, $schoolName, $uniqueCode, $isRegistered, $schoolId]);
 
                     // Sync with registration if enrolled
                     $sync = $pdo->prepare("UPDATE school_registrations_2027 SET district = ?, mandal = ?, school_name = ?, unique_code = ? WHERE school_id = ?");
                     $sync->execute([$district, $mandal, $schoolName, $uniqueCode, $schoolId]);
+
+                    $schDiffs = [];
+                    if ($oldSchool) {
+                        if ($oldSchool['school_name'] !== $schoolName) $schDiffs[] = "School Name: '{$oldSchool['school_name']}' → '{$schoolName}'";
+                        if ($oldSchool['unique_code'] !== $uniqueCode) $schDiffs[] = "UDISE: '{$oldSchool['unique_code']}' → '{$uniqueCode}'";
+                        if ($oldSchool['district'] !== $district) $schDiffs[] = "District: '{$oldSchool['district']}' → '{$district}'";
+                        if ($oldSchool['mandal'] !== $mandal) $schDiffs[] = "Mandal: '{$oldSchool['mandal']}' → '{$mandal}'";
+                        if ((int)$oldSchool['is_registered'] !== $isRegistered) $schDiffs[] = "Status: " . ($isRegistered ? 'Enrolled' : 'Available');
+                    }
+                    $diffSummary = !empty($schDiffs) ? implode(' | ', $schDiffs) : 'Record saved';
+
+                    logCoordinatorActivity(
+                        'SCHOOL_EDIT',
+                        "Updated School #{$schoolId}: '{$schoolName}'",
+                        $diffSummary,
+                        $oldSchool ?: null,
+                        ['school_name' => $schoolName, 'unique_code' => $uniqueCode, 'district' => $district, 'mandal' => $mandal, 'is_registered' => $isRegistered]
+                    );
 
                     $message = "School record #$schoolId updated successfully.";
                     $messageType = 'success';
@@ -309,8 +370,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $message = "Cannot delete school: It has active registration '{$enrolled['reference_id']}'.";
                     $messageType = 'error';
                 } else {
+                    $schoolInfoStmt = $pdo->prepare("SELECT school_name, unique_code, district, mandal FROM schools_master WHERE id = ?");
+                    $schoolInfoStmt->execute([$schoolId]);
+                    $schoolInfo = $schoolInfoStmt->fetch(PDO::FETCH_ASSOC);
+
                     $del = $pdo->prepare("DELETE FROM schools_master WHERE id = ?");
                     $del->execute([$schoolId]);
+
+                    $schTitle = $schoolInfo['school_name'] ?? "School #{$schoolId}";
+                    $schUdise = $schoolInfo['unique_code'] ?? 'N/A';
+                    $schLoc = ($schoolInfo['mandal'] ?? '') . ', ' . ($schoolInfo['district'] ?? '');
+
+                    logCoordinatorActivity(
+                        'SCHOOL_DELETE',
+                        "Deleted School: '{$schTitle}' (#{$schoolId})",
+                        "UDISE: {$schUdise}, Location: {$schLoc}"
+                    );
+
                     $message = "School entry #$schoolId removed from directory.";
                     $messageType = 'success';
                 }

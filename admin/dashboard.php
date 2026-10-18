@@ -5,6 +5,7 @@
  */
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/activity_logger.php';
 
 requireAdmin();
 
@@ -17,8 +18,21 @@ $messageType = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_reg'])) {
     $delId = (int)($_POST['reg_id'] ?? 0);
     if ($delId > 0) {
+        $delInfoStmt = $pdo->prepare("SELECT reference_id, school_name, district, mandal FROM school_registrations_2027 WHERE id = ?");
+        $delInfoStmt->execute([$delId]);
+        $delInfo = $delInfoStmt->fetch(PDO::FETCH_ASSOC);
+
         $delStmt = $pdo->prepare("DELETE FROM school_registrations_2027 WHERE id = ?");
         $delStmt->execute([$delId]);
+
+        if ($delInfo) {
+            logCoordinatorActivity(
+                'REGISTRATION_DELETE',
+                "Deleted Registration #{$delInfo['reference_id']} ({$delInfo['school_name']})",
+                "School: {$delInfo['school_name']}, District: {$delInfo['district']}, Mandal: {$delInfo['mandal']}"
+            );
+        }
+
         $message = "Registration record #$delId has been permanently deleted.";
         $messageType = 'success';
     }
@@ -38,8 +52,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_reg'])) {
     $district = trim($_POST['district'] ?? '');
 
     if ($regId > 0 && !empty($schoolName) && !empty($mobile)) {
+        $oldStmt = $pdo->prepare("SELECT * FROM school_registrations_2027 WHERE id = ?");
+        $oldStmt->execute([$regId]);
+        $oldRow = $oldStmt->fetch(PDO::FETCH_ASSOC);
+
         $upd = $pdo->prepare("UPDATE school_registrations_2027 SET school_name = ?, unique_code = ?, contact_person = ?, designation = ?, mobile = ?, email = ?, status = ?, mandal = ?, district = ? WHERE id = ?");
         $upd->execute([$schoolName, $uniqueCode, $contactPerson, $designation, $mobile, $email, $status, $mandal, $district, $regId]);
+
+        if ($oldRow) {
+            $diffs = [];
+            if ($oldRow['school_name'] !== $schoolName) $diffs[] = "School: '{$oldRow['school_name']}' → '{$schoolName}'";
+            if ($oldRow['unique_code'] !== $uniqueCode) $diffs[] = "UDISE: '{$oldRow['unique_code']}' → '{$uniqueCode}'";
+            if ($oldRow['district'] !== $district) $diffs[] = "District: '{$oldRow['district']}' → '{$district}'";
+            if ($oldRow['mandal'] !== $mandal) $diffs[] = "Mandal: '{$oldRow['mandal']}' → '{$mandal}'";
+            if ($oldRow['contact_person'] !== $contactPerson) $diffs[] = "In-Charge: '{$oldRow['contact_person']}' → '{$contactPerson}'";
+            if ($oldRow['mobile'] !== $mobile) $diffs[] = "Mobile: '{$oldRow['mobile']}' → '{$mobile}'";
+            if ($oldRow['email'] !== $email) $diffs[] = "Email: '{$oldRow['email']}' → '{$email}'";
+            if ($oldRow['status'] !== $status) $diffs[] = "Status: '{$oldRow['status']}' → '{$status}'";
+
+            $diffText = !empty($diffs) ? implode(' | ', $diffs) : 'Record saved';
+            logCoordinatorActivity(
+                'REGISTRATION_EDIT',
+                "Edited registration #{$oldRow['reference_id']} ({$schoolName})",
+                $diffText,
+                $oldRow,
+                ['school_name' => $schoolName, 'unique_code' => $uniqueCode, 'district' => $district, 'mandal' => $mandal, 'status' => $status]
+            );
+        }
+
         $message = "Registration record for '$schoolName' updated successfully.";
         $messageType = 'success';
     } else {
@@ -301,6 +341,38 @@ require_once __DIR__ . '/includes/admin_header.php';
         </div>
     </div>
 </div>
+
+<?php
+$recentActs = getRecentCoordinatorActivities(3);
+$unreadActCount = getUnreadActivityCount();
+if (!empty($recentActs)):
+?>
+<!-- Coordinator Real-time Activities Notification Banner -->
+<div style="background: linear-gradient(135deg, #f8fafc, #eff6ff); border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 12px 18px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(37,99,235,0.06);">
+    <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+        <div style="width: 38px; height: 38px; border-radius: 10px; background: #dbeafe; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+            🔔
+        </div>
+        <div style="min-width: 0;">
+            <div style="font-size: 0.88rem; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 8px;">
+                <span>Coordinator Actions Feed</span>
+                <?php if ($unreadActCount > 0): ?>
+                    <span style="background: #ef4444; color: white; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 10px;"><?php echo $unreadActCount; ?> unread</span>
+                <?php endif; ?>
+            </div>
+            <div style="font-size: 0.82rem; color: #334155; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 720px;">
+                <strong><?php echo htmlspecialchars($recentActs[0]['user_name']); ?>:</strong> <?php echo htmlspecialchars($recentActs[0]['action_title']); ?> — <span style="color: #64748b; font-weight: 600;"><?php echo activityTimeAgo($recentActs[0]['created_at']); ?></span>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <a href="activities.php" class="btn" style="padding: 7px 16px; font-size: 0.82rem; font-weight: 700; background: #31328f; color: white; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
+            <span>📋 Activity &amp; Audit Logs</span>
+            <span>&rarr;</span>
+        </a>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- Search & Filter Card -->
 <div class="card" style="margin-bottom: 1.5rem; padding: 1.1rem 1.25rem; box-shadow: var(--shadow-sm); border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">

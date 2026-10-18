@@ -22,6 +22,10 @@ $totalStaffBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM users WHERE is_a
 $totalSchoolsBadge = (int) $badgePDO->query("SELECT COUNT(*) FROM school_registrations_2027")->fetchColumn();
 $rawMasterCount = (int) $badgePDO->query("SELECT COUNT(*) FROM schools_master")->fetchColumn();
 $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . 'k' : $rawMasterCount;
+
+require_once __DIR__ . '/../../includes/activity_logger.php';
+$unreadActivitiesCount = isAdmin() ? getUnreadActivityCount() : 0;
+$recentActivitiesForDropdown = isAdmin() ? getRecentCoordinatorActivities(6) : [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -318,6 +322,118 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
             gap: 14px;
         }
 
+        /* Notifications Bell & Dropdown Tray */
+        .notif-dropdown-wrap {
+            position: relative;
+        }
+
+        .notif-bell-btn {
+            position: relative;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #334155;
+        }
+
+        .notif-bell-btn:hover {
+            background: #ececf7;
+            border-color: #31328f;
+            color: #31328f;
+            transform: translateY(-1px);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 2px solid #ffffff;
+            line-height: 1;
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.3);
+        }
+
+        .notif-dropdown-panel {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 370px;
+            max-width: 90vw;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: notifSlide 0.2s ease-out;
+        }
+
+        @keyframes notifSlide {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notif-dropdown-header {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .notif-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.15s ease;
+        }
+
+        .notif-item:hover {
+            background: #f8fafc;
+        }
+
+        .notif-item.unread {
+            background: #fbfbfe;
+            border-left: 3px solid #31328f;
+        }
+
+        .notif-dropdown-footer {
+            padding: 10px 16px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .notif-dropdown-footer a {
+            font-size: 0.82rem;
+            font-weight: 750;
+            color: #31328f;
+            text-decoration: none;
+        }
+
+        .notif-dropdown-footer a:hover {
+            text-decoration: underline;
+        }
+
         .sidebar-toggle-btn {
             display: none;
             background: none;
@@ -499,6 +615,22 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                         <span class="sidebar-badge"><?php echo $totalPapersBadge; ?></span>
                     </a>
 
+                    <a href="activities.php" class="sidebar-item <?php echo $currentPage === 'activities.php' ? 'active' : ''; ?>">
+                        <div class="sidebar-item-content">
+                            <span class="sidebar-icon">📋</span>
+                            <span>Activity &amp; Audit Logs</span>
+                        </div>
+                        <?php if ($unreadActivitiesCount > 0): ?>
+                            <span class="sidebar-badge" style="background: #ef4444; color: #ffffff; font-weight: 800; border-radius: 10px; padding: 2px 7px;">
+                                <?php echo $unreadActivitiesCount; ?>
+                            </span>
+                        <?php else: ?>
+                            <span class="sidebar-badge" style="background: rgba(255,255,255,0.1); color: #94a3b8;">
+                                Log
+                            </span>
+                        <?php endif; ?>
+                    </a>
+
                     <div class="nav-section-title" style="margin-top: 0.5rem;">Shortcuts & Views</div>
 
                     <a href="../index.php" target="_blank" class="sidebar-item">
@@ -617,12 +749,77 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                     </div>
                 </div>
 
-                <div class="topbar-right">
+                <div class="topbar-right" style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;" class="d-none d-md-inline">
                         <?php echo date('D, d M Y'); ?>
                     </span>
 
                     <?php if (isAdmin()): ?>
+                        <!-- Coordinator Activity Notification Bell -->
+                        <div class="notif-dropdown-wrap">
+                            <button type="button" id="notifBellBtn" class="notif-bell-btn" title="Coordinator Activity Notifications" onclick="toggleNotifTray(event)">
+                                🔔
+                                <?php if ($unreadActivitiesCount > 0): ?>
+                                    <span class="notif-badge" id="notifBadgeCounter"><?php echo $unreadActivitiesCount; ?></span>
+                                <?php endif; ?>
+                            </button>
+
+                            <div id="notifDropdown" class="notif-dropdown-panel" style="display: none;">
+                                <div class="notif-dropdown-header">
+                                    <div>
+                                        <strong style="font-size: 0.9rem; color: #0f172a;">Coordinator Notifications</strong>
+                                        <span style="font-size: 0.72rem; color: #64748b; display: block;">Real-time staff actions &amp; edits</span>
+                                    </div>
+                                    <?php if ($unreadActivitiesCount > 0): ?>
+                                        <button type="button" onclick="markAllNotificationsRead(event)" id="markAllReadBtn" style="background: transparent; border: none; font-size: 0.74rem; font-weight: 700; color: #059669; cursor: pointer;">
+                                            ✓ Mark read
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="notif-dropdown-list" style="max-height: 330px; overflow-y: auto;">
+                                    <?php if (empty($recentActivitiesForDropdown)): ?>
+                                        <div style="padding: 1.5rem; text-align: center; color: #94a3b8; font-size: 0.82rem;">
+                                            No recent coordinator actions yet.
+                                        </div>
+                                    <?php else: ?>
+                                        <?php foreach ($recentActivitiesForDropdown as $ract): 
+                                            $rIsUnread = (int)$ract['is_read'] === 0;
+                                        ?>
+                                            <a href="activities.php" class="notif-item <?php echo $rIsUnread ? 'unread' : ''; ?>">
+                                                <div style="width: 32px; height: 32px; border-radius: 8px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;">
+                                                    <?php 
+                                                        if (str_contains($ract['action_type'], 'REGISTRATION')) echo '✏️';
+                                                        elseif (str_contains($ract['action_type'], 'DELETE')) echo '🗑️';
+                                                        elseif (str_contains($ract['action_type'], 'SCHOOL')) echo '🏫';
+                                                        elseif (str_contains($ract['action_type'], 'MANDAL')) echo '🗺️';
+                                                        elseif (str_contains($ract['action_type'], 'AVATAR')) echo '📸';
+                                                        elseif (str_contains($ract['action_type'], 'PAPER')) echo '📄';
+                                                        else echo '📌';
+                                                    ?>
+                                                </div>
+                                                <div style="flex: 1; min-width: 0;">
+                                                    <div style="font-size: 0.82rem; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        <?php echo htmlspecialchars($ract['action_title']); ?>
+                                                    </div>
+                                                    <div style="font-size: 0.74rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;">
+                                                        By <strong><?php echo htmlspecialchars($ract['user_name']); ?></strong><?php echo !empty($ract['district']) ? ' (' . htmlspecialchars($ract['district']) . ')' : ''; ?>
+                                                    </div>
+                                                    <div style="font-size: 0.68rem; color: #94a3b8; margin-top: 2px;">
+                                                        <?php echo activityTimeAgo($ract['created_at']); ?>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div class="notif-dropdown-footer">
+                                    <a href="activities.php">View All Activity Trail &rarr;</a>
+                                </div>
+                            </div>
+                        </div>
+
                         <a href="export.php" class="btn btn-outline"
                             style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px;">
                             📥 Export CSV
@@ -634,6 +831,41 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                         Logout
                     </a>
                 </div>
+
+                <script>
+                function toggleNotifTray(e) {
+                    if (e) e.stopPropagation();
+                    const tray = document.getElementById('notifDropdown');
+                    if (tray) {
+                        tray.style.display = tray.style.display === 'none' ? 'flex' : 'none';
+                    }
+                }
+
+                function markAllNotificationsRead(e) {
+                    if (e) e.stopPropagation();
+                    fetch('api_activities.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'action=mark_all_read'
+                    }).then(r => r.json()).then(data => {
+                        if (data.success) {
+                            const badge = document.getElementById('notifBadgeCounter');
+                            if (badge) badge.remove();
+                            const btn = document.getElementById('markAllReadBtn');
+                            if (btn) btn.remove();
+                            document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
+                        }
+                    }).catch(err => console.error(err));
+                }
+
+                document.addEventListener('click', (e) => {
+                    const wrap = document.querySelector('.notif-dropdown-wrap');
+                    const tray = document.getElementById('notifDropdown');
+                    if (tray && wrap && !wrap.contains(e.target)) {
+                        tray.style.display = 'none';
+                    }
+                });
+                </script>
             </header>
 
             <!-- Main Content Wrapper -->

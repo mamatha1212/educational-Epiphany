@@ -5,6 +5,7 @@
  */
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/activity_logger.php';
 
 requireStaffLogin();
 
@@ -167,6 +168,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_coordinator_pr
         }
 
         if ($canUpdate) {
+            // Handle Profile Picture / Avatar Upload
+            $avatarUpdated = false;
+            if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
+                $imgFile = $_FILES['profile_pic'];
+                $ext = strtolower(pathinfo($imgFile['name'], PATHINFO_EXTENSION));
+                if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
+                    $avatarDir = __DIR__ . '/../uploads/avatars/';
+                    if (!is_dir($avatarDir)) {
+                        mkdir($avatarDir, 0777, true);
+                    }
+                    $newAvatarName = 'avatar_' . $user['id'] . '_' . time() . '.' . $ext;
+                    if (move_uploaded_file($imgFile['tmp_name'], $avatarDir . $newAvatarName)) {
+                        $avatarRel = 'uploads/avatars/' . $newAvatarName;
+                        $pdo->prepare("UPDATE users SET profile_pic = ? WHERE id = ?")->execute([$avatarRel, $user['id']]);
+                        $_SESSION['user']['profile_pic'] = $avatarRel;
+                        $user['profile_pic'] = $avatarRel;
+                        $avatarUpdated = true;
+
+                        logCoordinatorActivity(
+                            'PROFILE_AVATAR',
+                            "Coordinator {$name} uploaded a new profile picture",
+                            "Uploaded avatar file: {$imgFile['name']} (" . round($imgFile['size'] / 1024) . " KB)"
+                        );
+                    }
+                }
+            }
+
+            // Check field differences for detailed admin audit trail
+            $changes = [];
+            if (($user['name'] ?? '') !== $name) $changes[] = "Name: '{$user['name']}' → '{$name}'";
+            if (($user['email'] ?? '') !== $email) $changes[] = "Email: '{$user['email']}' → '{$email}'";
+            if (($user['mobile'] ?? '') !== $mobile) $changes[] = "Mobile: '{$user['mobile']}' → '{$mobile}'";
+            if ($passUpdate) $changes[] = "Password changed";
+
             if ($passUpdate) {
                 $newHash = password_hash($newPass, PASSWORD_DEFAULT);
                 $updStmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, mobile = ?, password_hash = ? WHERE id = ?");
@@ -184,7 +219,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_coordinator_pr
             $user['email'] = $email;
             $user['mobile'] = $mobile;
 
-            $statusMessage = "Coordinator profile updated successfully!" . ($passUpdate ? " Password was also changed." : "");
+            if (!empty($changes)) {
+                logCoordinatorActivity(
+                    'PROFILE_UPDATE',
+                    "Coordinator {$name} updated profile settings",
+                    implode(', ', $changes)
+                );
+            }
+
+            $statusMessage = "Coordinator profile updated successfully!" . ($passUpdate ? " Password was also changed." : "") . ($avatarUpdated ? " New profile picture uploaded." : "");
             $statusType = 'success';
         }
     }
@@ -227,6 +270,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_reg'])) {
         }
 
         if ($regId > 0 && !empty($schoolName) && !empty($mobile)) {
+            // Fetch old record for diff comparison
+            $oldStmt = $pdo->prepare("SELECT * FROM school_registrations_2027 WHERE id = ?");
+            $oldStmt->execute([$regId]);
+            $oldRow = $oldStmt->fetch(PDO::FETCH_ASSOC);
+
             if (!empty($district)) {
                 $upd = $pdo->prepare("UPDATE school_registrations_2027 SET school_name = ?, unique_code = ?, district = ?, mandal = ?, contact_person = ?, designation = ?, mobile = ?, email = ?, status = ? WHERE id = ?");
                 $upd->execute([$schoolName, $uniqueCode, $district, $mandal, $contactPerson, $designation, $mobile, $email, $status, $regId]);
@@ -234,6 +282,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_reg'])) {
                 $upd = $pdo->prepare("UPDATE school_registrations_2027 SET school_name = ?, unique_code = ?, mandal = ?, contact_person = ?, designation = ?, mobile = ?, email = ?, status = ? WHERE id = ?");
                 $upd->execute([$schoolName, $uniqueCode, $mandal, $contactPerson, $designation, $mobile, $email, $status, $regId]);
             }
+
+            // Calculate precise diff for Admin Notification
+            if ($oldRow) {
+                $diffs = [];
+                if ($oldRow['school_name'] !== $schoolName) {
+                    $diffs[] = "School Name: '{$oldRow['school_name']}' → '{$schoolName}'";
+                }
+                if ($oldRow['unique_code'] !== $uniqueCode) {
+                    $diffs[] = "UDISE: '{$oldRow['unique_code']}' → '{$uniqueCode}'";
+                }
+                if (!empty($district) && $oldRow['district'] !== $district) {
+                    $diffs[] = "District: '{$oldRow['district']}' → '{$district}'";
+                }
+                if ($oldRow['mandal'] !== $mandal) {
+                    $diffs[] = "Mandal: '{$oldRow['mandal']}' → '{$mandal}'";
+                }
+                if ($oldRow['contact_person'] !== $contactPerson) {
+                    $diffs[] = "In-Charge: '{$oldRow['contact_person']}' → '{$contactPerson}'";
+                }
+                if ($oldRow['designation'] !== $designation) {
+                    $diffs[] = "Designation: '{$oldRow['designation']}' → '{$designation}'";
+                }
+                if ($oldRow['mobile'] !== $mobile) {
+                    $diffs[] = "Mobile: '{$oldRow['mobile']}' → '{$mobile}'";
+                }
+                if ($oldRow['email'] !== $email) {
+                    $diffs[] = "Email: '{$oldRow['email']}' → '{$email}'";
+                }
+                if ($oldRow['status'] !== $status) {
+                    $diffs[] = "Status: '{$oldRow['status']}' → '{$status}'";
+                }
+
+                $diffStr = !empty($diffs) ? implode(' | ', $diffs) : 'Record saved';
+                $coordinatorName = $user['name'] ?? ($user['username'] ?? 'Staff Coordinator');
+
+                logCoordinatorActivity(
+                    'REGISTRATION_EDIT',
+                    "Coordinator {$coordinatorName} edited registration #{$oldRow['reference_id']} ({$schoolName})",
+                    $diffStr,
+                    $oldRow,
+                    ['school_name' => $schoolName, 'unique_code' => $uniqueCode, 'district' => $district, 'mandal' => $mandal, 'contact_person' => $contactPerson, 'designation' => $designation, 'mobile' => $mobile, 'email' => $email, 'status' => $status]
+                );
+            }
+
             $statusMessage = "School registration for '$schoolName' updated successfully.";
         } else {
             $statusMessage = "School name and contact phone number are required.";
@@ -278,6 +370,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_paper'])) {
                         VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)
                     ");
                     $stmt->execute([$title, $classGrade, $subject, $relPath, (int)$file['size'], $isPublished, $uploaderName]);
+                    
+                    logCoordinatorActivity(
+                        'PAPER_UPLOAD',
+                        "Coordinator {$uploaderName} uploaded Question Paper: '{$title}'",
+                        "Target Class: Grade {$classGrade}, Subject: {$subject}, File: {$file['name']} (" . round($file['size'] / 1024) . " KB)"
+                    );
+
                     $statusMessage = "Question paper uploaded and saved successfully!";
                     $activeTab = 'prelims';
                 } else {
@@ -2147,8 +2246,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 
             <!-- User Profile Card -->
             <div class="sidebar-user">
-                <div class="user-avatar">
-                    👔
+                <div class="user-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <?php if (!empty($user['profile_pic'])): ?>
+                        <img src="../<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+                    <?php else: ?>
+                        👔
+                    <?php endif; ?>
                 </div>
                 <div class="user-meta">
                     <div class="user-name"><?php echo htmlspecialchars($user['name'] ?? $user['username']); ?></div>
@@ -2290,8 +2393,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 
                     <!-- Coordinator Profile Pill -->
                     <div class="topbar-user-pill" onclick="switchDashboardTab('profile')" title="View profile & permissions">
-                        <div class="topbar-user-avatar">
-                            <?php echo strtoupper(substr($user['name'] ?: $user['username'], 0, 1)); ?>
+                        <div class="topbar-user-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                            <?php if (!empty($user['profile_pic'])): ?>
+                                <img src="../<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+                            <?php else: ?>
+                                <?php echo strtoupper(substr($user['name'] ?: $user['username'], 0, 1)); ?>
+                            <?php endif; ?>
                         </div>
                         <div class="topbar-user-details">
                             <span class="topbar-user-name"><?php echo htmlspecialchars($user['name'] ?: $user['username']); ?></span>
@@ -2336,8 +2443,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     <div class="profile-hero-card">
                         <div class="profile-hero-top">
                             <div class="profile-hero-user">
-                                <div class="profile-hero-avatar">
-                                    <?php echo strtoupper(substr($user['name'] ?: $user['username'], 0, 1)); ?>
+                                <div class="profile-hero-avatar" style="overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                                    <?php if (!empty($user['profile_pic'])): ?>
+                                        <img src="../<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+                                    <?php else: ?>
+                                        <?php echo strtoupper(substr($user['name'] ?: $user['username'], 0, 1)); ?>
+                                    <?php endif; ?>
                                     <span class="avatar-online-dot" title="Account active and verified"></span>
                                 </div>
                                 <div class="profile-hero-title-group">
@@ -2659,7 +2770,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                             </span>
                         </div>
 
-                        <form method="POST" action="dashboard.php?tab=profile" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <form method="POST" action="dashboard.php?tab=profile" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.5rem;">
                             <input type="hidden" name="update_coordinator_profile" value="1">
 
                             <!-- Section 1: Contact Information -->
@@ -2669,6 +2780,25 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                     <span>Personal &amp; Contact Details</span>
                                 </div>
                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+                                    <!-- Profile Picture Upload Field -->
+                                    <div class="form-group" style="margin-bottom: 0; grid-column: 1 / -1;">
+                                        <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                            Profile Picture / Avatar
+                                        </label>
+                                        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                                            <div style="width: 54px; height: 54px; border-radius: 50%; overflow: hidden; border: 2px solid #059669; background: #ecfdf5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.3rem;">
+                                                <?php if (!empty($user['profile_pic'])): ?>
+                                                    <img src="../<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                                                <?php else: ?>
+                                                    👔
+                                                <?php endif; ?>
+                                            </div>
+                                            <div style="flex: 1; min-width: 220px;">
+                                                <input type="file" name="profile_pic" accept="image/*" class="form-control" style="height: 44px; border-radius: 8px; padding: 7px 12px; width: 100%; font-size: 0.88rem;">
+                                                <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Upload JPG, PNG, or WEBP photo (Admin is notified in real time upon change).</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-group" style="margin-bottom: 0;">
                                         <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
                                             Coordinator Full Name <span class="required" style="color: #ef4444;">*</span>
