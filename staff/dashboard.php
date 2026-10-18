@@ -1474,7 +1474,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             border-collapse: separate;
             border-spacing: 0;
             text-align: left;
-            min-width: 1550px;
+            min-width: 1250px;
         }
 
         .roster-table thead th {
@@ -2714,10 +2714,9 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                             <tr>
                                                 <th style="width: 175px; min-width: 170px;">EEMTSRC (Ref ID)</th>
                                                 <th style="min-width: 360px;">School Details</th>
-                                                <th style="width: 240px; min-width: 230px;">District &amp; Mandal</th>
-                                                <th style="width: 240px; min-width: 230px;">In-Charge Person</th>
-                                                <th style="width: 190px; min-width: 180px;">Contact Mobile</th>
-                                                <th style="width: 200px; min-width: 190px;">Verification Status</th>
+                                                <th style="width: 250px; min-width: 230px;">District &amp; Mandal</th>
+                                                <th style="width: 250px; min-width: 230px;">In-Charge Person</th>
+                                                <th style="width: 200px; min-width: 185px;">Contact Mobile</th>
                                                 <th class="col-actions" style="width: 220px; min-width: 210px;">Actions</th>
                                             </tr>
                                         </thead>
@@ -2796,59 +2795,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                         <?php endif; ?>
                                                     </td>
 
-                                                    <!-- Col 6: Verification Status -->
-                                                    <td>
-                                                        <?php if ($canEditRegs): ?>
-                                                            <form method="POST" action="dashboard.php" class="roster-status-form">
-                                                                <input type="hidden" name="update_status" value="1">
-                                                                <input type="hidden" name="reg_id" value="<?php echo $row['id']; ?>">
-                                                                <select name="status" class="roster-status-select" title="Change status" onchange="this.form.submit()">
-                                                                    <option value="submitted" <?php echo ($row['status'] ?? '') === 'submitted' ? 'selected' : ''; ?>>⏳ Submitted</option>
-                                                                    <option value="contacted" <?php echo ($row['status'] ?? '') === 'contacted' ? 'selected' : ''; ?>>📞 Contacted</option>
-                                                                    <option value="verified" <?php echo ($row['status'] ?? '') === 'verified' ? 'selected' : ''; ?>>✓ Verified</option>
-                                                                    <option value="completed" <?php echo ($row['status'] ?? '') === 'completed' ? 'selected' : ''; ?>>★ Completed</option>
-                                                                </select>
-                                                                <button type="submit" class="roster-status-save-btn" title="Save status update">
-                                                                    Save
-                                                                </button>
-                                                            </form>
-                                                        <?php else: ?>
-                                                            <?php
-                                                            $st = strtolower($row['status'] ?? 'submitted');
-                                                            $bBg = '#f1f5f9';
-                                                            $bColor = '#475569';
-                                                            $bBdr = '#cbd5e1';
-                                                            $bIcon = '●';
-                                                            if ($st === 'verified') {
-                                                                $bBg = '#ecfdf5';
-                                                                $bColor = '#047857';
-                                                                $bBdr = '#a7f3d0';
-                                                                $bIcon = '✓';
-                                                            } elseif ($st === 'contacted') {
-                                                                $bBg = '#eff6ff';
-                                                                $bColor = '#1d4ed8';
-                                                                $bBdr = '#bfdbfe';
-                                                                $bIcon = '📞';
-                                                            } elseif ($st === 'completed') {
-                                                                $bBg = '#faf5ff';
-                                                                $bColor = '#7e22ce';
-                                                                $bBdr = '#e9d5ff';
-                                                                $bIcon = '★';
-                                                            } else {
-                                                                $bBg = '#fffbeb';
-                                                                $bColor = '#b45309';
-                                                                $bBdr = '#fde68a';
-                                                                $bIcon = '⏳';
-                                                            }
-                                                            ?>
-                                                            <span style="background: <?php echo $bBg; ?>; color: <?php echo $bColor; ?>; border: 1px solid <?php echo $bBdr; ?>; font-size: 0.78rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 4px;">
-                                                                <span><?php echo $bIcon; ?></span>
-                                                                <span><?php echo ucfirst(htmlspecialchars($row['status'] ?? 'submitted')); ?></span>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </td>
-
-                                                    <!-- Col 7: Actions (Sticky) -->
+                                                    <!-- Col 6: Actions (Sticky) -->
                                                     <td class="col-actions">
                                                         <div class="roster-actions-wrap">
                                                             <button type="button" class="roster-action-btn btn-view" onclick='openViewRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' title="View Registration Full Details">
