@@ -1882,10 +1882,29 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             color: #64748b;
         }
 
+        /* Mobile Sidebar Backdrop */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: 1040;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
         /* Responsive Breakpoints */
         @media (max-width: 992px) {
+            .sidebar-backdrop.active {
+                display: block;
+                opacity: 1;
+            }
+
             .admin-sidebar {
                 transform: translateX(-100%);
+                z-index: 1050;
             }
 
             .admin-sidebar.sidebar-open {
@@ -2099,6 +2118,9 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 <body>
 
     <div class="admin-shell">
+
+        <!-- Mobile Sidebar Backdrop Overlay -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
 
         <!-- LEFT SIDEBAR PANEL -->
         <aside class="admin-sidebar" id="adminSidebar">
@@ -3803,8 +3825,23 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             if (e.target.id === 'uploadPaperModal') closeUploadPaperModal();
         });
 
+        // Close Mobile Sidebar Helper
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            if (sidebar) {
+                sidebar.classList.remove('sidebar-open');
+            }
+            if (backdrop) {
+                backdrop.classList.remove('active');
+            }
+        }
+
         // Tab Switching Logic
         function switchDashboardTab(tabName) {
+            // Automatically close sidebar on mobile when any menu is clicked
+            closeMobileSidebar();
+
             const profilePanel = document.getElementById('tabPanelProfile');
             const regPanel = document.getElementById('tabPanelRegistrations');
             const prelimsPanel = document.getElementById('tabPanelPrelims');
@@ -3899,24 +3936,41 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             const toggleBtn = document.getElementById('sidebarToggle');
             const closeBtn = document.getElementById('sidebarCloseBtn');
             const sidebar = document.getElementById('adminSidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
 
             if (toggleBtn && sidebar) {
                 toggleBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    sidebar.classList.toggle('sidebar-open');
+                    const isOpen = sidebar.classList.toggle('sidebar-open');
+                    if (backdrop) {
+                        if (isOpen) {
+                            backdrop.classList.add('active');
+                        } else {
+                            backdrop.classList.remove('active');
+                        }
+                    }
                 });
             }
 
-            if (closeBtn && sidebar) {
+            if (closeBtn) {
                 closeBtn.addEventListener('click', () => {
-                    sidebar.classList.remove('sidebar-open');
+                    closeMobileSidebar();
+                });
+            }
+
+            // Close sidebar when clicking any menu item inside sidebar on mobile
+            if (sidebar) {
+                sidebar.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        closeMobileSidebar();
+                    });
                 });
             }
 
             // Close on tap outside on mobile
             document.addEventListener('click', (e) => {
                 if (sidebar && sidebar.classList.contains('sidebar-open') && !sidebar.contains(e.target) && e.target !== toggleBtn) {
-                    sidebar.classList.remove('sidebar-open');
+                    closeMobileSidebar();
                 }
             });
         });
