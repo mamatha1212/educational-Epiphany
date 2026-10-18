@@ -1508,27 +1508,15 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             border-bottom: 1px solid #f1f5f9;
         }
 
-        /* Sticky Actions Column - stays visible during horizontal scroll */
+        /* Actions Column - regular flow, no sticky */
         .roster-table thead th.col-actions {
-            position: sticky;
-            right: 0;
-            z-index: 20;
-            background: #f8fafc;
-            box-shadow: -4px 0 12px rgba(15, 23, 42, 0.06);
             text-align: right;
+            white-space: nowrap;
         }
 
         .roster-table tbody td.col-actions {
-            position: sticky;
-            right: 0;
-            z-index: 15;
-            background: #ffffff;
-            box-shadow: -4px 0 12px rgba(15, 23, 42, 0.06);
             text-align: right;
-        }
-
-        .roster-table tbody tr:hover td.col-actions {
-            background: #f8fafc;
+            white-space: nowrap;
         }
 
         /* Ref ID Chip */
@@ -1809,6 +1797,20 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             transform: translateY(-1px);
         }
 
+        /* Mobile Horizontal Scroll Hint */
+        .mobile-scroll-hint {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
         /* Responsive Breakpoints */
         @media (max-width: 992px) {
             .admin-sidebar {
@@ -1833,7 +1835,8 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             }
 
             .admin-topbar {
-                padding: 0 1rem;
+                padding: 0 0.85rem;
+                height: 58px;
             }
 
             .topbar-scope-chip {
@@ -1845,7 +1848,104 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             }
 
             .admin-content {
-                padding: 1.25rem 1rem;
+                padding: 1rem 0.75rem;
+            }
+
+            .mobile-scroll-hint {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .topbar-left {
+                gap: 8px;
+                min-width: 0;
+            }
+
+            .breadcrumb-root,
+            .breadcrumb-sep {
+                display: none;
+            }
+
+            .breadcrumb-current {
+                font-size: 0.84rem;
+                max-width: 140px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .topbar-logout-btn {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+                gap: 4px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.65rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .kpi-card {
+                padding: 0.85rem !important;
+            }
+
+            .kpi-card .kpi-num {
+                font-size: 1.5rem !important;
+            }
+
+            .kpi-icon {
+                width: 34px !important;
+                height: 34px !important;
+                font-size: 1rem !important;
+            }
+
+            .filter-toolbar {
+                padding: 0.9rem;
+                margin-bottom: 1rem;
+            }
+
+            .filter-row {
+                gap: 0.65rem;
+            }
+
+            .filter-row .form-group {
+                flex: 1 1 100% !important;
+                min-width: 100% !important;
+            }
+
+            .filter-actions-wrap {
+                width: 100%;
+                display: flex;
+                gap: 8px;
+                margin-top: 0.25rem;
+            }
+
+            .filter-actions-wrap .btn {
+                flex: 1;
+                justify-content: center;
+                height: 42px !important;
+            }
+
+            .table-card {
+                border-radius: 12px;
+                margin-bottom: 1.5rem;
+            }
+
+            .table-card-header {
+                padding: 0.85rem 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .table-card-header h3 {
+                font-size: 1rem !important;
+            }
+
+            .admin-content {
+                padding: 0.75rem 0.5rem;
             }
         }
 
@@ -2661,7 +2761,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                         value="<?php echo htmlspecialchars($search); ?>">
                                 </div>
 
-                                <div style="display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;">
+                                <div class="filter-actions-wrap" style="display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;">
                                     <button type="submit" class="btn btn-primary"
                                         style="height: 40px; padding: 0 1.25rem; background: #059669; border: none; white-space: nowrap; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
                                         🔍 Filter
@@ -2708,6 +2808,9 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                     <p style="font-size: 0.88rem; margin: 0; color: #64748b;">Try adjusting your keyword search query, district or status filters above.</p>
                                 </div>
                             <?php else: ?>
+                                <div class="mobile-scroll-hint">
+                                    <span>👉 Swipe left / right to view all columns &amp; actions</span>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="roster-table">
                                         <thead>
