@@ -143,13 +143,19 @@ function getDB(): PDO {
     } else {
         // MySQL / MariaDB (Standard for Shared Hosting cPanel & Production VPS)
         $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', MYSQL_HOST, MYSQL_PORT, MYSQL_NAME);
+        $isPersistent = (env('DB_PERSISTENT', 'false') === 'true');
+        $mysqlOptions = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+        ];
+        if ($isPersistent) {
+            $mysqlOptions[PDO::ATTR_PERSISTENT] = true;
+        }
+
         try {
-            $pdo = new PDO($dsn, MYSQL_USER, MYSQL_PASS, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
-            ]);
+            $pdo = new PDO($dsn, MYSQL_USER, MYSQL_PASS, $mysqlOptions);
         } catch (PDOException $e) {
             // Friendly error message for hosting setup without leaking raw credentials to public
             $isDev = (env('APP_ENV') === 'local' || env('APP_DEBUG') === 'true');

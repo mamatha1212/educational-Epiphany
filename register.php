@@ -66,67 +66,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
             if ($existing) {
                 $error = "This school (" . htmlspecialchars($schoolRecord['school_name']) . " - UDISE: " . htmlspecialchars($unique_code) . ") is already registered with Reference ID (EEMTSRC): " . htmlspecialchars($existing['reference_id']) . ". Duplicate registration is not permitted.";
             } else {
-                // Generate Guaranteed Unique EEMT School Registration Code (Series starting at 26275000001)
-                $seqOffset = 0;
-                do {
-                    $stmtMax = $pdo->query("SELECT MAX(reference_id) FROM school_registrations_2027 WHERE reference_id LIKE '26275%' AND LENGTH(reference_id) = 11");
-                    $maxRef = $stmtMax->fetchColumn();
-
-                    if ($maxRef && preg_match('/^26275([0-9]{6})$/', $maxRef, $matches)) {
-                        $nextSeq = (int) $matches[1] + 1 + $seqOffset;
-                    } else {
-                        $nextSeq = 1 + $seqOffset;
-                    }
-
-                    $reference_id = '26275' . str_pad((string) $nextSeq, 6, '0', STR_PAD_LEFT);
-
-                    $refCheck = $pdo->prepare("SELECT COUNT(*) FROM school_registrations_2027 WHERE reference_id = ?");
-                    $refCheck->execute([$reference_id]);
-                    if ($refCheck->fetchColumn() == 0) {
-                        break;
-                    }
-                    $seqOffset++;
-                } while (true);
+                // Generate Guaranteed Unique EEMT School Registration Code with Automatic Concurrency Collision Retry
+                $maxAttempts = 5;
+                $registrationSuccess = false;
+                $reference_id = null;
 
                 try {
-                    $insertStmt = $pdo->prepare("
-                        INSERT INTO school_registrations_2027 
-                        (reference_id, school_id, district, mandal, school_name, unique_code, contact_person, designation, mobile, email, ip_address, status)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'submitted')
-                    ");
-                    $insertStmt->execute([
-                        $reference_id,
-                        $schoolRecord['id'],
-                        $district,
-                        $mandal,
-                        $school_name,
-                        $unique_code,
-                        $contact_person,
-                        $designation,
-                        $mobile,
-                        $email,
-                        $ip_address
-                    ]);
+                    for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+                        $stmtMax = $pdo->query("SELECT MAX(reference_id) FROM school_registrations_2027 WHERE reference_id LIKE '26275%' AND LENGTH(reference_id) = 11");
+                        $maxRef = $stmtMax->fetchColumn();
 
-                    // Mark school as registered (sync across unique_code aliases)
-                    $pdo->prepare("UPDATE schools_master SET is_registered = 1 WHERE unique_code = ? OR id = ?")->execute([$schoolRecord['unique_code'], $schoolRecord['id']]);
+                        if ($maxRef && preg_match('/^26275([0-9]{6})$/', $maxRef, $matches)) {
+                            $nextSeq = (int) $matches[1] + 1 + $attempt;
+                        } else {
+                            $nextSeq = 1 + $attempt;
+                        }
 
-                    // Send Confirmation Email
-                    sendRegistrationEmail($email, [
-                        'reference_id' => $reference_id,
-                        'school_name' => $school_name,
-                        'contact_person' => $contact_person,
-                        'designation' => $designation,
-                        'district' => $district,
-                        'mandal' => $mandal,
-                        'unique_code' => $unique_code,
-                        'mobile' => $mobile,
-                        'created_at' => date('d M Y, h:i A')
-                    ]);
+                        $candidateRef = '26275' . str_pad((string) $nextSeq, 6, '0', STR_PAD_LEFT);
 
-                    // Redirect to confirmation
-                    header("Location: register_success.php?ref=" . urlencode($reference_id));
-                    exit;
+                        try {
+                            $insertStmt = $pdo->prepare("
+                                INSERT INTO school_registrations_2027 
+                                (reference_id, school_id, district, mandal, school_name, unique_code, contact_person, designation, mobile, email, ip_address, status)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'submitted')
+                            ");
+                            $insertStmt->execute([
+                                $candidateRef,
+                                $schoolRecord['id'],
+                                $district,
+                                $mandal,
+                                $school_name,
+                                $unique_code,
+                                $contact_person,
+                                $designation,
+                                $mobile,
+                                $email,
+                                $ip_address
+                            ]);
+
+                            $reference_id = $candidateRef;
+                            $registrationSuccess = true;
+                            break; // Successfully inserted!
+                        } catch (Exception $e) {
+                            $errText = $e->getMessage();
+                            // If conflict was specifically on reference_id collision from concurrent submit, retry
+                            if (str_contains($errText, 'reference_id') || str_contains($errText, 'idx_sr_ref') || str_contains($errText, 'UNIQUE constraint failed: school_registrations_2027.reference_id')) {
+                                usleep(rand(5000, 25000)); // 5-25ms random jitter
+                                continue;
+                            }
+                            // Otherwise rethrow (duplicate mobile, duplicate school_id, etc.)
+                            throw $e;
+                        }
+                    }
+
+                    if (!$registrationSuccess) {
+                        $error = "High traffic detected. Please click Register once more to complete registration.";
+                    } else {
+                        // Mark school as registered (sync across unique_code aliases)
+                        $pdo->prepare("UPDATE schools_master SET is_registered = 1 WHERE unique_code = ? OR id = ?")->execute([$schoolRecord['unique_code'], $schoolRecord['id']]);
+
+                        // Send Confirmation Email
+                        sendRegistrationEmail($email, [
+                            'reference_id' => $reference_id,
+                            'school_name' => $school_name,
+                            'contact_person' => $contact_person,
+                            'designation' => $designation,
+                            'district' => $district,
+                            'mandal' => $mandal,
+                            'unique_code' => $unique_code,
+                            'mobile' => $mobile,
+                            'created_at' => date('d M Y, h:i A')
+                        ]);
+
+                        // Redirect to confirmation
+                        header("Location: register_success.php?ref=" . urlencode($reference_id));
+                        exit;
+                    }
 
                 } catch (Exception $e) {
                     $errText = $e->getMessage();
@@ -135,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
                     } elseif (str_contains($errText, 'unique_code') || str_contains($errText, 'uq_sr_unique_code') || str_contains($errText, 'school_id') || str_contains($errText, 'uq_sr_school_id')) {
                         $error = "This School / UDISE Code is already registered. Duplicate registrations are strictly not permitted.";
                     } elseif (str_contains($errText, 'reference_id') || str_contains($errText, 'idx_sr_ref')) {
-                        $error = "Reference code generation conflict. Please submit again to generate a new unique reference code.";
+                        $error = "Reference code generation conflict under peak traffic. Please click Register again.";
                     } else {
                         $error = "Registration failed: " . $errText;
                     }

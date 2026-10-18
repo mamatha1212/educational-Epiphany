@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+header('Cache-Control: public, max-age=1800');
 require_once dirname(__DIR__) . '/config/database.php';
 
 $district = trim($_GET['district'] ?? '');

@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS schools_master (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX IF NOT EXISTS idx_sm_dist_mand_school ON schools_master (district, mandal, school_name);
+CREATE INDEX IF NOT EXISTS idx_sm_dist_mand ON schools_master (district, mandal);
 CREATE INDEX IF NOT EXISTS idx_sm_district ON schools_master (district);
 CREATE INDEX IF NOT EXISTS idx_sm_mandal ON schools_master (mandal);
 CREATE INDEX IF NOT EXISTS idx_sm_code ON schools_master (unique_code);
@@ -33,9 +35,12 @@ CREATE TABLE IF NOT EXISTS school_registrations_2027 (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_sr_ref ON school_registrations_2027 (reference_id);
-CREATE INDEX IF NOT EXISTS idx_sr_dist ON school_registrations_2027 (district);
-CREATE INDEX IF NOT EXISTS idx_sr_code ON school_registrations_2027 (unique_code);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_sr_ref ON school_registrations_2027 (reference_id);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_sr_code ON school_registrations_2027 (unique_code);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_sr_mobile ON school_registrations_2027 (mobile);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_sr_school_id ON school_registrations_2027 (school_id);
+CREATE INDEX IF NOT EXISTS idx_sr_dist_mand ON school_registrations_2027 (district, mandal);
+CREATE INDEX IF NOT EXISTS idx_sr_status ON school_registrations_2027 (status);
 
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
