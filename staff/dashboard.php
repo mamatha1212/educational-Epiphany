@@ -1519,6 +1519,22 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             white-space: nowrap;
         }
 
+        /* S.No Chip */
+        .roster-sno-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 6px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 750;
+            font-size: 0.82rem;
+            border: 1px solid #e2e8f0;
+        }
+
         /* Ref ID Chip */
         .roster-ref-chip {
             display: inline-block;
@@ -2815,6 +2831,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                     <table class="roster-table">
                                         <thead>
                                             <tr>
+                                                <th style="width: 70px; min-width: 65px; text-align: center;">S.No</th>
                                                 <th style="width: 175px; min-width: 170px;">EEMTSRC (Ref ID)</th>
                                                 <th style="min-width: 360px;">School Details</th>
                                                 <th style="width: 250px; min-width: 230px;">District &amp; Mandal</th>
@@ -2824,8 +2841,14 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($registrations as $row): ?>
+                                            <?php foreach ($registrations as $index => $row): ?>
+                                                <?php $sno = ($offset ?? 0) + $index + 1; ?>
                                                 <tr>
+                                                    <!-- Col 0: S.No -->
+                                                    <td style="text-align: center;">
+                                                        <span class="roster-sno-chip"><?php echo $sno; ?></span>
+                                                    </td>
+
                                                     <!-- Col 1: Ref ID & Date -->
                                                     <td>
                                                         <span class="roster-ref-chip">
