@@ -29,6 +29,7 @@ function sendRegistrationEmail(string $toEmail, array $data): bool
   }
 
   $loginUrl = $baseUrl . '/school_login.php';
+  $forgotUrl = $baseUrl . '/forgot_password.php';
   $qpUrl = $baseUrl . '/prelims_qp.php?udise=' . urlencode($data['unique_code'] ?? '') . '&eemtsrc=' . urlencode($data['reference_id'] ?? '');
   $logoUrl = $baseUrl . '/assets/images/logo.png';
 
@@ -132,6 +133,9 @@ function sendRegistrationEmail(string $toEmail, array $data): bool
             <div class='btn-wrapper' style='text-align:center; margin:20px 0 10px;'>
               <a href='$loginUrl' class='btn-primary' style='background:#31328f; color:#ffffff !important; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:700; font-size:13px; display:inline-block; margin-right:6px; margin-bottom:8px;'>Access School Dashboard &rarr;</a>
               <a href='$qpUrl' class='btn-secondary' style='background:#059669; color:#ffffff !important; padding:12px 20px; border-radius:8px; text-decoration:none; font-weight:700; font-size:13px; display:inline-block; margin-bottom:8px;'>Access Prelims QP Portal &rarr;</a>
+              <div style='margin-top:10px;'>
+                <a href='$forgotUrl' style='font-size:12px; color:#31328f; text-decoration:none; font-weight:700;'>🔍 Forgot / Find your Login credentials &rarr;</a>
+              </div>
             </div>
           </div>
 
@@ -183,7 +187,7 @@ function sendRegistrationEmail(string $toEmail, array $data): bool
           </table>
 
           <div class='notice-box' style='background:#fefce8; border:1px solid #fef08a; border-radius:8px; padding:14px 16px; font-size:12px; color:#854d0e; line-height:1.5; margin-top:22px;'>
-            <strong>Important Note for Teachers:</strong> Please print or preserve this email slip for your school records. When accessing and downloading EEMT 2027 Prelims Question Papers, you will be prompted to enter your 11-digit UDISE Code (<code>$uniqueCode</code>) and your EEMTSRC code (<code>$refId</code>).
+            <strong>Important Note for Teachers:</strong> Please print or preserve this email slip for your school records. When accessing and downloading EEMT 2027 Prelims Question Papers, you will be prompted to enter your 11-digit UDISE Code (<code>$uniqueCode</code>) and your EEMTSRC code (<code>$refId</code>). If you ever misplace this code, use the <a href='$forgotUrl' style='color:#854d0e; font-weight:700; text-decoration:underline;'>Find Login Credentials portal</a> to retrieve your Ref ID instantly.
           </div>
         </div>
 
