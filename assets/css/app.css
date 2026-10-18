@@ -2,17 +2,17 @@
  * EEMT 2027 - Modern Design System & Component Library
  */
 :root {
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --primary-light: #eff6ff;
-  --primary-border: #bfdbfe;
+  --primary: #31328f;
+  --primary-hover: #262775;
+  --primary-light: #ececf7;
+  --primary-border: #c8c9eb;
   
   --secondary: #0f172a;
   --accent: #f59e0b;
   --success: #10b981;
   --success-light: #ecfdf5;
-  --danger: #ef4444;
-  --danger-light: #fef2f2;
+  --danger: #ef3b2d;
+  --danger-light: #fef2f1;
   
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
@@ -50,7 +50,7 @@ body {
 .navbar {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
-  padding: 0.85rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -74,16 +74,21 @@ body {
 }
 
 .brand-logo {
-  height: 42px;
+  height: 80px;
   width: auto;
   display: block;
+  transition: transform 0.2s ease;
+}
+
+.brand-logo:hover {
+  transform: scale(1.03);
 }
 
 .brand-text h1 {
   font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #1e3a8a;
+  color: #31328f;
   line-height: 1.2;
 }
 
@@ -101,12 +106,16 @@ body {
   gap: 1rem;
 }
 
+.mobile-menu-header {
+  display: none;
+}
+
 .nav-link {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: #4c4d4e;
   text-decoration: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
   transition: all 0.2s ease;
 }
@@ -119,6 +128,11 @@ body {
 .nav-link.active {
   color: var(--primary);
   background: var(--primary-light);
+}
+
+.nav-link-highlight {
+  font-weight: 700;
+  color: #31328f !important;
 }
 
 .nav-btn {
@@ -177,6 +191,15 @@ body {
   box-shadow: var(--shadow-sm);
   padding: 2rem;
   margin-bottom: 1.5rem;
+}
+
+.registration-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.registration-card-body {
+  padding: 2.25rem 2.25rem 2.5rem;
 }
 
 .card-title {
@@ -389,7 +412,7 @@ body {
 }
 
 .slip-header {
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #1f2065 0%, #31328f 100%);
   color: white;
   padding: 2rem 1.5rem;
   text-align: center;
@@ -451,8 +474,8 @@ body {
 }
 
 .qp-notice-card {
-  background: #eff6ff;
-  border: 1.5px solid #bfdbfe;
+  background: #ececf7;
+  border: 1.5px solid #c8c9eb;
   border-radius: 10px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -460,7 +483,7 @@ body {
 
 .qp-notice-header {
   font-weight: 700;
-  color: #1e40af;
+  color: #31328f;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -469,14 +492,14 @@ body {
 
 .qp-notice-desc {
   font-size: 0.9rem;
-  color: #1e3a8a;
+  color: #31328f;
   margin: 0 0 0.75rem;
   line-height: 1.5;
 }
 
 .qp-notice-list {
   font-size: 0.875rem;
-  color: #1e40af;
+  color: #31328f;
   margin: 0 0 1rem 1.25rem;
   line-height: 1.6;
 }
@@ -694,7 +717,7 @@ footer {
   }
 
   .brand-logo {
-    height: 36px;
+    height: 48px;
   }
 
   .brand-text h1 {
@@ -708,46 +731,114 @@ footer {
 
   .mobile-menu-btn {
     display: inline-flex;
+    padding: 7px 11px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #4c4d4e;
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
 
+  .mobile-menu-btn:hover,
+  .mobile-menu-btn:active {
+    background: var(--primary-light);
+    border-color: var(--primary-border);
+    color: var(--primary);
+  }
+
+  /* Full-Screen Mobile Navigation Overlay */
   .nav-links {
     display: none;
-    position: absolute;
-    top: calc(100% + 0.65rem);
-    left: -1rem;
-    right: -1rem;
-    background: #ffffff;
-    border-bottom: 2px solid var(--primary-border);
-    box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.12);
-    flex-direction: column;
-    padding: 0.85rem 1rem;
-    gap: 0.4rem;
-    z-index: 999;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: #ffffff !important;
+    z-index: 999999 !important;
+    flex-direction: column !important;
+    padding: 1.25rem 1.5rem 2.5rem !important;
+    box-sizing: border-box !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: none !important;
+    border: none !important;
   }
 
   .navbar.nav-open .nav-links {
-    display: flex;
-    animation: slideDownMobile 0.2s ease-out;
+    display: flex !important;
+    animation: fadeInFullscreenMenu 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  @keyframes slideDownMobile {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes fadeInFullscreenMenu {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .mobile-close-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #4c4d4e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-close-btn:hover,
+  .mobile-close-btn:active {
+    background: #fed7d5;
+    color: #ef3b2d;
+    border-color: #fecaca;
   }
 
   .nav-link {
     width: 100%;
-    padding: 10px 14px;
-    font-size: 0.95rem;
-    border-radius: 6px;
+    padding: 14px 12px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #4c4d4e;
+    border-bottom: 1px solid #f1f5f9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-link:hover,
+  .nav-link:active {
+    background: var(--primary-light);
+    color: var(--primary);
   }
 
   .nav-btn {
     width: 100%;
     justify-content: center;
-    padding: 10px 16px;
-    margin-top: 4px;
-    font-size: 0.95rem;
+    padding: 14px 20px;
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 12px;
+    background: var(--primary);
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(49, 50, 143, 0.25);
   }
 
   /* Content Spacing */
@@ -773,6 +864,14 @@ footer {
     padding: 1.25rem 1rem;
     border-radius: 12px;
     margin-bottom: 1.25rem;
+  }
+
+  .registration-card {
+    padding: 0 !important;
+  }
+
+  .registration-card-body {
+    padding: 1.35rem 1rem 1.75rem;
   }
 
   .card-title {

@@ -235,7 +235,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 }
 .qp-input:focus {
     background: #ffffff;
-    border-color: #2563eb;
+    border-color: #31328f;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 .qp-select {
@@ -261,7 +261,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 }
 .qp-select:focus {
     background-color: #ffffff;
-    border-color: #2563eb;
+    border-color: #31328f;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 .qp-label {
@@ -281,7 +281,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     <!-- Page Header -->
     <div style="margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.25rem;">
         <div>
-            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em;">
                 📚 Examination Materials Portal
             </div>
             <h1 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.03em; line-height: 1.2;">
@@ -319,9 +319,9 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="font-size: 2rem; font-weight: 800; color: #0f172a; line-height: 1.1; margin-top: 4px;">
                     <?php echo $totalPapers; ?>
                 </div>
-                <span style="font-size: 0.78rem; color: #2563eb; font-weight: 600; margin-top: 4px; display: block;">In Repository</span>
+                <span style="font-size: 0.78rem; color: #31328f; font-weight: 600; margin-top: 4px; display: block;">In Repository</span>
             </div>
-            <div style="width: 48px; height: 48px; border-radius: 14px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; color: #2563eb;">
+            <div style="width: 48px; height: 48px; border-radius: 14px; background: #ececf7; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; color: #31328f;">
                 📄
             </div>
         </div>
@@ -378,7 +378,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
                     <span>📄 Question Paper Repository</span>
-                    <span style="font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 2px 8px; border-radius: 20px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; padding: 2px 8px; border-radius: 20px;">
                         <?php echo count($papers); ?> Total
                     </span>
                 </h3>
@@ -389,7 +389,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="position: relative; width: 260px;">
                     <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.9rem; pointer-events: none;">🔍</span>
-                    <input type="text" id="paperSearchInput" onkeyup="filterPaperTable()" placeholder="Filter by title, class, subject..." style="width: 100%; height: 38px; padding: 0 12px 0 34px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #1e293b; background: #ffffff; outline: none; transition: all 0.2s ease;" onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
+                    <input type="text" id="paperSearchInput" onkeyup="filterPaperTable()" placeholder="Filter by title, class, subject..." style="width: 100%; height: 38px; padding: 0 12px 0 34px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #1e293b; background: #ffffff; outline: none; transition: all 0.2s ease;" onfocus="this.style.borderColor='#31328f'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
                 </div>
                 <a href="#upload-card" class="btn btn-primary" style="height: 38px; padding: 0 1rem; font-weight: 700; font-size: 0.82rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37,99,235,0.2); text-decoration: none; white-space: nowrap;">
                     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
@@ -400,7 +400,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
         <?php if (empty($papers)): ?>
             <div style="padding: 3.5rem 2rem; text-align: center; color: #64748b;">
-                <div style="width: 64px; height: 64px; border-radius: 18px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 2rem; color: #2563eb;">
+                <div style="width: 64px; height: 64px; border-radius: 18px; background: #ececf7; border: 1px solid #c8c9eb; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 2rem; color: #31328f;">
                     📄
                 </div>
                 <h4 style="font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; font-size: 1.15rem;">No Question Papers Uploaded</h4>
@@ -428,7 +428,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 </td>
                                 <td style="padding: 14px 18px; vertical-align: middle;">
                                     <div style="display: flex; align-items: center; gap: 12px;">
-                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; color: #2563eb; box-shadow: 0 2px 6px rgba(37,99,235,0.1);">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #ececf7; border: 1px solid #c8c9eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; color: #31328f; box-shadow: 0 2px 6px rgba(37,99,235,0.1);">
                                             📄
                                         </div>
                                         <div>
@@ -442,7 +442,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                     </div>
                                 </td>
                                 <td style="padding: 14px 18px; vertical-align: middle;">
-                                    <span style="background: #eff6ff; color: #1d4ed8; font-weight: 700; border: 1px solid #bfdbfe; font-size: 0.78rem; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <span style="background: #ececf7; color: #1d4ed8; font-weight: 700; border: 1px solid #c8c9eb; font-size: 0.78rem; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;">
                                         🎓 <?php echo htmlspecialchars($p['class']); ?>
                                     </span>
                                 </td>
@@ -488,7 +488,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                         </form>
 
                                         <!-- Edit Paper Button -->
-                                        <button type="button" class="btn" onclick="openEditPaperModal(<?php echo htmlspecialchars(json_encode($p), ENT_QUOTES, 'UTF-8'); ?>)" style="padding: 6px 11px; font-size: 0.78rem; font-weight: 700; border-radius: 8px; background: #ffffff; color: #2563eb; border: 1.5px solid #bfdbfe; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.borderColor='#2563eb';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#bfdbfe';" title="Edit Question Paper Details">
+                                        <button type="button" class="btn" onclick="openEditPaperModal(<?php echo htmlspecialchars(json_encode($p), ENT_QUOTES, 'UTF-8'); ?>)" style="padding: 6px 11px; font-size: 0.78rem; font-weight: 700; border-radius: 8px; background: #ffffff; color: #31328f; border: 1.5px solid #c8c9eb; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s ease;" onmouseover="this.style.background='#ececf7'; this.style.borderColor='#31328f';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#c8c9eb';" title="Edit Question Paper Details">
                                             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                             Edit
                                         </button>
@@ -503,7 +503,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                         <form method="POST" style="display: inline; margin: 0;" onsubmit="return confirm('Permanently delete this question paper?');">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="paper_id" value="<?php echo $p['id']; ?>">
-                                            <button type="submit" class="btn" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 8px; background: #ffffff; color: #dc2626; border: 1.5px solid #fecaca; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s ease;" onmouseover="this.style.background='#fef2f2';" onmouseout="this.style.background='#ffffff';" title="Delete Paper">
+                                            <button type="submit" class="btn" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 8px; background: #ffffff; color: #d92d20; border: 1.5px solid #fed7d5; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s ease;" onmouseover="this.style.background='#fef2f1';" onmouseout="this.style.background='#ffffff';" title="Delete Paper">
                                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                             </button>
                                         </form>
@@ -519,10 +519,10 @@ require_once __DIR__ . '/includes/admin_header.php';
 
     <!-- Upload Form Card -->
     <div class="card" id="upload-card" style="padding: 0; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); background: #ffffff; border: 1px solid #e2e8f0; overflow: hidden;">
-        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6);"></div>
+        <div style="height: 4px; background: linear-gradient(90deg, #31328f, #6366f1, #8b5cf6);"></div>
 
         <div style="padding: 1.5rem 2rem 1.25rem 2rem; border-bottom: 1px solid #edf2f7; display: flex; align-items: center; gap: 14px; background: linear-gradient(to right, #f8fafc, #ffffff);">
-            <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: #ececf7; border: 1px solid #c8c9eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #31328f; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
                 <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
             </div>
             <div>
@@ -540,7 +540,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="margin-bottom: 1.25rem;">
                 <label class="qp-label" for="title">
                     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    Paper Title <span style="color: #ef4444;">*</span>
+                    Paper Title <span style="color: #ef3b2d;">*</span>
                 </label>
                 <input type="text" id="title" name="title" class="qp-input" placeholder="e.g. EEMT 2027 Prelims - Class 10 State Model Paper & Answer Key" required>
             </div>
@@ -550,7 +550,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="qp-label" for="class">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
-                        Target Class <span style="color: #ef4444;">*</span>
+                        Target Class <span style="color: #ef3b2d;">*</span>
                     </label>
                     <select id="class" name="class" class="qp-select" required>
                         <option value="">-- Select Class --</option>
@@ -562,7 +562,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="qp-label" for="subject">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        Subject / Domain <span style="color: #ef4444;">*</span>
+                        Subject / Domain <span style="color: #ef3b2d;">*</span>
                     </label>
                     <input type="text" id="subject" name="subject" class="qp-input" placeholder="e.g. Mathematics, Science, Mental Ability" required>
                 </div>
@@ -572,7 +572,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="margin-bottom: 1.25rem;">
                 <label class="qp-label" for="paper_file">
                     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                    PDF Document File <span style="color: #ef4444;">*</span>
+                    PDF Document File <span style="color: #ef3b2d;">*</span>
                 </label>
                 <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 1.25rem; text-align: center; transition: all 0.2s ease;">
                     <input type="file" id="paper_file" name="paper_file" accept=".pdf" required style="display: block; width: 100%; font-size: 0.9rem; color: #475569; cursor: pointer;">
@@ -586,7 +586,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <!-- Row 4: Publish Status Switch Box -->
             <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
                 <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none;">
-                    <input type="checkbox" name="is_published" value="1" checked style="width: 20px; height: 20px; accent-color: #2563eb; cursor: pointer;">
+                    <input type="checkbox" name="is_published" value="1" checked style="width: 20px; height: 20px; accent-color: #31328f; cursor: pointer;">
                     <div>
                         <strong style="color: #0f172a; font-size: 0.94rem; display: block;">Publish immediately to school dashboards</strong>
                         <span style="font-size: 0.8rem; color: #64748b;">Schools will be able to view and download this question paper as soon as it is uploaded</span>
@@ -599,7 +599,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <button type="reset" class="btn" style="height: 44px; padding: 0 1.5rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='#ffffff';">
                     Clear Form
                 </button>
-                <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 1.85rem; font-weight: 700; font-size: 0.92rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.3); background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.3)';">
+                <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 1.85rem; font-weight: 700; font-size: 0.92rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.3); background: linear-gradient(135deg, #31328f, #1d4ed8); border: none; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.3)';">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                     Upload & Save Paper
                 </button>
@@ -612,12 +612,12 @@ require_once __DIR__ . '/includes/admin_header.php';
 <div id="editPaperModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem;">
     <div style="background: #ffffff; border-radius: 20px; max-width: 680px; width: 100%; box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(226, 232, 240, 0.8); overflow: hidden; animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1); position: relative;">
         <!-- Top Accent Gradient Line -->
-        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6);"></div>
+        <div style="height: 4px; background: linear-gradient(90deg, #31328f, #6366f1, #8b5cf6);"></div>
 
         <!-- Modal Header -->
         <div style="padding: 1.35rem 2rem; background: linear-gradient(to right, #f8fafc, #ffffff); border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 14px;">
-                <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
+                <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #ececf7, #dbeafe); border: 1px solid #c8c9eb; display: flex; align-items: center; justify-content: center; color: #31328f; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                 </div>
                 <div>
@@ -642,7 +642,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="margin-bottom: 1.25rem;">
                 <label class="qp-label" for="edit_title">
                     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    Paper Title <span style="color: #ef4444;">*</span>
+                    Paper Title <span style="color: #ef3b2d;">*</span>
                 </label>
                 <input type="text" id="edit_title" name="title" class="qp-input" required>
             </div>
@@ -652,7 +652,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="qp-label" for="edit_class">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
-                        Target Class <span style="color: #ef4444;">*</span>
+                        Target Class <span style="color: #ef3b2d;">*</span>
                     </label>
                     <select id="edit_class" name="class" class="qp-select" required>
                         <option value="">-- Select Class --</option>
@@ -664,7 +664,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="qp-label" for="edit_subject">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        Subject / Domain <span style="color: #ef4444;">*</span>
+                        Subject / Domain <span style="color: #ef3b2d;">*</span>
                     </label>
                     <input type="text" id="edit_subject" name="subject" class="qp-input" required>
                 </div>
@@ -675,7 +675,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="qp-label" for="edit_is_published">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        Publication Status <span style="color: #ef4444;">*</span>
+                        Publication Status <span style="color: #ef3b2d;">*</span>
                     </label>
                     <select id="edit_is_published" name="is_published" class="qp-select" required>
                         <option value="1">🟢 Published (Live for Schools)</option>
@@ -704,7 +704,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <button type="button" onclick="closeEditPaperModal()" style="height: 44px; padding: 0 1.4rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='#ffffff';">
                     Cancel
                 </button>
-                <button type="submit" style="height: 44px; padding: 0 1.75rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
+                <button type="submit" style="height: 44px; padding: 0 1.75rem; background: linear-gradient(135deg, #31328f, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     Save Changes
                 </button>

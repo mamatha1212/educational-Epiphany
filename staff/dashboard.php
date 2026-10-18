@@ -710,7 +710,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
         }
 
         .kpi-card.kpi-blue {
-            border-top: 4px solid #2563eb;
+            border-top: 4px solid #31328f;
         }
 
         .kpi-card.kpi-amber {
@@ -1000,12 +1000,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                         </span>
                     <?php elseif ($canViewRegs && $canEditRegs): ?>
                         <span class="badge"
-                            style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
+                            style="background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
                             ✏️ Regs: Show & Edit Mode
                         </span>
                     <?php else: ?>
                         <span class="badge"
-                            style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
+                            style="background: #fef2f1; color: #b42318; border: 1px solid #fed7d5; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
                             🔒 Regs: Access Restricted
                         </span>
                     <?php endif; ?>
@@ -1030,7 +1030,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     </button>
 
                     <a href="../logout.php" class="btn"
-                        style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; font-size: 0.85rem; padding: 6px 12px; font-weight: 700;">
+                        style="background: #fef2f1; color: #d92d20; border: 1px solid #fed7d5; font-size: 0.85rem; padding: 6px 12px; font-weight: 700;">
                         Logout
                     </a>
                 </div>
@@ -1064,7 +1064,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                         <div
                             style="background: #ffffff; border-radius: 16px; padding: 4rem 2rem; text-align: center; border: 1.5px dashed #cbd5e1; box-shadow: 0 4px 14px rgba(0,0,0,0.03); margin-bottom: 2rem;">
                             <div
-                                style="width: 72px; height: 72px; border-radius: 20px; background: #fef2f2; border: 1.5px solid #fecaca; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; color: #dc2626; margin: 0 auto 1.25rem;">
+                                style="width: 72px; height: 72px; border-radius: 20px; background: #fef2f1; border: 1.5px solid #fed7d5; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; color: #d92d20; margin: 0 auto 1.25rem;">
                                 🔒
                             </div>
                             <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem;">School
@@ -1103,12 +1103,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                     <div
                                         style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">
                                         Active Mandals</div>
-                                    <div style="font-size: 2.1rem; font-weight: 800; color: #1e3a8a; margin: 0.2rem 0;">
+                                    <div style="font-size: 2.1rem; font-weight: 800; color: #31328f; margin: 0.2rem 0;">
                                         <?php echo number_format($totalMandals); ?></div>
-                                    <div style="font-size: 0.78rem; color: #2563eb; font-weight: 600;">Coverage Across State
+                                    <div style="font-size: 0.78rem; color: #31328f; font-weight: 600;">Coverage Across State
                                     </div>
                                 </div>
-                                <div class="kpi-icon" style="background: #eff6ff; color: #2563eb;">
+                                <div class="kpi-icon" style="background: #ececf7; color: #31328f;">
                                     📍
                                 </div>
                             </div>
@@ -1277,7 +1277,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                 <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
                                                     <td style="padding: 14px 16px; vertical-align: middle;">
                                                         <span class="badge"
-                                                            style="background: #eff6ff; color: #1d4ed8; font-family: monospace; font-size: 0.9rem; font-weight: 800; border: 1px solid #bfdbfe; white-space: nowrap; padding: 4px 8px;">
+                                                            style="background: #ececf7; color: #1d4ed8; font-family: monospace; font-size: 0.9rem; font-weight: 800; border: 1px solid #c8c9eb; white-space: nowrap; padding: 4px 8px;">
                                                             <?php echo htmlspecialchars($row['reference_id']); ?>
                                                         </span>
                                                         <div
@@ -1311,7 +1311,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                         <?php if (!empty($row['mobile'])): ?>
                                                             <a href="tel:<?php echo htmlspecialchars($row['mobile']); ?>"
                                                                 style="font-weight: 700; color: #1e293b; font-size: 0.92rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; transition: all 0.15s ease;"
-                                                                onmouseover="this.style.background='#eff6ff'; this.style.borderColor='#93c5fd'; this.style.color='#2563eb';"
+                                                                onmouseover="this.style.background='#ececf7'; this.style.borderColor='#93c5fd'; this.style.color='#31328f';"
                                                                 onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.color='#1e293b';"
                                                                 title="Mobile: <?php echo htmlspecialchars($row['mobile']); ?>">
                                                                 <span style="font-size: 0.95rem;">📱</span>
@@ -1335,9 +1335,9 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                                     <option value="completed" <?php echo ($row['status'] ?? '') === 'completed' ? 'selected' : ''; ?>>Completed</option>
                                                                 </select>
                                                                 <button type="submit"
-                                                                    style="height: 32px; padding: 0 10px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none; background: #2563eb; color: white; cursor: pointer; transition: background 0.15s ease;"
+                                                                    style="height: 32px; padding: 0 10px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none; background: #31328f; color: white; cursor: pointer; transition: background 0.15s ease;"
                                                                     onmouseover="this.style.background='#1d4ed8';"
-                                                                    onmouseout="this.style.background='#2563eb';">
+                                                                    onmouseout="this.style.background='#31328f';">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -1352,9 +1352,9 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                                 $bColor = '#047857';
                                                                 $bBdr = '#a7f3d0';
                                                             } elseif ($st === 'contacted') {
-                                                                $bBg = '#eff6ff';
+                                                                $bBg = '#ececf7';
                                                                 $bColor = '#1d4ed8';
-                                                                $bBdr = '#bfdbfe';
+                                                                $bBdr = '#c8c9eb';
                                                             } elseif ($st === 'completed') {
                                                                 $bBg = '#f5f3ff';
                                                                 $bColor = '#7c3aed';
@@ -1373,7 +1373,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                                 👁️ View
                                                             </button>
                                                             <?php if ($canEditRegs): ?>
-                                                                <button type="button" class="btn" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Edit Registration Details">
+                                                                <button type="button" class="btn" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; border-radius: 6px; cursor: pointer;" title="Edit Registration Details">
                                                                     ✏️ Edit
                                                                 </button>
                                                             <?php endif; ?>
@@ -1515,14 +1515,14 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                     style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">
                                     Coordinator Access</div>
                                 <div
-                                    style="font-size: 1.02rem; font-weight: 800; color: <?php echo canManagePapers() ? '#6b21a8' : '#2563eb'; ?>; margin: 0.35rem 0;">
+                                    style="font-size: 1.02rem; font-weight: 800; color: <?php echo canManagePapers() ? '#6b21a8' : '#31328f'; ?>; margin: 0.35rem 0;">
                                     <?php echo canManagePapers() ? 'Upload Permitted 📤' : 'View & Download 👁️'; ?>
                                 </div>
                                 <div style="font-size: 0.76rem; color: #64748b; font-weight: 600;">Exam Materials
                                     Console</div>
                             </div>
                             <div
-                                style="width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                                style="width: 44px; height: 44px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
                                 🛡️
                             </div>
                         </div>
@@ -1589,7 +1589,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                 <div
                                                     style="font-size: 0.78rem; color: #64748b; margin-top: 6px; display: flex; align-items: center; gap: 8px;">
                                                     <span
-                                                        style="background: #eff6ff; color: #1e40af; padding: 2px 7px; border-radius: 4px; font-weight: 700;">Class
+                                                        style="background: #ececf7; color: #31328f; padding: 2px 7px; border-radius: 4px; font-weight: 700;">Class
                                                         <?php echo htmlspecialchars($paper['class']); ?></span>
                                                     <span
                                                         style="background: #f1f5f9; color: #475569; padding: 2px 7px; border-radius: 4px; font-weight: 600;"><?php echo htmlspecialchars($paper['subject'] ?? 'General'); ?></span>
@@ -1612,7 +1612,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 <div id="tabPanelSchools" style="<?php echo $activeTab === 'schools' ? 'display: block;' : 'display: none;'; ?>">
                     
                     <!-- View-Only Mode Banner -->
-                    <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1e40af; padding: 12px 18px; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                    <div style="background: #ececf7; border: 1.5px solid #c8c9eb; color: #31328f; padding: 12px 18px; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span style="font-size: 1.25rem;">👁️</span>
                             <div>
@@ -1622,7 +1622,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                 </span>
                             </div>
                         </div>
-                        <span style="font-size: 0.74rem; background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap;">
+                        <span style="font-size: 0.74rem; background: #dbeafe; color: #31328f; border: 1px solid #c8c9eb; padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap;">
                             Read-Only Mode
                         </span>
                     </div>
@@ -1647,13 +1647,13 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                             <div class="kpi-icon" style="background: #ecfdf5; color: #059669;">🗺️</div>
                         </div>
 
-                        <div class="kpi-card" style="border-top: 4px solid #2563eb;">
+                        <div class="kpi-card" style="border-top: 4px solid #31328f;">
                             <div>
                                 <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">3. Master Schools</div>
-                                <div style="font-size: 2.1rem; font-weight: 800; color: #1e3a8a; margin: 0.2rem 0;"><?php echo number_format($totalMasterSchools); ?></div>
-                                <div style="font-size: 0.78rem; color: #2563eb; font-weight: 600;">Total AP Govt Schools</div>
+                                <div style="font-size: 2.1rem; font-weight: 800; color: #31328f; margin: 0.2rem 0;"><?php echo number_format($totalMasterSchools); ?></div>
+                                <div style="font-size: 0.78rem; color: #31328f; font-weight: 600;">Total AP Govt Schools</div>
                             </div>
-                            <div class="kpi-icon" style="background: #eff6ff; color: #2563eb;">🏫</div>
+                            <div class="kpi-icon" style="background: #ececf7; color: #31328f;">🏫</div>
                         </div>
 
                         <div class="kpi-card" style="border-top: 4px solid #7c3aed;">
@@ -1811,7 +1811,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                     <?php echo htmlspecialchars($m['district']); ?>
                                                 </td>
                                                 <td style="padding: 12px 16px; text-align: center;">
-                                                    <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-weight: 700;">
+                                                    <span class="badge" style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-weight: 700;">
                                                         🏫 <?php echo number_format($m['total_schools']); ?>
                                                     </span>
                                                 </td>
@@ -1825,7 +1825,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                     <?php endif; ?>
                                                 </td>
                                                 <td style="padding: 12px 16px; text-align: right;">
-                                                    <a href="dashboard.php?tab=schools&schools_district=<?php echo urlencode($schoolDistrict); ?>&schools_mandal=<?php echo urlencode($m['mandal']); ?>" class="btn" style="background: #2563eb; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: 700; border-radius: 7px; text-decoration: none;">
+                                                    <a href="dashboard.php?tab=schools&schools_district=<?php echo urlencode($schoolDistrict); ?>&schools_mandal=<?php echo urlencode($m['mandal']); ?>" class="btn" style="background: #31328f; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: 700; border-radius: 7px; text-decoration: none;">
                                                         🔍 View Schools &rarr;
                                                     </a>
                                                 </td>
@@ -1872,7 +1872,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                     </span>
                                                 </td>
                                                 <td style="padding: 12px 16px; text-align: center;">
-                                                    <span class="badge" style="background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; font-weight: 700;">
+                                                    <span class="badge" style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-weight: 700;">
                                                         🏫 <?php echo number_format($d['total_schools']); ?> Schools
                                                     </span>
                                                 </td>
@@ -1917,7 +1917,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     <div>
                         <h3 id="view_school_title" style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #0f172a; line-height: 1.3;">School Details</h3>
                         <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
-                            <span id="view_ref_badge" class="badge" style="background: #eff6ff; color: #1e40af; font-weight: 700; font-family: monospace; font-size: 0.78rem;"></span>
+                            <span id="view_ref_badge" class="badge" style="background: #ececf7; color: #31328f; font-weight: 700; font-family: monospace; font-size: 0.78rem;"></span>
                             <span id="view_status_badge" class="badge" style="font-size: 0.75rem; text-transform: uppercase;"></span>
                         </div>
                     </div>
@@ -1946,7 +1946,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
                     <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Phone Number</div>
                     <div style="margin-top: 3px;">
-                        <a id="view_phone_link" href="#" style="font-weight: 700; color: #2563eb; text-decoration: none; font-size: 0.95rem;"></a>
+                        <a id="view_phone_link" href="#" style="font-weight: 700; color: #31328f; text-decoration: none; font-size: 0.95rem;"></a>
                     </div>
                     <div style="margin-top: 4px;">
                         <a id="view_wa_link" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #25d366; color: #fff; border-radius: 6px; text-decoration: none;">💬 WhatsApp</a>
@@ -1966,7 +1966,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 
             <!-- Footer -->
             <div style="padding: 1rem 1.75rem; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                <a id="view_slip_link" href="#" target="_blank" class="btn" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none; border-radius: 8px;">
+                <a id="view_slip_link" href="#" target="_blank" class="btn" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; text-decoration: none; border-radius: 8px;">
                     📄 View Official Slip
                 </a>
                 <div style="display: flex; gap: 8px;">
@@ -2083,7 +2083,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             if (st === 'verified') {
                 stBadge.style.background = '#ecfdf5'; stBadge.style.color = '#047857'; stBadge.style.border = '1px solid #a7f3d0';
             } else if (st === 'contacted') {
-                stBadge.style.background = '#eff6ff'; stBadge.style.color = '#1d4ed8'; stBadge.style.border = '1px solid #bfdbfe';
+                stBadge.style.background = '#ececf7'; stBadge.style.color = '#1d4ed8'; stBadge.style.border = '1px solid #c8c9eb';
             } else if (st === 'completed') {
                 stBadge.style.background = '#f5f3ff'; stBadge.style.color = '#7c3aed'; stBadge.style.border = '1px solid #ddd6fe';
             } else {

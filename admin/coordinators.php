@@ -271,7 +271,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     <!-- Page Header -->
     <div style="margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.25rem;">
         <div>
-            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.04em;">
                 🛡️ System Access Management
             </div>
             <h1 style="font-size: 1.85rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.03em; line-height: 1.2;">
@@ -309,9 +309,9 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="font-size: 2rem; font-weight: 800; color: #0f172a; line-height: 1.1; margin-top: 4px;">
                     <?php echo $totalStaff; ?>
                 </div>
-                <span style="font-size: 0.78rem; color: #2563eb; font-weight: 600; margin-top: 4px; display: block;">Dashboard Logins</span>
+                <span style="font-size: 0.78rem; color: #31328f; font-weight: 600; margin-top: 4px; display: block;">Dashboard Logins</span>
             </div>
-            <div style="width: 48px; height: 48px; border-radius: 14px; background: #eff6ff; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; color: #2563eb;">
+            <div style="width: 48px; height: 48px; border-radius: 14px; background: #ececf7; border: 1px solid #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; color: #31328f;">
                 👥
             </div>
         </div>
@@ -320,7 +320,7 @@ require_once __DIR__ . '/includes/admin_header.php';
         <div style="background: #ffffff; border-radius: 16px; padding: 1.35rem 1.5rem; border: 1px solid #e2e8f0; box-shadow: 0 2px 12px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: space-between; transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
             <div>
                 <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; display: block;">Administrators</span>
-                <div style="font-size: 2rem; font-weight: 800; color: #1e3a8a; line-height: 1.1; margin-top: 4px;">
+                <div style="font-size: 2rem; font-weight: 800; color: #31328f; line-height: 1.1; margin-top: 4px;">
                     <?php echo $totalAdmins; ?>
                 </div>
                 <span style="font-size: 0.78rem; color: #4338ca; font-weight: 600; margin-top: 4px; display: block;">Full Root Control</span>
@@ -368,7 +368,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div>
                 <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
                     <span>👥 Authorized Staff & Coordinators</span>
-                    <span style="font-size: 0.75rem; font-weight: 700; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 2px 8px; border-radius: 20px;">
+                    <span style="font-size: 0.75rem; font-weight: 700; background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; padding: 2px 8px; border-radius: 20px;">
                         <?php echo count($users); ?> Total
                     </span>
                 </h3>
@@ -379,7 +379,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="position: relative; width: 280px;">
                     <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.9rem; pointer-events: none;">🔍</span>
-                    <input type="text" id="staffSearchInput" onkeyup="filterStaffTable()" placeholder="Filter by name, username..." style="width: 100%; height: 38px; padding: 0 12px 0 34px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #1e293b; background: #ffffff; outline: none; transition: all 0.2s ease;" onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
+                    <input type="text" id="staffSearchInput" onkeyup="filterStaffTable()" placeholder="Filter by name, username..." style="width: 100%; height: 38px; padding: 0 12px 0 34px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; color: #1e293b; background: #ffffff; outline: none; transition: all 0.2s ease;" onfocus="this.style.borderColor='#31328f'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';">
                 </div>
             </div>
         </div>
@@ -424,7 +424,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
                                 <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 40px; height: 40px; border-radius: 12px; background: <?php echo $u['role'] === 'admin' ? 'linear-gradient(135deg, #1e3a8a, #2563eb)' : 'linear-gradient(135deg, #065f46, #059669)'; ?>; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 0.88rem; font-weight: 800; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); border: 2px solid #ffffff;">
+                                    <div style="width: 40px; height: 40px; border-radius: 12px; background: <?php echo $u['role'] === 'admin' ? 'linear-gradient(135deg, #31328f, #31328f)' : 'linear-gradient(135deg, #065f46, #059669)'; ?>; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 0.88rem; font-weight: 800; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); border: 2px solid #ffffff;">
                                         <?php echo htmlspecialchars($initials); ?>
                                     </div>
                                     <div>
@@ -439,7 +439,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
                                 <?php if ($u['role'] === 'admin'): ?>
-                                    <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                                    <span style="background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
                                         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                                         Administrator
                                     </span>
@@ -452,7 +452,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
                                 <?php if ($u['role'] === 'admin'): ?>
-                                    <span style="font-size: 0.78rem; color: #1e40af; font-weight: 700; background: #dbeafe; padding: 6px 12px; border-radius: 8px; border: 1px solid #bfdbfe; display: inline-flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 0.78rem; color: #31328f; font-weight: 700; background: #dbeafe; padding: 6px 12px; border-radius: 8px; border: 1px solid #c8c9eb; display: inline-flex; align-items: center; gap: 6px;">
                                         👑 Root Master (Unrestricted Control)
                                     </span>
                                 <?php else: ?>
@@ -478,7 +478,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                                     <input type="hidden" name="perm_type" value="regs_edit">
                                                     <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
                                                     <?php if ($canEditRegs): ?>
-                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Can Edit & Verify. Click to Revoke">✏️ Edit</button>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #1d4ed8; background: #ececf7; border: 1px solid #c8c9eb; border-radius: 6px; cursor: pointer;" title="Can Edit & Verify. Click to Revoke">✏️ Edit</button>
                                                     <?php else: ?>
                                                         <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="View Only (No Edit). Click to Grant Edit">🔒 Edit</button>
                                                     <?php endif; ?>
@@ -507,7 +507,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                                     <input type="hidden" name="perm_type" value="schools_edit">
                                                     <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
                                                     <?php if ($canManageSchools): ?>
-                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Can Manage/Edit Schools & Mandals. Click to Revoke">✏️ Edit</button>
+                                                        <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 700; color: #1d4ed8; background: #ececf7; border: 1px solid #c8c9eb; border-radius: 6px; cursor: pointer;" title="Can Manage/Edit Schools & Mandals. Click to Revoke">✏️ Edit</button>
                                                     <?php else: ?>
                                                         <button type="submit" style="padding: 2.5px 7px; font-size: 0.7rem; font-weight: 600; color: #94a3b8; background: #fff; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" title="Cannot Manage Schools. Click to Grant">🔒 Edit</button>
                                                     <?php endif; ?>
@@ -549,7 +549,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                             <td style="padding: 14px 18px; vertical-align: middle;">
                                 <?php if (!empty($u['mobile']) && $u['mobile'] !== 'N/A'): ?>
                                     <div style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">
-                                        <a href="tel:<?php echo htmlspecialchars($u['mobile']); ?>" style="color: #2563eb; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+                                        <a href="tel:<?php echo htmlspecialchars($u['mobile']); ?>" style="color: #31328f; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
                                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                             <?php echo htmlspecialchars($u['mobile']); ?>
                                         </a>
@@ -574,8 +574,8 @@ require_once __DIR__ . '/includes/admin_header.php';
                                         Active
                                     </span>
                                 <?php else: ?>
-                                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;">
-                                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444;"></span>
+                                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; background: #fef2f1; color: #b42318; border: 1px solid #fed7d5;">
+                                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #ef3b2d;"></span>
                                         Disabled
                                     </span>
                                 <?php endif; ?>
@@ -585,7 +585,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle; text-align: right; white-space: nowrap;">
                                 <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
-                                    <button type="button" class="btn" onclick="openEditModal(<?php echo htmlspecialchars(json_encode($u), ENT_QUOTES, 'UTF-8'); ?>)" style="padding: 6px 14px; font-size: 0.8rem; font-weight: 700; background: #ffffff; color: #2563eb; border: 1.5px solid #bfdbfe; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 3px rgba(37,99,235,0.06); transition: all 0.15s ease;" onmouseover="this.style.background='#eff6ff'; this.style.borderColor='#2563eb';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#bfdbfe';" title="Edit Staff Details">
+                                    <button type="button" class="btn" onclick="openEditModal(<?php echo htmlspecialchars(json_encode($u), ENT_QUOTES, 'UTF-8'); ?>)" style="padding: 6px 14px; font-size: 0.8rem; font-weight: 700; background: #ffffff; color: #31328f; border: 1.5px solid #c8c9eb; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 3px rgba(37,99,235,0.06); transition: all 0.15s ease;" onmouseover="this.style.background='#ececf7'; this.style.borderColor='#31328f';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#c8c9eb';" title="Edit Staff Details">
                                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                                         Edit
                                     </button>
@@ -593,7 +593,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                         <form method="POST" style="display: inline; margin: 0;" onsubmit="return confirm('Permanently delete staff account @<?php echo htmlspecialchars(addslashes($u['username'])); ?>?');">
                                             <input type="hidden" name="action" value="delete_user">
                                             <input type="hidden" name="user_id" value="<?php echo $u['id']; ?>">
-                                            <button type="submit" class="btn" style="padding: 6px 14px; font-size: 0.8rem; font-weight: 700; background: #ffffff; color: #dc2626; border: 1.5px solid #fecaca; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 3px rgba(220,38,38,0.06); transition: all 0.15s ease;" onmouseover="this.style.background='#fef2f2'; this.style.borderColor='#dc2626';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#fecaca';" title="Delete Staff Account">
+                                            <button type="submit" class="btn" style="padding: 6px 14px; font-size: 0.8rem; font-weight: 700; background: #ffffff; color: #d92d20; border: 1.5px solid #fed7d5; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 1px 3px rgba(220,38,38,0.06); transition: all 0.15s ease;" onmouseover="this.style.background='#fef2f1'; this.style.borderColor='#d92d20';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#fed7d5';" title="Delete Staff Account">
                                                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                                 Delete
                                             </button>
@@ -614,10 +614,10 @@ require_once __DIR__ . '/includes/admin_header.php';
 
     <!-- Create Staff Card -->
     <div class="card" id="add-user-card" style="padding: 0; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); background: #ffffff; border: 1px solid #e2e8f0; overflow: hidden;">
-        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6);"></div>
+        <div style="height: 4px; background: linear-gradient(90deg, #31328f, #6366f1, #8b5cf6);"></div>
         
         <div style="padding: 1.5rem 2rem 1.25rem 2rem; border-bottom: 1px solid #edf2f7; display: flex; align-items: center; gap: 14px; background: linear-gradient(to right, #f8fafc, #ffffff);">
-            <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: #ececf7; border: 1px solid #c8c9eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: #31328f; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
                 <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
             </div>
             <div>
@@ -636,7 +636,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="modal-field-label" for="name">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        Full Name <span style="color: #ef4444;">*</span>
+                        Full Name <span style="color: #ef3b2d;">*</span>
                     </label>
                     <input type="text" id="name" name="name" class="modal-field-input" placeholder="e.g. R. Suresh Kumar" required>
                 </div>
@@ -645,7 +645,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="modal-field-label" for="username">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
-                        Username <span style="color: #ef4444;">*</span>
+                        Username <span style="color: #ef3b2d;">*</span>
                     </label>
                     <input type="text" id="username" name="username" class="modal-field-input" placeholder="e.g. suresh_coord" required>
                 </div>
@@ -654,7 +654,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="modal-field-label" for="password">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                        Password <span style="color: #ef4444;">*</span>
+                        Password <span style="color: #ef3b2d;">*</span>
                     </label>
                     <input type="password" id="password" name="password" class="modal-field-input" placeholder="Minimum 6 characters" minlength="6" required>
                 </div>
@@ -663,7 +663,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div>
                     <label class="modal-field-label" for="role">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        System Role <span style="color: #ef4444;">*</span>
+                        System Role <span style="color: #ef3b2d;">*</span>
                     </label>
                     <select id="role" name="role" class="modal-field-select" required>
                         <option value="coordinator">Coordinator (Registrations & Papers)</option>
@@ -699,7 +699,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 <span style="font-size: 0.76rem; color: #64748b;">Specify exact read (view) and write (edit) capabilities for this coordinator</span>
                             </div>
                         </div>
-                        <span style="font-size: 0.74rem; color: #2563eb; font-weight: 700; background: #eff6ff; padding: 4px 10px; border-radius: 20px; border: 1px solid #bfdbfe;">Multi-Select Access Controls</span>
+                        <span style="font-size: 0.74rem; color: #31328f; font-weight: 700; background: #ececf7; padding: 4px 10px; border-radius: 20px; border: 1px solid #c8c9eb;">Multi-Select Access Controls</span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
@@ -725,8 +725,8 @@ require_once __DIR__ . '/includes/admin_header.php';
                             </label>
 
                             <!-- Edit Option -->
-                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#2563eb';">
-                                <input type="checkbox" id="create_can_edit_registrations" name="can_edit_registrations" value="1" checked style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('create_can_view_registrations').checked=true;}">
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#31328f';">
+                                <input type="checkbox" id="create_can_edit_registrations" name="can_edit_registrations" value="1" checked style="width: 18px; height: 18px; accent-color: #31328f; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('create_can_view_registrations').checked=true;}">
                                 <div>
                                     <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Edit & Verify Status</strong>
                                     <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
@@ -810,7 +810,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <button type="reset" class="btn" style="height: 44px; padding: 0 1.5rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='#ffffff';">
                     Clear Form
                 </button>
-                <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 1.85rem; font-weight: 700; font-size: 0.92rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.3); background: linear-gradient(135deg, #2563eb, #1d4ed8); border: none; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.3)';">
+                <button type="submit" class="btn btn-primary" style="height: 44px; padding: 0 1.85rem; font-weight: 700; font-size: 0.92rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37,99,235,0.3); background: linear-gradient(135deg, #31328f, #1d4ed8); border: none; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.3)';">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                     Create Staff Account
                 </button>
@@ -863,7 +863,7 @@ function filterStaffTable() {
 }
 .modal-field-input:focus {
     background: #ffffff;
-    border-color: #2563eb;
+    border-color: #31328f;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 .modal-field-select {
@@ -889,7 +889,7 @@ function filterStaffTable() {
 }
 .modal-field-select:focus {
     background-color: #ffffff;
-    border-color: #2563eb;
+    border-color: #31328f;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 .modal-field-label {
@@ -908,12 +908,12 @@ function filterStaffTable() {
 <div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 1.25rem; overflow-y: auto;">
     <div style="background: #ffffff; border-radius: 20px; max-width: 950px; width: 95vw; max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.4), 0 0 0 1px rgba(226, 232, 240, 0.8); overflow: hidden; animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1); position: relative; margin: auto;">
         <!-- Top Accent Gradient Line -->
-        <div style="height: 4px; background: linear-gradient(90deg, #2563eb, #6366f1, #8b5cf6); flex-shrink: 0;"></div>
+        <div style="height: 4px; background: linear-gradient(90deg, #31328f, #6366f1, #8b5cf6); flex-shrink: 0;"></div>
 
         <!-- Modal Header -->
         <div style="padding: 1.2rem 2rem; background: linear-gradient(to right, #f8fafc, #ffffff); border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
             <div style="display: flex; align-items: center; gap: 14px;">
-                <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; color: #2563eb; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #ececf7, #dbeafe); border: 1px solid #c8c9eb; display: flex; align-items: center; justify-content: center; color: #31328f; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.12);">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                 </div>
                 <div>
@@ -942,7 +942,7 @@ function filterStaffTable() {
                     <div>
                         <label class="modal-field-label" for="edit_name">
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                            Full Name <span style="color: #ef4444;">*</span>
+                            Full Name <span style="color: #ef3b2d;">*</span>
                         </label>
                         <input type="text" id="edit_name" name="name" class="modal-field-input" placeholder="e.g. Hem Mohan" required>
                     </div>
@@ -951,7 +951,7 @@ function filterStaffTable() {
                     <div>
                         <label class="modal-field-label" for="edit_username">
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
-                            Username <span style="color: #ef4444;">*</span>
+                            Username <span style="color: #ef3b2d;">*</span>
                         </label>
                         <input type="text" id="edit_username" name="username" class="modal-field-input" placeholder="e.g. hema" required>
                     </div>
@@ -969,7 +969,7 @@ function filterStaffTable() {
                     <div>
                         <label class="modal-field-label" for="edit_role">
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                            System Role <span style="color: #ef4444;">*</span>
+                            System Role <span style="color: #ef3b2d;">*</span>
                         </label>
                         <select id="edit_role" name="role" class="modal-field-select" required>
                             <option value="coordinator">Coordinator (Registrations & Papers)</option>
@@ -990,7 +990,7 @@ function filterStaffTable() {
                     <div>
                         <label class="modal-field-label" for="edit_is_active">
                             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            Account Status <span style="color: #ef4444;">*</span>
+                            Account Status <span style="color: #ef3b2d;">*</span>
                         </label>
                         <select id="edit_is_active" name="is_active" class="modal-field-select" required>
                             <option value="1">🟢 Active (Access Enabled)</option>
@@ -1018,7 +1018,7 @@ function filterStaffTable() {
                                 <span style="font-size: 0.76rem; color: #64748b;">Specify exact read (view) and write (edit) capabilities for this coordinator</span>
                             </div>
                         </div>
-                        <span style="font-size: 0.74rem; color: #2563eb; font-weight: 700; background: #eff6ff; padding: 4px 10px; border-radius: 20px; border: 1px solid #bfdbfe;">Multi-Select Access Controls</span>
+                        <span style="font-size: 0.74rem; color: #31328f; font-weight: 700; background: #ececf7; padding: 4px 10px; border-radius: 20px; border: 1px solid #c8c9eb;">Multi-Select Access Controls</span>
                     </div>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
@@ -1044,8 +1044,8 @@ function filterStaffTable() {
                             </label>
 
                             <!-- Edit Option -->
-                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#2563eb';">
-                                <input type="checkbox" id="edit_can_edit_registrations" name="can_edit_registrations" value="1" style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('edit_can_view_registrations').checked=true;}">
+                            <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.15s ease;" onmouseover="this.style.borderColor='#31328f';">
+                                <input type="checkbox" id="edit_can_edit_registrations" name="can_edit_registrations" value="1" style="width: 18px; height: 18px; accent-color: #31328f; cursor: pointer; margin-top: 2px; flex-shrink: 0;" onchange="if(this.checked){document.getElementById('edit_can_view_registrations').checked=true;}">
                                 <div>
                                     <strong style="font-size: 0.82rem; color: #0f172a; display: block;">✏️ Edit & Verify Status</strong>
                                     <span style="font-size: 0.72rem; color: #64748b; line-height: 1.3; display: block; margin-top: 2px;">
@@ -1129,7 +1129,7 @@ function filterStaffTable() {
                 <button type="button" onclick="closeEditModal()" style="height: 44px; padding: 0 1.5rem; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; font-weight: 600; font-size: 0.92rem; border-radius: 10px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#94a3b8'" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1'">
                     Cancel
                 </button>
-                <button type="submit" id="saveStaffChangesBtn" style="height: 44px; padding: 0 2rem; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
+                <button type="submit" id="saveStaffChangesBtn" style="height: 44px; padding: 0 2rem; background: linear-gradient(135deg, #31328f, #1d4ed8); color: #ffffff; border: none; font-weight: 700; font-size: 0.92rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 18px rgba(37,99,235,0.45)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(37,99,235,0.35)'">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     Save Changes
                 </button>

@@ -23,7 +23,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <div class="container" style="max-width: 1100px;">
     <!-- Hero Banner -->
-    <div class="card" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; padding: 3rem 2.5rem; border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.4); margin-bottom: 2.5rem; text-align: center; position: relative; overflow: hidden;">
+    <div class="card" style="background: linear-gradient(135deg, #0f172a 0%, #31328f 100%); color: white; padding: 3rem 2.5rem; border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.4); margin-bottom: 2.5rem; text-align: center; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; width: 220px; height: 220px; background: rgba(59, 130, 246, 0.15); border-radius: 50%; filter: blur(40px);"></div>
         <div style="position: absolute; bottom: -50px; left: -50px; width: 220px; height: 220px; background: rgba(16, 185, 129, 0.15); border-radius: 50%; filter: blur(40px);"></div>
 
@@ -44,7 +44,7 @@ require_once __DIR__ . '/includes/header.php';
             </p>
 
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <a href="register.php" class="btn btn-primary" style="font-size: 1.05rem; padding: 0.9rem 2rem; background: #2563eb; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);">
+                <a href="register.php" class="btn btn-primary" style="font-size: 1.05rem; padding: 0.9rem 2rem; background: #31328f; box-shadow: 0 10px 25px -5px rgba(49, 50, 143, 0.5);">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     Register School for EEMT 2027
                 </a>
@@ -63,9 +63,9 @@ require_once __DIR__ . '/includes/header.php';
     <!-- 3 Quick Access Role Cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
         <!-- Card 1: School Registration -->
-        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #2563eb;">
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #31328f;">
             <div>
-                <div style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: #2563eb;">
+                <div style="width: 48px; height: 48px; border-radius: 12px; background: #ececf7; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; color: #31328f;">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                 </div>
                 <h3 style="font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">New School Registration</h3>
@@ -117,25 +117,25 @@ require_once __DIR__ . '/includes/header.php';
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
             <div style="text-align: center; padding: 1rem;">
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">1</div>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #31328f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">1</div>
                 <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">Select Your School</h4>
                 <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Choose your AP District & Mandal, then select your registered Government School.</p>
             </div>
 
             <div style="text-align: center; padding: 1rem;">
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">2</div>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #31328f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">2</div>
                 <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">Enter Unique Code</h4>
                 <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Enter your school's unique code. The system validates it in real time against state records.</p>
             </div>
 
             <div style="text-align: center; padding: 1rem;">
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">3</div>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #31328f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">3</div>
                 <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">Get Reference ID</h4>
                 <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Enter contact person info. An official Reference ID is generated and sent to your email.</p>
             </div>
 
             <div style="text-align: center; padding: 1rem;">
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">4</div>
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #31328f; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: 800;">4</div>
                 <h4 style="font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">Download Papers</h4>
                 <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Log in anytime with Reference ID + Code to access released Prelims Question Papers.</p>
             </div>

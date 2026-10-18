@@ -69,7 +69,7 @@ $totalPapersCount = count($questionPapers);
             --sidebar-bg: #0f172a;
             --sidebar-border: #1e293b;
             --sidebar-hover: #1e293b;
-            --sidebar-active: #2563eb;
+            --sidebar-active: #31328f;
             --topbar-height: 64px;
         }
 
@@ -171,7 +171,7 @@ $totalPapersCount = count($questionPapers);
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #31328f, #1d4ed8);
             color: white;
             display: flex;
             align-items: center;
@@ -322,7 +322,7 @@ $totalPapersCount = count($questionPapers);
 
         .btn-copy-code {
             width: 100%;
-            background: #2563eb;
+            background: #31328f;
             color: white;
             border: none;
             padding: 5px 8px;
@@ -346,7 +346,7 @@ $totalPapersCount = count($questionPapers);
             align-items: center;
             gap: 8px;
             padding: 8px 10px;
-            color: #ef4444;
+            color: #ef3b2d;
             font-size: 0.85rem;
             font-weight: 600;
             text-decoration: none;
@@ -450,7 +450,7 @@ $totalPapersCount = count($questionPapers);
 
         /* Hero Card */
         .hero-banner {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+            background: linear-gradient(135deg, #31328f 0%, #31328f 50%, #3b82f6 100%);
             border-radius: 14px;
             padding: 1.75rem 2rem;
             color: white;
@@ -511,7 +511,7 @@ $totalPapersCount = count($questionPapers);
             align-items: center;
             gap: 1rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-            border-left: 4px solid #2563eb;
+            border-left: 4px solid #31328f;
         }
 
         .kpi-card.purple {
@@ -535,7 +535,7 @@ $totalPapersCount = count($questionPapers);
             justify-content: center;
             font-size: 1.5rem;
             flex-shrink: 0;
-            background: #eff6ff;
+            background: #ececf7;
         }
 
         .kpi-card.purple .kpi-icon {
@@ -603,7 +603,7 @@ $totalPapersCount = count($questionPapers);
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            background: #eff6ff;
+            background: #ececf7;
             flex-shrink: 0;
         }
 
@@ -653,7 +653,7 @@ $totalPapersCount = count($questionPapers);
             padding: 3px 7px;
             border-radius: 6px;
             font-family: monospace;
-            color: #1e40af;
+            color: #31328f;
             font-weight: 700;
         }
 
@@ -671,7 +671,7 @@ $totalPapersCount = count($questionPapers);
 
         .qp-badge-scheduled {
             display: inline-block;
-            background: #eff6ff;
+            background: #ececf7;
             color: #1d4ed8;
             font-size: 0.75rem;
             font-weight: 800;
@@ -679,7 +679,7 @@ $totalPapersCount = count($questionPapers);
             letter-spacing: 0.08em;
             padding: 4px 12px;
             border-radius: 9999px;
-            border: 1px solid #bfdbfe;
+            border: 1px solid #c8c9eb;
             margin-bottom: 1rem;
         }
 
@@ -810,9 +810,9 @@ $totalPapersCount = count($questionPapers);
         }
 
         .topbar-logout-btn {
-            background: #fef2f2;
-            color: #ef4444;
-            border: 1px solid #fecaca;
+            background: #fef2f1;
+            color: #ef3b2d;
+            border: 1px solid #fed7d5;
             padding: 5px 12px;
             font-size: 0.8rem;
             font-weight: 700;
@@ -824,7 +824,7 @@ $totalPapersCount = count($questionPapers);
 
         .topbar-logout-btn:hover {
             background: #fee2e2;
-            color: #dc2626;
+            color: #d92d20;
         }
 
         @media (min-width: 640px) {
@@ -844,6 +844,18 @@ $totalPapersCount = count($questionPapers);
             }
         }
 
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 1.25rem 0.85rem;
+            }
+        }
+
         @media (max-width: 640px) {
             .admin-topbar {
                 height: 58px;
@@ -856,6 +868,159 @@ $totalPapersCount = count($questionPapers);
 
             .sidebar-toggle-btn {
                 padding: 5px 8px;
+            }
+
+            .admin-content {
+                padding: 1rem 0.65rem;
+            }
+
+            /* Responsive Hero Banner */
+            .hero-banner {
+                padding: 1.25rem 1rem;
+                border-radius: 12px;
+                margin-bottom: 1.25rem;
+            }
+
+            .hero-banner h1 {
+                font-size: 1.2rem;
+                line-height: 1.3;
+                margin-bottom: 0.4rem;
+                word-break: break-word;
+            }
+
+            .hero-banner p {
+                font-size: 0.82rem;
+                line-height: 1.45;
+                margin-bottom: 0.75rem;
+            }
+
+            .hero-chips {
+                gap: 6px;
+            }
+
+            .hero-chip {
+                font-size: 0.72rem;
+                padding: 0.25rem 0.65rem;
+            }
+
+            /* 2x2 Clean Compact KPI Grid on Mobile */
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.65rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .kpi-card {
+                padding: 0.75rem 0.75rem;
+                gap: 0.6rem;
+                border-radius: 10px;
+                border-left-width: 4px;
+            }
+
+            .kpi-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.15rem;
+                border-radius: 8px;
+                flex-shrink: 0;
+            }
+
+            .kpi-value {
+                font-size: 1.1rem !important;
+            }
+
+            .kpi-label {
+                font-size: 0.72rem;
+                line-height: 1.2;
+            }
+
+            /* Info Cards Grid & Rows */
+            .info-cards-grid {
+                gap: 1rem;
+                margin-bottom: 1.25rem;
+            }
+
+            .modern-card {
+                border-radius: 10px;
+            }
+
+            .modern-card-header {
+                padding: 0.85rem 1rem;
+                gap: 10px;
+            }
+
+            .modern-card-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1.05rem;
+            }
+
+            .modern-card-title {
+                font-size: 0.95rem;
+            }
+
+            .modern-card-sub {
+                font-size: 0.72rem;
+            }
+
+            .modern-card-body {
+                padding: 0.5rem 1rem 1rem;
+            }
+
+            .detail-row {
+                padding: 0.65rem 0;
+                font-size: 0.82rem;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            .detail-label {
+                flex-shrink: 0;
+                min-width: 100px;
+            }
+
+            .detail-val {
+                text-align: right;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            /* Question Paper Notice */
+            .qp-notice-card {
+                padding: 1.75rem 1rem;
+                border-radius: 10px;
+            }
+
+            .qp-notice-title {
+                font-size: 1.25rem;
+            }
+
+            .qp-notice-desc {
+                font-size: 0.85rem;
+            }
+
+            .qp-bullets-box {
+                padding: 1rem;
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+
+            .detail-label,
+            .detail-val {
+                text-align: left;
+                min-width: unset;
+                max-width: 100%;
             }
         }
 
@@ -961,7 +1126,7 @@ $totalPapersCount = count($questionPapers);
                         <span class="sidebar-icon">📄</span>
                         <span>Prelims Question Papers</span>
                     </div>
-                    <span class="sidebar-badge" style="background: #2563eb; color: white;">28 Nov</span>
+                    <span class="sidebar-badge" style="background: #31328f; color: white;">28 Nov</span>
                 </a>
 
                 <div class="nav-section-title" style="margin-top: 0.5rem;">Quick Links</div>
@@ -1133,16 +1298,6 @@ $totalPapersCount = count($questionPapers);
                                     <span class="detail-label">Mandal</span>
                                     <span class="detail-val"><?php echo htmlspecialchars($mandal); ?></span>
                                 </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Village / Location</span>
-                                    <span
-                                        class="detail-val"><?php echo htmlspecialchars($school['village'] ?? $school['address'] ?? 'N/A'); ?></span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Pincode</span>
-                                    <span
-                                        class="detail-val"><?php echo htmlspecialchars($school['pincode'] ?? 'N/A'); ?></span>
-                                </div>
                             </div>
                         </div>
 
@@ -1169,7 +1324,7 @@ $totalPapersCount = count($questionPapers);
                                     <span class="detail-label">Mobile Number</span>
                                     <span class="detail-val">
                                         <a href="tel:<?php echo htmlspecialchars($inchargeMobile); ?>"
-                                            style="color: #2563eb; text-decoration: none; font-weight: 700;">
+                                            style="color: #31328f; text-decoration: none; font-weight: 700;">
                                             <?php echo htmlspecialchars($inchargeMobile); ?>
                                         </a>
                                     </span>
@@ -1179,18 +1334,13 @@ $totalPapersCount = count($questionPapers);
                                     <span class="detail-val">
                                         <?php if (!empty($school['email'])): ?>
                                             <a href="mailto:<?php echo htmlspecialchars($school['email']); ?>"
-                                                style="color: #2563eb; text-decoration: none;">
+                                                style="color: #31328f; text-decoration: none;">
                                                 <?php echo htmlspecialchars($school['email']); ?>
                                             </a>
                                         <?php else: ?>
                                             N/A
                                         <?php endif; ?>
                                     </span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="detail-label">Alternate Contact</span>
-                                    <span
-                                        class="detail-val"><?php echo htmlspecialchars($school['alternate_phone'] ?? 'N/A'); ?></span>
                                 </div>
                                 <div class="detail-row">
                                     <span class="detail-label">Registration Date</span>
@@ -1216,7 +1366,7 @@ $totalPapersCount = count($questionPapers);
                         style="padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <div
-                                style="width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                                style="width: 44px; height: 44px; border-radius: 10px; background: #ececf7; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
                                 📢
                             </div>
                             <div>
@@ -1227,7 +1377,7 @@ $totalPapersCount = count($questionPapers);
                             </div>
                         </div>
                         <button type="button" onclick="switchTab('papers', event)" class="btn"
-                            style="background: #2563eb; color: white; padding: 8px 16px; font-weight: 700; font-size: 0.85rem; border-radius: 8px; border: none; cursor: pointer;">
+                            style="background: #31328f; color: white; padding: 8px 16px; font-weight: 700; font-size: 0.85rem; border-radius: 8px; border: none; cursor: pointer;">
                             Go to Question Papers Tab &rarr;
                         </button>
                     </div>
@@ -1276,7 +1426,7 @@ $totalPapersCount = count($questionPapers);
                                             <?php foreach ($questionPapers as $qp): ?>
                                                 <tr style="border-bottom: 1px solid #f1f5f9;">
                                                     <td style="padding: 1rem 1.25rem; vertical-align: middle;">
-                                                        <span style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
+                                                        <span style="background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
                                                             🎓 <?php echo htmlspecialchars($qp['class'] ?? 'Class 10'); ?>
                                                         </span>
                                                     </td>
@@ -1303,7 +1453,7 @@ $totalPapersCount = count($questionPapers);
                                                     <td style="padding: 1rem 1.25rem; text-align: right; vertical-align: middle;">
                                                         <a href="download_paper.php?id=<?php echo (int)$qp['id']; ?>" target="_blank"
                                                             class="btn"
-                                                            style="background: #2563eb; color: white; padding: 8px 16px; font-size: 0.82rem; font-weight: 700; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(37,99,235,0.2); transition: all 0.2s;">
+                                                            style="background: #31328f; color: white; padding: 8px 16px; font-size: 0.82rem; font-weight: 700; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(37,99,235,0.2); transition: all 0.2s;">
                                                             <span>📥 Download PDF</span>
                                                         </a>
                                                     </td>
@@ -1320,7 +1470,7 @@ $totalPapersCount = count($questionPapers);
                             <div class="qp-badge-scheduled">Scheduled Examination Event</div>
                             <h2 class="qp-notice-title">
                                 Question paper will be updated on prelims exam day<br>
-                                <span style="color: #2563eb;">(28th November 2026)</span>
+                                <span style="color: #31328f;">(28th November 2026)</span>
                             </h2>
                             <p class="qp-notice-desc">
                                 Once the question paper is uploaded by the State Coordinator or Admin team on the

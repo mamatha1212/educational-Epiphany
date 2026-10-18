@@ -68,11 +68,11 @@ require_once __DIR__ . '/includes/header.php';
 </div>
 
 <!-- Mandatory Validation Notice Box -->
-<div class="card" style="max-width: 900px; margin: 0 auto 2rem; border-left: 5px solid #2563eb; background: #f8fafc;">
+<div class="card" style="max-width: 900px; margin: 0 auto 2rem; border-left: 5px solid #31328f; background: #f8fafc;">
     <div style="display: flex; gap: 14px; align-items: flex-start;">
         <span style="font-size: 1.75rem; line-height: 1;"></span>
         <div>
-            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e3a8a; margin-bottom: 0.35rem;">
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #31328f; margin-bottom: 0.35rem;">
                 Validation Check is Mandatory for Prelims QP Access
             </h3>
             <p style="font-size: 0.9rem; color: #334155; margin: 0 0 0.5rem; line-height: 1.5;">
@@ -174,7 +174,7 @@ require_once __DIR__ . '/includes/header.php';
                 <div>
                     <span style="color: var(--text-muted); display: block;">EEMT SR Code (EEMTSRC):</span>
                     <strong
-                        style="color: #1e40af; font-size: 0.95rem;"><?php echo htmlspecialchars($validatedSchool['reference_id']); ?></strong>
+                        style="color: #31328f; font-size: 0.95rem;"><?php echo htmlspecialchars($validatedSchool['reference_id']); ?></strong>
                 </div>
                 <div>
                     <span style="color: var(--text-muted); display: block;">In-Charge / HM:</span>

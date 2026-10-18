@@ -140,7 +140,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
-.kpi-card.kpi-blue { border-top: 4px solid #2563eb; }
+.kpi-card.kpi-blue { border-top: 4px solid #31328f; }
 .kpi-card.kpi-green { border-top: 4px solid #10b981; }
 .kpi-card.kpi-amber { border-top: 4px solid #f59e0b; }
 .kpi-card.kpi-purple { border-top: 4px solid #8b5cf6; }
@@ -228,8 +228,8 @@ require_once __DIR__ . '/includes/admin_header.php';
     color: #0f172a;
 }
 .page-btn.active {
-    background: #2563eb;
-    border-color: #2563eb;
+    background: #31328f;
+    border-color: #31328f;
     color: #ffffff;
     font-weight: 700;
     box-shadow: 0 2px 6px rgba(37,99,235,0.3);
@@ -260,7 +260,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-top: 0.2rem; line-height: 1.1;"><?php echo number_format($totalSchools); ?></div>
             <div style="font-size: 0.78rem; color: #10b981; margin-top: 0.35rem; font-weight: 600;">Active AP Govt Schools</div>
         </div>
-        <div class="kpi-icon" style="background: #eff6ff; color: #2563eb;">
+        <div class="kpi-icon" style="background: #ececf7; color: #31328f;">
             🏫
         </div>
     </div>
@@ -355,7 +355,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div>
                 Filtered results: <strong><?php echo number_format($totalFiltered); ?></strong> matching records found.
             </div>
-            <a href="dashboard.php" style="color: #2563eb; text-decoration: underline; font-weight: 600;">Clear all filters</a>
+            <a href="dashboard.php" style="color: #31328f; text-decoration: underline; font-weight: 600;">Clear all filters</a>
         </div>
     <?php endif; ?>
 </div>
@@ -367,7 +367,7 @@ require_once __DIR__ . '/includes/admin_header.php';
         <div>
             <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
                 <span>Statewide Registered Government Schools</span>
-                <span class="badge" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 0.78rem; font-weight: 700; padding: 3px 8px;">
+                <span class="badge" style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-size: 0.78rem; font-weight: 700; padding: 3px 8px;">
                     <?php echo number_format($totalFiltered); ?> Total
                 </span>
             </h3>
@@ -414,7 +414,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <?php foreach ($registrations as $row): ?>
                         <tr style="border-bottom: 1px solid #f1f5f9;">
                             <td style="padding: 14px 18px; vertical-align: middle;">
-                                <span class="badge" style="background: #eff6ff; color: #1d4ed8; font-family: monospace; font-size: 0.88rem; font-weight: 700; border: 1px solid #bfdbfe; white-space: nowrap;">
+                                <span class="badge" style="background: #ececf7; color: #1d4ed8; font-family: monospace; font-size: 0.88rem; font-weight: 700; border: 1px solid #c8c9eb; white-space: nowrap;">
                                     <?php echo htmlspecialchars($row['reference_id']); ?>
                                 </span>
                             </td>
@@ -438,7 +438,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                 <span class="badge badge-info" style="font-size: 0.7rem; padding: 0.15rem 0.45rem; font-weight: 600; white-space: nowrap;"><?php echo htmlspecialchars($row['designation']); ?></span>
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
-                                <div><a href="tel:<?php echo htmlspecialchars($row['mobile']); ?>" style="color: #2563eb; font-weight: 600; font-size: 0.85rem; text-decoration: none; white-space: nowrap;"><?php echo htmlspecialchars($row['mobile']); ?></a></div>
+                                <div><a href="tel:<?php echo htmlspecialchars($row['mobile']); ?>" style="color: #31328f; font-weight: 600; font-size: 0.85rem; text-decoration: none; white-space: nowrap;"><?php echo htmlspecialchars($row['mobile']); ?></a></div>
                                 <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;"><?php echo htmlspecialchars($row['email']); ?></div>
                             </td>
                             <td style="padding: 14px 18px; vertical-align: middle; font-size: 0.8rem; color: #64748b; white-space: nowrap;">
@@ -449,7 +449,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                     <button type="button" class="btn" onclick='openViewRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 6px; cursor: pointer;" title="View Registration Full Details">
                                         👁️ View
                                     </button>
-                                    <button type="button" class="btn" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 6px; cursor: pointer;" title="Edit Registration Details">
+                                    <button type="button" class="btn" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; border-radius: 6px; cursor: pointer;" title="Edit Registration Details">
                                         ✏️ Edit
                                     </button>
                                     <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="btn" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 600; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; text-decoration: none;" title="View Official Registration Slip">
@@ -457,7 +457,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                     </a>
                                     <form method="POST" action="dashboard.php" style="display: inline-block; margin: 0;" onsubmit="return confirm('Permanently delete registration for <?php echo htmlspecialchars(addslashes($row['school_name'])); ?> (<?php echo $row['reference_id']; ?>)?');">
                                         <input type="hidden" name="reg_id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="delete_reg" value="1" class="btn" style="padding: 5px 8px; font-size: 0.76rem; font-weight: 600; background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer;" title="Delete Record">
+                                        <button type="submit" name="delete_reg" value="1" class="btn" style="padding: 5px 8px; font-size: 0.76rem; font-weight: 600; background: #fef2f1; color: #ef3b2d; border: 1px solid #fed7d5; border-radius: 6px; cursor: pointer;" title="Delete Record">
                                             🗑️
                                         </button>
                                     </form>
@@ -535,15 +535,15 @@ require_once __DIR__ . '/includes/admin_header.php';
 <div id="viewRegModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
     <div style="background: #ffffff; border-radius: 18px; width: 100%; max-width: 650px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.2s ease-out;">
         <!-- Header -->
-        <div style="padding: 1.25rem 1.75rem; background: linear-gradient(135deg, #f8fafc, #eff6ff); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+        <div style="padding: 1.25rem 1.75rem; background: linear-gradient(135deg, #f8fafc, #ececf7); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 40px; height: 40px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #bfdbfe;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid #c8c9eb;">
                     🏫
                 </div>
                 <div>
                     <h3 id="view_school_title" style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #0f172a; line-height: 1.3;">School Details</h3>
                     <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
-                        <span id="view_ref_badge" class="badge" style="background: #dbeafe; color: #1e40af; font-weight: 700; font-family: monospace; font-size: 0.78rem;"></span>
+                        <span id="view_ref_badge" class="badge" style="background: #dbeafe; color: #31328f; font-weight: 700; font-family: monospace; font-size: 0.78rem;"></span>
                         <span id="view_status_badge" class="badge" style="font-size: 0.75rem; text-transform: uppercase;"></span>
                     </div>
                 </div>
@@ -572,7 +572,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;">
                 <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Phone Number</div>
                 <div style="margin-top: 3px;">
-                    <a id="view_phone_link" href="#" style="font-weight: 700; color: #2563eb; text-decoration: none; font-size: 0.95rem;"></a>
+                    <a id="view_phone_link" href="#" style="font-weight: 700; color: #31328f; text-decoration: none; font-size: 0.95rem;"></a>
                 </div>
                 <div style="margin-top: 4px;">
                     <a id="view_wa_link" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; background: #25d366; color: #fff; border-radius: 6px; text-decoration: none;">💬 WhatsApp</a>
@@ -592,7 +592,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
         <!-- Footer -->
         <div style="padding: 1rem 1.75rem; background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-            <a id="view_slip_link" href="#" target="_blank" class="btn" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; text-decoration: none; border-radius: 8px;">
+            <a id="view_slip_link" href="#" target="_blank" class="btn" style="padding: 8px 14px; font-size: 0.82rem; font-weight: 700; background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; text-decoration: none; border-radius: 8px;">
                 📄 View Official Slip
             </a>
             <div style="display: flex; gap: 8px;">
@@ -610,12 +610,12 @@ require_once __DIR__ . '/includes/admin_header.php';
 <!-- MODAL: EDIT SCHOOL REGISTRATION -->
 <div id="editRegModal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
     <div style="background: #ffffff; border-radius: 18px; width: 100%; max-width: 650px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column; animation: modalSlide 0.2s ease-out;">
-        <div style="padding: 1.25rem 1.75rem; background: linear-gradient(135deg, #f8fafc, #eff6ff); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+        <div style="padding: 1.25rem 1.75rem; background: linear-gradient(135deg, #f8fafc, #ececf7); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 1.25rem;">✏️</span>
                 <div>
                     <h3 style="margin: 0; font-size: 1.12rem; font-weight: 800; color: #0f172a;">Edit School Registration</h3>
-                    <span id="edit_reg_ref_display" style="font-size: 0.78rem; font-family: monospace; color: #2563eb; font-weight: 700;"></span>
+                    <span id="edit_reg_ref_display" style="font-size: 0.78rem; font-family: monospace; color: #31328f; font-weight: 700;"></span>
                 </div>
             </div>
             <button type="button" onclick="closeEditRegModal()" style="background: transparent; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; padding: 4px; line-height: 1;" onmouseover="this.style.color='#0f172a'" onmouseout="this.style.color='#94a3b8'">&times;</button>
@@ -683,7 +683,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <button type="button" onclick="closeEditRegModal()" class="btn" style="height: 40px; padding: 0 16px; font-size: 0.85rem; font-weight: 600; background: #ffffff; color: #475569; border: 1.5px solid #cbd5e1; border-radius: 8px;">
                     Cancel
                 </button>
-                <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 20px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; background: #2563eb; color: #ffffff; border: none;">
+                <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 20px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; background: #31328f; color: #ffffff; border: none;">
                     💾 Save Changes
                 </button>
             </div>
@@ -705,7 +705,7 @@ function openViewRegModal(row) {
     if (st === 'verified') {
         stBadge.style.background = '#ecfdf5'; stBadge.style.color = '#047857'; stBadge.style.border = '1px solid #a7f3d0';
     } else if (st === 'contacted') {
-        stBadge.style.background = '#eff6ff'; stBadge.style.color = '#1d4ed8'; stBadge.style.border = '1px solid #bfdbfe';
+        stBadge.style.background = '#ececf7'; stBadge.style.color = '#1d4ed8'; stBadge.style.border = '1px solid #c8c9eb';
     } else if (st === 'completed') {
         stBadge.style.background = '#f5f3ff'; stBadge.style.color = '#7c3aed'; stBadge.style.border = '1px solid #ddd6fe';
     } else {

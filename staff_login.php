@@ -62,7 +62,7 @@ require_once __DIR__ . '/includes/header.php';
 <div class="page-header">
     <div style="margin-bottom: 1rem;">
         <img src="assets/images/logo.png" alt="EEMT Logo"
-            style="height: 70px; width: auto; background: white; padding: 6px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: inline-block;"
+            style="height: 85px; width: auto; background: white; padding: 6px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display: inline-block;"
             onerror="this.src='assets/images/logo.jpeg';">
     </div>
     <div
@@ -106,7 +106,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- 1. ADMIN FORM -->
     <div id="panel-admin" style="display: <?php echo $activeTab === 'admin' ? 'block' : 'none'; ?>;">
         <div
-            style="display: flex; align-items: center; gap: 10px; background: #eff6ff; border-left: 4px solid #3b82f6; padding: 10px 14px; border-radius: 6px; margin-bottom: 1.5rem; font-size: 0.85rem; color: #1e40af;">
+            style="display: flex; align-items: center; gap: 10px; background: #ececf7; border-left: 4px solid #31328f; padding: 10px 14px; border-radius: 6px; margin-bottom: 1.5rem; font-size: 0.85rem; color: #31328f;">
             <div>
                 <strong>State Administrator Access:</strong> Full system control, coordinator management, question paper
                 publishing, and statewide data export.
@@ -134,7 +134,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
 
             <button type="submit" name="login_staff" class="btn btn-primary btn-block"
-                style="margin-top: 1.5rem; background: #2563eb; padding: 0.85rem; font-size: 1rem; font-weight: 700;">
+                style="margin-top: 1.5rem; background: #31328f; padding: 0.85rem; font-size: 1rem; font-weight: 700;">
                 Sign In to Admin Dashboard &rarr;
             </button>
         </form>
@@ -185,7 +185,7 @@ require_once __DIR__ . '/includes/header.php';
             Are you a School Headmaster or Teacher?
         </div>
         <a href="school_login.php"
-            style="display: inline-flex; align-items: center; gap: 6px; margin-top: 0.5rem; color: #2563eb; font-weight: 700; text-decoration: none; font-size: 0.92rem;">
+            style="display: inline-flex; align-items: center; gap: 6px; margin-top: 0.5rem; color: #31328f; font-weight: 700; text-decoration: none; font-size: 0.92rem;">
             <span>🏫 Go to Dedicated School Login Portal</span> &rarr;
         </a>
     </div>
@@ -205,7 +205,7 @@ require_once __DIR__ . '/includes/header.php';
             adminPanel.style.display = 'block';
             coordPanel.style.display = 'none';
             adminBtn.style.background = '#ffffff';
-            adminBtn.style.color = '#1e3a8a';
+            adminBtn.style.color = '#31328f';
             adminBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
             coordBtn.style.background = 'transparent';
             coordBtn.style.color = '#64748b';

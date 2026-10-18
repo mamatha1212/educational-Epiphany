@@ -47,15 +47,7 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page-header">
-    <div style="margin-bottom: 1rem;">
-        <img src="assets/images/logo.png" alt="EEMT Logo"
-            style="height: 70px; width: auto; background: white; padding: 6px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: inline-block;"
-            onerror="this.src='assets/images/logo.jpeg';">
-    </div>
-    <div
-        style="display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 6px 14px; border-radius: 9999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem;">
-        <span>🏫 Official School Access</span>
-    </div>
+
     <h2 class="page-title">School Login Portal</h2>
     <p class="page-subtitle">For Headmasters, Principals & Teachers of Registered Government Schools</p>
 </div>
@@ -86,39 +78,48 @@ require_once __DIR__ . '/includes/header.php';
             </label>
             <input type="text" id="unique_code_login" name="unique_code" class="form-control"
                 placeholder="e.g. 28142500311" required autocomplete="off"
-                value="<?php echo htmlspecialchars($_POST['unique_code'] ?? ''); ?>">
+                value="<?php echo htmlspecialchars($_POST['unique_code'] ?? $_GET['code'] ?? ''); ?>">
             <div class="form-hint">Official 11-digit Government school UDISE code.</div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 0.5rem;">
             <label class="form-label" for="reference_id">
                 2. EEMTSRC (EEMT School Registration Code) <span class="required">*</span>
             </label>
             <input type="text" id="reference_id" name="reference_id" class="form-control" placeholder="e.g. 26275000001"
-                required autocomplete="off" value="<?php echo htmlspecialchars($_POST['reference_id'] ?? ''); ?>">
+                required autocomplete="off" value="<?php echo htmlspecialchars($_POST['reference_id'] ?? $_GET['ref'] ?? ''); ?>">
             <div class="form-hint">Registration series code (e.g. <code>26275000001</code>).</div>
         </div>
 
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+            <a href="forgot_password.php" style="color: #31328f; font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🔍 Find your Login credentials &rarr;</span>
+            </a>
+        </div>
+
         <button type="submit" name="login_school" class="btn btn-primary btn-block"
-            style="margin-top: 1.75rem; padding: 0.85rem; font-size: 1rem; font-weight: 700;">
+            style="padding: 0.85rem; font-size: 1rem; font-weight: 700;">
             Verify & Open School Dashboard &rarr;
         </button>
 
         <div
             style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px dashed var(--border);">
             <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                Forgot your login credentials or EEMTSRC?
+                <a href="forgot_password.php" style="color: #31328f; font-weight: 700; text-decoration: none;">Find your Login credentials &rarr;</a>
+            </div>
+
+            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">
                 Need question papers immediately?
                 <a href="prelims_qp.php" style="color: #059669; font-weight: 700; text-decoration: none;">Direct Prelims
                     QP Portal &rarr;</a>
             </div>
 
-            <div style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            <div style="font-size: 0.88rem; color: var(--text-muted);">
                 School not registered yet?
                 <a href="register.php" style="color: var(--primary); font-weight: 700; text-decoration: none;">Register
                     School Now &rarr;</a>
             </div>
-
-
         </div>
     </form>
 </div>

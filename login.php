@@ -36,9 +36,9 @@ require_once __DIR__ . '/includes/header.php';
 
 <div class="page-header">
     <div style="margin-bottom: 1rem;">
-        <img src="assets/images/logo.png" alt="EEMT Logo" style="height: 70px; width: auto; background: white; padding: 6px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: inline-block;" onerror="this.src='assets/images/logo.jpeg';">
+        <img src="assets/images/logo.png" alt="EEMT Logo" style="height: 85px; width: auto; background: white; padding: 6px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display: inline-block;" onerror="this.src='assets/images/logo.jpeg';">
     </div>
-    <div style="display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 6px 14px; border-radius: 9999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem;">
+    <div style="display: inline-flex; align-items: center; gap: 8px; background: #ececf7; border: 1px solid #c8c9eb; color: #31328f; padding: 6px 14px; border-radius: 9999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem;">
         <span>🔐 Secure Access Gateway</span>
     </div>
     <h2 class="page-title">EEMT 2027 Sign In Portals</h2>
@@ -48,10 +48,10 @@ require_once __DIR__ . '/includes/header.php';
 <div style="max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
     
     <!-- Portal 1: School Login -->
-    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-top: 5px solid #2563eb; box-shadow: var(--shadow-lg); transition: transform 0.2s, box-shadow 0.2s;">
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-top: 5px solid #31328f; box-shadow: var(--shadow-lg); transition: transform 0.2s, box-shadow 0.2s;">
         <div>
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                <div style="width: 50px; height: 50px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+                <div style="width: 50px; height: 50px; border-radius: 12px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
                     🏫
                 </div>
                 <span class="badge badge-info">Schools Portal</span>
@@ -66,7 +66,7 @@ require_once __DIR__ . '/includes/header.php';
             </p>
 
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px; font-size: 0.82rem; color: #334155; margin-bottom: 1.5rem;">
-                <div style="font-weight: 700; margin-bottom: 4px; color: #1e3a8a;">Required Credentials:</div>
+                <div style="font-weight: 700; margin-bottom: 4px; color: #31328f;">Required Credentials:</div>
                 <ul style="margin: 0; padding-left: 1.2rem; line-height: 1.4;">
                     <li>11-Digit School UDISE Code</li>
                     <li>EEMTSR Code (Format: <code>26275XXXXXX</code>)</li>

@@ -114,7 +114,7 @@ require_once __DIR__ . '/includes/header.php';
                 <tr>
                     <th>EEMT SR Code (EEMTSRC)</th>
                     <td><strong
-                            style="color: #1e40af; font-size: 1.05rem;"><?php echo htmlspecialchars($record['reference_id']); ?></strong>
+                            style="color: #31328f; font-size: 1.05rem;"><?php echo htmlspecialchars($record['reference_id']); ?></strong>
                     </td>
                 </tr>
                 <tr>

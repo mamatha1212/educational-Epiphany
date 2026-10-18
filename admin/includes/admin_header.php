@@ -41,7 +41,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
             --sidebar-bg: #0f172a;
             --sidebar-border: #1e293b;
             --sidebar-hover: #1e293b;
-            --sidebar-active: #2563eb;
+            --sidebar-active: #31328f;
             --topbar-height: 64px;
         }
 
@@ -141,7 +141,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
             width: 38px;
             height: 38px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #31328f, #1d4ed8);
             color: white;
             display: flex;
             align-items: center;
@@ -450,7 +450,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                 </div>
 
                 <div class="sidebar-user">
-                    <div class="user-avatar" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #31328f, #1d4ed8);">
                         🛡️
                     </div>
                     <div class="user-meta">
@@ -630,7 +630,7 @@ $totalMasterBadge = $rawMasterCount > 999 ? round($rawMasterCount / 1000, 1) . '
                     <?php endif; ?>
 
                     <a href="../logout.php" class="btn"
-                        style="background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px;">
+                        style="background: #fef2f1; color: #ef3b2d; border: 1px solid #fed7d5; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px;">
                         Logout
                     </a>
                 </div>

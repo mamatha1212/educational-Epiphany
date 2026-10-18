@@ -149,21 +149,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<div class="page-header">
-    <div style="margin-bottom: 1rem;">
-        <img src="assets/images/logo.png" alt="EEMT Logo"
-            style="height: 70px; width: auto; background: white; padding: 6px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: inline-block;"
-            onerror="this.src='assets/images/logo.jpeg';">
+<div class="card registration-card" style="max-width: 850px; margin: 0 auto; padding: 0; overflow: hidden; border-radius: 18px; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08); border: 1px solid var(--border);">
+    <!-- Continuous Top Banner Header (Directly inside Form Card) -->
+    <div style="width: 100%; line-height: 0; background: #31328f;">
+        <img src="assets/images/educational-epiphany-banner.jpg" alt="Educational Epiphany - EEMT 2027 Prelims Registration"
+            style="width: 100%; height: auto; display: block; border-top-left-radius: 17px; border-top-right-radius: 17px;">
     </div>
-    <h2 class="page-title">AP Government Schools Registration</h2>
-    <p class="page-subtitle">Educational Epiphany Merit Test (EEMT) 2027 &mdash; School Prelims Enrollment Portal</p>
-</div>
 
-<div class="card" style="max-width: 850px; margin: 0 auto;">
-    <div class="card-title">
+    <!-- Form Section -->
+    <div class="registration-card-body" style="padding: 2.25rem 2.25rem 2.5rem;">
+        <div style="text-align: center; margin-bottom: 1.75rem;">
+            <h1 style="font-size: 1.85rem; font-weight: 800; color: #31328f; letter-spacing: -0.02em; margin: 0;">
+                EEMT 2027 Registration
+            </h1>
+        </div>
 
-        <span>School & In-Charge Teacher Details</span>
-    </div>
+        <div class="card-title" style="margin-top: 0; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #f1f5f9;">
+            <span>School & In-Charge Teacher Details</span>
+        </div>
 
     <?php if ($error): ?>
         <div class="alert alert-danger">
@@ -303,6 +306,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
     </form>
+    </div>
 </div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

@@ -373,7 +373,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     }
 
     .hierarchy-tab.active {
-        background: #2563eb;
+        background: #31328f;
         color: #ffffff;
         box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
     }
@@ -421,7 +421,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
     .sm-input:focus {
         background: #ffffff;
-        border-color: #2563eb;
+        border-color: #31328f;
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
@@ -448,7 +448,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
     .sm-select:focus {
         background-color: #ffffff;
-        border-color: #2563eb;
+        border-color: #31328f;
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
@@ -468,9 +468,9 @@ require_once __DIR__ . '/includes/admin_header.php';
     }
 
     .sm-pill-blue {
-        background: #eff6ff;
+        background: #ececf7;
         color: #1d4ed8;
-        border: 1px solid #bfdbfe;
+        border: 1px solid #c8c9eb;
     }
 
     .sm-pill-green {
@@ -514,7 +514,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     .sm-btn-primary {
         height: 32px;
         padding: 0 12px;
-        background: #2563eb;
+        background: #31328f;
         color: #ffffff !important;
         border: none;
         border-radius: 7px;
@@ -691,19 +691,19 @@ require_once __DIR__ . '/includes/admin_header.php';
             <?php endif; ?>
             <span style="color: #cbd5e1;">/</span>
             <a href="schools_master.php?view=districts"
-                style="color: <?php echo $view === 'districts' ? '#2563eb' : '#64748b'; ?>; text-decoration: none; font-weight: 700;">
+                style="color: <?php echo $view === 'districts' ? '#31328f' : '#64748b'; ?>; text-decoration: none; font-weight: 700;">
                 Districts (<?php echo $totalDistrictsCount; ?>)
             </a>
             <?php if (!empty($selectedDistrict)): ?>
                 <span style="color: #cbd5e1;">/</span>
                 <a href="schools_master.php?view=mandals&district=<?php echo urlencode($selectedDistrict); ?>"
-                    style="color: <?php echo $view === 'mandals' ? '#2563eb' : '#64748b'; ?>; text-decoration: none; font-weight: 700;">
+                    style="color: <?php echo $view === 'mandals' ? '#31328f' : '#64748b'; ?>; text-decoration: none; font-weight: 700;">
                     <?php echo htmlspecialchars($selectedDistrict); ?>
                 </a>
             <?php endif; ?>
             <?php if (!empty($selectedMandal)): ?>
                 <span style="color: #cbd5e1;">/</span>
-                <span style="color: #2563eb; font-weight: 700;">
+                <span style="color: #31328f; font-weight: 700;">
                     <?php echo htmlspecialchars($selectedMandal); ?> (Schools)
                 </span>
             <?php endif; ?>
@@ -736,7 +736,7 @@ require_once __DIR__ . '/includes/admin_header.php';
         <?php if (canEditSchools()): ?>
             <?php if ($view === 'districts'): ?>
                 <button type="button" onclick="openAddDistrictModal()" class="btn"
-                    style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.35rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                    style="background: linear-gradient(135deg, #31328f, #1d4ed8); color: white; border: none; padding: 0 1.35rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -745,7 +745,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <?php elseif ($view === 'mandals'): ?>
                 <button type="button"
                     onclick="openAddMandalModal('<?php echo htmlspecialchars(addslashes($selectedDistrict)); ?>')" class="btn"
-                    style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.35rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                    style="background: linear-gradient(135deg, #31328f, #1d4ed8); color: white; border: none; padding: 0 1.35rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -755,7 +755,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <button type="button"
                     onclick="openAddSchoolModal('<?php echo htmlspecialchars(addslashes($selectedDistrict)); ?>', '<?php echo htmlspecialchars(addslashes($selectedMandal)); ?>')"
                     class="btn"
-                    style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.35rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                    style="background: linear-gradient(135deg, #31328f, #1d4ed8); color: white; border: none; padding: 0 1.35rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -768,7 +768,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
 <?php if (!canEditSchools()): ?>
     <div
-        style="background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1e40af; padding: 12px 18px; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        style="background: #ececf7; border: 1.5px solid #c8c9eb; color: #31328f; padding: 12px 18px; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
         <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 1.25rem;">👁️</span>
             <div>
@@ -779,7 +779,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             </div>
         </div>
         <span
-            style="font-size: 0.74rem; background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap;">Read-Only
+            style="font-size: 0.74rem; background: #dbeafe; color: #31328f; border: 1px solid #c8c9eb; padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap;">Read-Only
             Mode</span>
     </div>
 <?php endif; ?>
@@ -787,7 +787,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 <!-- Alert Notifications -->
 <?php if ($message): ?>
     <div
-        style="background: <?php echo $messageType === 'success' ? '#f0fdf4' : '#fef2f2'; ?>; border: 1.5px solid <?php echo $messageType === 'success' ? '#bbf7d0' : '#fecaca'; ?>; color: <?php echo $messageType === 'success' ? '#166534' : '#991b1b'; ?>; padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 600;">
+        style="background: <?php echo $messageType === 'success' ? '#f0fdf4' : '#fef2f1'; ?>; border: 1.5px solid <?php echo $messageType === 'success' ? '#bbf7d0' : '#fed7d5'; ?>; color: <?php echo $messageType === 'success' ? '#166534' : '#991b1b'; ?>; padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 600;">
         <span><?php echo $messageType === 'success' ? '✅' : '⚠️'; ?></span>
         <span><?php echo htmlspecialchars($message); ?></span>
     </div>
@@ -825,7 +825,7 @@ require_once __DIR__ . '/includes/admin_header.php';
     </div>
 
     <div class="sm-metric-card">
-        <div class="sm-metric-icon" style="background: #eff6ff; color: #2563eb;">🏫</div>
+        <div class="sm-metric-icon" style="background: #ececf7; color: #31328f;">🏫</div>
         <div>
             <div
                 style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b;">
@@ -833,7 +833,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <div style="font-size: 1.65rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin-top: 2px;">
                 <?php echo number_format($totalMasterSchools); ?>
             </div>
-            <div style="font-size: 0.75rem; color: #2563eb; font-weight: 600; margin-top: 2px;">Total AP Govt Schools
+            <div style="font-size: 0.75rem; color: #31328f; font-weight: 600; margin-top: 2px;">Total AP Govt Schools
             </div>
         </div>
     </div>
@@ -911,7 +911,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 placeholder="Search District by name (or type a Mandal/School)..."
                 value="<?php echo htmlspecialchars($districtSearch); ?>">
             <button type="submit" class="btn"
-                style="background: #2563eb; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
+                style="background: #31328f; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
                 Search Districts
             </button>
             <?php if ($districtSearch): ?>
@@ -929,7 +929,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             </div>
             <?php if (canEditSchools()): ?>
                 <button type="button" onclick="openAddDistrictModal()" class="btn"
-                    style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.15rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+                    style="background: linear-gradient(135deg, #31328f, #1d4ed8); color: white; border: none; padding: 0 1.15rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
                     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -1098,7 +1098,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             </div>
 
             <button type="submit" class="btn"
-                style="background: #2563eb; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
+                style="background: #31328f; color: white; border: none; padding: 0 1.25rem; height: 42px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap;">
                 Search Mandals
             </button>
 
@@ -1110,7 +1110,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <?php if (canEditSchools()): ?>
                 <button type="button"
                     onclick="openAddMandalModal('<?php echo htmlspecialchars(addslashes($selectedDistrict)); ?>')" class="btn"
-                    style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.15rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+                    style="background: linear-gradient(135deg, #31328f, #1d4ed8); color: white; border: none; padding: 0 1.15rem; height: 42px; font-size: 0.88rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
                     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
@@ -1264,7 +1264,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
                     <?php for ($p = max(1, $mPage - 2); $p <= min($mTotalPages, $mPage + 2); $p++): ?>
                         <a href="<?php echo $mbQ . $p; ?>"
-                            style="height: 32px; min-width: 32px; padding: 0 10px; border: 1px solid <?php echo $p === $mPage ? '#2563eb' : '#cbd5e1'; ?>; border-radius: 6px; background: <?php echo $p === $mPage ? '#2563eb' : '#ffffff'; ?>; color: <?php echo $p === $mPage ? '#ffffff' : '#334155'; ?>; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                            style="height: 32px; min-width: 32px; padding: 0 10px; border: 1px solid <?php echo $p === $mPage ? '#31328f' : '#cbd5e1'; ?>; border-radius: 6px; background: <?php echo $p === $mPage ? '#31328f' : '#ffffff'; ?>; color: <?php echo $p === $mPage ? '#ffffff' : '#334155'; ?>; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
                             <?php echo $p; ?>
                         </a>
                     <?php endfor; ?>
@@ -1403,7 +1403,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <!-- Action Buttons -->
                 <div style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: nowrap; flex-shrink: 0;">
                     <button type="submit" class="btn"
-                        style="height: 42px; background: #2563eb; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
+                        style="height: 42px; background: #31328f; color: white; border: none; padding: 0 1.25rem; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -1419,7 +1419,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                         <button type="button"
                             onclick="openAddSchoolModal('<?php echo htmlspecialchars(addslashes($selectedDistrict)); ?>', '<?php echo htmlspecialchars(addslashes($selectedMandal)); ?>')"
                             class="btn"
-                            style="height: 42px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 0 1.15rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+                            style="height: 42px; background: linear-gradient(135deg, #31328f, #1d4ed8); color: white; border: none; padding: 0 1.15rem; font-weight: 700; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
                             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -1488,7 +1488,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                                     <div
                                         style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 4px 8px; white-space: nowrap;">
                                         <code
-                                            style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.85rem; font-weight: 700; color: #1e40af;">
+                                            style="font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.85rem; font-weight: 700; color: #31328f;">
                                                         <?php echo htmlspecialchars($s['unique_code']); ?>
                                                     </code>
                                         <button type="button"
@@ -1585,7 +1585,7 @@ require_once __DIR__ . '/includes/admin_header.php';
 
                     <?php for ($p = max(1, $page - 2); $p <= min($totalPages, $page + 2); $p++): ?>
                         <a href="<?php echo $bQ . $p; ?>"
-                            style="height: 32px; min-width: 32px; padding: 0 10px; border: 1px solid <?php echo $p === $page ? '#2563eb' : '#cbd5e1'; ?>; border-radius: 6px; background: <?php echo $p === $page ? '#2563eb' : '#ffffff'; ?>; color: <?php echo $p === $page ? '#ffffff' : '#334155'; ?>; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                            style="height: 32px; min-width: 32px; padding: 0 10px; border: 1px solid <?php echo $p === $page ? '#31328f' : '#cbd5e1'; ?>; border-radius: 6px; background: <?php echo $p === $page ? '#31328f' : '#ffffff'; ?>; color: <?php echo $p === $page ? '#ffffff' : '#334155'; ?>; font-size: 0.85rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
                             <?php echo $p; ?>
                         </a>
                     <?php endfor; ?>
@@ -1628,7 +1628,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District
-                        Name <span style="color: #ef4444;">*</span></label>
+                        Name <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" name="district" class="sm-input" placeholder="e.g. KURNOOL-2831 / TIRUPATI-2826"
                         required>
                 </div>
@@ -1644,7 +1644,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <button type="button" onclick="closeAddDistrictModal()"
                         style="height: 42px; padding: 0 1.25rem; background: white; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="height: 42px; padding: 0 1.5rem; background: #2563eb; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
+                        style="height: 42px; padding: 0 1.5rem; background: #31328f; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
                         District</button>
                 </div>
             </form>
@@ -1660,7 +1660,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 style="padding: 1.25rem 1.75rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div
-                        style="width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                        style="width: 38px; height: 38px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                         ✏️
                     </div>
                     <div>
@@ -1678,7 +1678,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District
-                        Name <span style="color: #ef4444;">*</span></label>
+                        Name <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" id="edit_new_district" name="new_district" class="sm-input" required>
                 </div>
                 <div
@@ -1686,7 +1686,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <button type="button" onclick="closeEditDistrictModal()"
                         style="height: 42px; padding: 0 1.25rem; background: white; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="height: 42px; padding: 0 1.5rem; background: #2563eb; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
+                        style="height: 42px; padding: 0 1.5rem; background: #31328f; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
                         Changes</button>
                 </div>
             </form>
@@ -1718,7 +1718,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District
-                        <span style="color: #ef4444;">*</span></label>
+                        <span style="color: #ef3b2d;">*</span></label>
                     <select id="add_mandal_district" name="district" class="sm-select" required>
                         <option value="">-- Select District --</option>
                         <?php foreach ($districtsList as $d): ?>
@@ -1729,7 +1729,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal
-                        Name <span style="color: #ef4444;">*</span></label>
+                        Name <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" name="mandal" class="sm-input" placeholder="e.g. THAVANAMPALLE-282353" required>
                 </div>
                 <div
@@ -1737,7 +1737,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <button type="button" onclick="closeAddMandalModal()"
                         style="height: 42px; padding: 0 1.25rem; background: white; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="height: 42px; padding: 0 1.5rem; background: #2563eb; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
+                        style="height: 42px; padding: 0 1.5rem; background: #31328f; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
                         Mandal</button>
                 </div>
             </form>
@@ -1753,7 +1753,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 style="padding: 1.25rem 1.75rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div
-                        style="width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                        style="width: 38px; height: 38px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                         ✏️
                     </div>
                     <div>
@@ -1771,7 +1771,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">New
-                        Mandal Name <span style="color: #ef4444;">*</span></label>
+                        Mandal Name <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" id="edit_mandal_new" name="new_mandal" class="sm-input" required>
                 </div>
                 <div
@@ -1779,7 +1779,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <button type="button" onclick="closeEditMandalModal()"
                         style="height: 42px; padding: 0 1.25rem; background: white; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="height: 42px; padding: 0 1.5rem; background: #2563eb; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
+                        style="height: 42px; padding: 0 1.5rem; background: #31328f; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
                         Changes</button>
                 </div>
             </form>
@@ -1795,7 +1795,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                 style="padding: 1.25rem 1.75rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; background: #f8fafc;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div
-                        style="width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                        style="width: 38px; height: 38px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                         🏫
                     </div>
                     <div>
@@ -1813,7 +1813,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <div>
                         <label
                             style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District
-                            <span style="color: #ef4444;">*</span></label>
+                            <span style="color: #ef3b2d;">*</span></label>
                         <select id="modal_add_district" name="district" class="sm-select" required
                             onchange="loadMandalsForAddSchool(this.value)">
                             <option value="">-- Select District --</option>
@@ -1825,7 +1825,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <div>
                         <label
                             style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal
-                            <span style="color: #ef4444;">*</span></label>
+                            <span style="color: #ef3b2d;">*</span></label>
                         <div id="modal_add_mandal_select_wrapper">
                             <select id="modal_add_mandal_select" name="mandal" class="sm-select" required
                                 onchange="onModalAddMandalSelectChange(this.value)">
@@ -1845,13 +1845,13 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">School
-                        Name <span style="color: #ef4444;">*</span></label>
+                        Name <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" name="school_name" class="sm-input" placeholder="e.g. ZPHS VETLAPALEM" required>
                 </div>
                 <div style="margin-bottom: 1.5rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">UDISE
-                        / Unique Code <span style="color: #ef4444;">*</span></label>
+                        / Unique Code <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" name="unique_code" class="sm-input" placeholder="e.g. 28142500311" required>
                 </div>
                 <div
@@ -1859,7 +1859,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <button type="button" onclick="closeAddSchoolModal()"
                         style="height: 42px; padding: 0 1.25rem; background: white; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="height: 42px; padding: 0 1.5rem; background: #2563eb; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
+                        style="height: 42px; padding: 0 1.5rem; background: #31328f; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
                         School</button>
                 </div>
             </form>
@@ -1893,7 +1893,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <div>
                         <label
                             style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">District
-                            <span style="color: #ef4444;">*</span></label>
+                            <span style="color: #ef3b2d;">*</span></label>
                         <select id="edit_school_district" name="district" class="sm-select" required
                             onchange="loadMandalsForEditSchool(this.value)">
                             <option value="">-- Select District --</option>
@@ -1905,7 +1905,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <div>
                         <label
                             style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Mandal
-                            <span style="color: #ef4444;">*</span></label>
+                            <span style="color: #ef3b2d;">*</span></label>
                         <div id="edit_school_mandal_select_wrapper">
                             <select id="edit_school_mandal_select" name="mandal" class="sm-select" required
                                 onchange="onModalEditMandalSelectChange(this.value)">
@@ -1925,14 +1925,14 @@ require_once __DIR__ . '/includes/admin_header.php';
                 <div style="margin-bottom: 1.15rem;">
                     <label
                         style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">School
-                        Name <span style="color: #ef4444;">*</span></label>
+                        Name <span style="color: #ef3b2d;">*</span></label>
                     <input type="text" id="edit_school_name" name="school_name" class="sm-input" required>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
                     <div>
                         <label
                             style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">UDISE
-                            Code <span style="color: #ef4444;">*</span></label>
+                            Code <span style="color: #ef3b2d;">*</span></label>
                         <input type="text" id="edit_school_unique_code" name="unique_code" class="sm-input" required>
                     </div>
                     <div>
@@ -1949,7 +1949,7 @@ require_once __DIR__ . '/includes/admin_header.php';
                     <button type="button" onclick="closeEditSchoolModal()"
                         style="height: 42px; padding: 0 1.25rem; background: white; border: 1.5px solid #cbd5e1; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Cancel</button>
                     <button type="submit"
-                        style="height: 42px; padding: 0 1.5rem; background: #2563eb; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
+                        style="height: 42px; padding: 0 1.5rem; background: #31328f; color: white; border: none; font-weight: 700; font-size: 0.88rem; border-radius: 9px; cursor: pointer;">Save
                         Changes</button>
                 </div>
             </form>
