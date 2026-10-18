@@ -2807,20 +2807,6 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                 </div>
                             </div>
 
-                            <div class="kpi-card kpi-amber">
-                                <div>
-                                    <div
-                                        style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">
-                                        Verified / Contacted</div>
-                                    <div style="font-size: 2.1rem; font-weight: 800; color: #92400e; margin: 0.2rem 0;">
-                                        <?php echo number_format($verifiedCount); ?></div>
-                                    <div style="font-size: 0.78rem; color: #d97706; font-weight: 600;">Followed-up Schools
-                                    </div>
-                                </div>
-                                <div class="kpi-icon" style="background: #fffbeb; color: #d97706;">
-                                    🤝
-                                </div>
-                            </div>
 
                             <div class="kpi-card kpi-purple" onclick="switchDashboardTab('prelims')"
                                 style="cursor: pointer;" title="Click to view Prelims Question Papers Tab">

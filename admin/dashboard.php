@@ -400,6 +400,7 @@ require_once __DIR__ . '/includes/admin_header.php';
             <table class="table" style="margin-bottom: 0; width: 100%; min-width: 1450px; border-collapse: collapse;">
                 <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
                     <tr>
+                        <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 65px; min-width: 60px; text-align: center;">S.No</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 160px; min-width: 160px;">Ref ID (EEMTSRC)</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 340px; min-width: 300px;">School Name</th>
                         <th style="font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; color: #475569; padding: 14px 18px; width: 220px; min-width: 200px;">District / Mandal</th>
@@ -411,8 +412,15 @@ require_once __DIR__ . '/includes/admin_header.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($registrations as $row): ?>
+                    <?php foreach ($registrations as $index => $row): 
+                        $sno = ($offset ?? 0) + $index + 1;
+                    ?>
                         <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 14px 18px; vertical-align: middle; text-align: center;">
+                                <span style="display: inline-flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; padding: 0 6px; border-radius: 6px; background: #f1f5f9; color: #475569; font-weight: 750; font-size: 0.82rem; border: 1px solid #e2e8f0;">
+                                    <?php echo $sno; ?>
+                                </span>
+                            </td>
                             <td style="padding: 14px 18px; vertical-align: middle;">
                                 <span class="badge" style="background: #ececf7; color: #1d4ed8; font-family: monospace; font-size: 0.88rem; font-weight: 700; border: 1px solid #c8c9eb; white-space: nowrap;">
                                     <?php echo htmlspecialchars($row['reference_id']); ?>
