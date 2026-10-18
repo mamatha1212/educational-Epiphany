@@ -2869,17 +2869,6 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                         value="<?php echo htmlspecialchars($mandalFilter); ?>">
                                 </div>
 
-                                <div class="form-group" style="margin-bottom: 0; flex: 1 1 140px; min-width: 120px;">
-                                    <label class="form-label" for="status"
-                                        style="font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem; display: block; white-space: nowrap;">Status</label>
-                                    <select name="status" id="status" class="form-select"
-                                        style="height: 40px; font-size: 0.88rem; width: 100%;">
-                                        <option value="">All Statuses</option>
-                                        <option value="submitted" <?php echo $statusFilter === 'submitted' ? 'selected' : ''; ?>>Submitted</option>
-                                        <option value="contacted" <?php echo $statusFilter === 'contacted' ? 'selected' : ''; ?>>Contacted</option>
-                                        <option value="verified" <?php echo $statusFilter === 'verified' ? 'selected' : ''; ?>>Verified</option>
-                                    </select>
-                                </div>
 
                                 <div class="form-group" style="margin-bottom: 0; flex: 2 1 220px; min-width: 160px;">
                                     <label class="form-label" for="search"
