@@ -708,14 +708,16 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 2rem;
+            padding: 0 1.75rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            gap: 1rem;
         }
 
         .topbar-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            min-width: 0;
         }
 
         .sidebar-toggle-btn {
@@ -726,22 +728,501 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             padding: 6px 10px;
             cursor: pointer;
             color: #334155;
+            flex-shrink: 0;
         }
 
-        .topbar-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin: 0;
+        .topbar-breadcrumb {
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-breadcrumb .breadcrumb-root {
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        .topbar-breadcrumb .breadcrumb-sep {
+            color: #cbd5e1;
+            font-size: 0.82rem;
+        }
+
+        .topbar-breadcrumb .breadcrumb-current {
+            color: #0f172a;
+            font-weight: 800;
             letter-spacing: -0.01em;
         }
 
         .topbar-right {
             display: flex;
             align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .topbar-scope-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            border-radius: 999px;
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .topbar-scope-chip .chip-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #16a34a;
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+        }
+
+        .topbar-user-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 4px 12px 4px 5px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .topbar-user-pill:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        .topbar-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+        }
+
+        .topbar-user-details {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            line-height: 1.15;
+        }
+
+        .topbar-user-name {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .topbar-user-sub {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .topbar-logout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #ffffff;
+            color: #ef4444;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .topbar-logout-btn:hover {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        /* Profile Hero Banner */
+        .profile-hero-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 45%, #1e293b 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 2rem;
+            color: #ffffff;
+            box-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.35);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-hero-card::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .profile-hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-hero-user {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .profile-hero-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff;
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.35);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .profile-hero-avatar .avatar-online-dot {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2.5px solid #0f172a;
+        }
+
+        .profile-hero-name {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge-glass-role {
+            background: rgba(99, 102, 241, 0.25);
+            border: 1px solid rgba(165, 180, 252, 0.35);
+            color: #c7d2fe;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-glass-active {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(52, 211, 153, 0.4);
+            color: #6ee7b7;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .profile-hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .hero-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 9px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: none;
+        }
+
+        .hero-action-btn.btn-white {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .hero-action-btn.btn-white:hover {
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+
+        .hero-action-btn.btn-glass {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(8px);
+        }
+        .hero-action-btn.btn-glass:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Info Tiles Grid */
+        .profile-tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-info-tile {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 12px 14px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .profile-info-tile:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .tile-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .tile-meta {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .tile-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .tile-val {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Permission Cards Grid */
+        .perm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .perm-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.4rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .perm-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border-color: #cbd5e1;
+        }
+
+        .perm-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 1.1rem;
+        }
+
+        .perm-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .perm-icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .perm-card-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .perm-card-category {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .perm-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .perm-list {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 0.9rem !important;
+            font-size: 0.83rem;
+        }
+
+        .perm-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: #334155;
+            line-height: 1.45;
+        }
+
+        .perm-item.restricted {
+            color: #94a3b8;
+        }
+
+        .perm-check-icon {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .perm-cross-icon {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background: #fee2e2;
+            color: #dc2626;
+            font-size: 10px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Edit Profile Card */
+        .profile-edit-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 1.75rem 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            margin-bottom: 2.5rem;
+        }
+
+        .profile-edit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 1.1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
             gap: 10px;
         }
 
@@ -870,6 +1351,14 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 
             .admin-topbar {
                 padding: 0 1rem;
+            }
+
+            .topbar-scope-chip {
+                display: none;
+            }
+
+            .topbar-user-details {
+                display: none;
             }
 
             .admin-content {
@@ -1067,66 +1556,42 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <div class="topbar-title">
-                        <span><?php 
-                            if ($activeTab === 'profile') echo 'Coordinator Profile & Permission Details';
-                            elseif ($activeTab === 'schools') echo 'Schools, Mandals & Districts Directory';
-                            elseif ($activeTab === 'prelims') echo 'Prelims Question Papers Repository';
-                            else echo 'Field Operations & School Verification Roster';
+                    <div class="topbar-breadcrumb">
+                        <span class="breadcrumb-root">Coordinator Portal</span>
+                        <span class="breadcrumb-sep">/</span>
+                        <span class="breadcrumb-current" id="topbarActiveTitle"><?php 
+                            if ($activeTab === 'profile') echo 'Profile & Permissions';
+                            elseif ($activeTab === 'schools') echo 'Schools & Mandals Directory';
+                            elseif ($activeTab === 'prelims') echo 'Prelims Question Papers';
+                            else echo 'School Registrations Roster';
                         ?></span>
                     </div>
                 </div>
 
                 <div class="topbar-right">
-                    <button type="button" onclick="switchDashboardTab('profile')" class="btn"
-                        style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; font-size: 0.82rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; border-radius: 6px;">
-                        👤 My Profile
-                    </button>
+                    <!-- Territory Scope Badge -->
+                    <div class="topbar-scope-chip" title="Assigned Territorial Scope">
+                        <span class="chip-dot"></span>
+                        <span><?php echo htmlspecialchars($user['assigned_district'] ?: 'All AP Districts (Statewide)'); ?></span>
+                    </div>
 
-                    <span class="badge"
-                        style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 700; padding: 6px 12px;">
-                        Scope: <?php echo htmlspecialchars($user['assigned_district'] ?: 'All AP Districts'); ?>
-                    </span>
+                    <!-- Coordinator Profile Pill -->
+                    <div class="topbar-user-pill" onclick="switchDashboardTab('profile')" title="View profile & permissions">
+                        <div class="topbar-user-avatar">
+                            <?php echo strtoupper(substr($user['name'] ?: $user['username'], 0, 1)); ?>
+                        </div>
+                        <div class="topbar-user-details">
+                            <span class="topbar-user-name"><?php echo htmlspecialchars($user['name'] ?: $user['username']); ?></span>
+                            <span class="topbar-user-sub">Field Coordinator</span>
+                        </div>
+                    </div>
 
-                    <?php if ($canViewRegs && !$canEditRegs): ?>
-                        <span class="badge"
-                            style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
-                            👁️ Regs: View-Only Mode
-                        </span>
-                    <?php elseif ($canViewRegs && $canEditRegs): ?>
-                        <span class="badge"
-                            style="background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
-                            ✏️ Regs: Show & Edit Mode
-                        </span>
-                    <?php else: ?>
-                        <span class="badge"
-                            style="background: #fef2f1; color: #b42318; border: 1px solid #fed7d5; font-weight: 700; padding: 6px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
-                            🔒 Regs: Access Restricted
-                        </span>
-                    <?php endif; ?>
-
-                    <?php if (canViewSchools() || canManageSchools()): ?>
-                        <button type="button" onclick="switchDashboardTab('schools')" class="btn"
-                            style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.85rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                            🏛️ <?php echo canManageSchools() ? 'Manage Schools & Districts' : 'Schools & Mandals Directory'; ?>
-                        </button>
-                    <?php endif; ?>
-
-                    <?php if (canManagePapers()): ?>
-                        <button type="button" onclick="openUploadPaperModal()" class="btn"
-                            style="background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; font-size: 0.85rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                            📤 Upload Question Paper
-                        </button>
-                    <?php endif; ?>
-
-                    <button type="button" onclick="switchDashboardTab('prelims')" class="btn"
-                        style="background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; font-size: 0.85rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-                        📄 Prelims QP (<?php echo count($questionPapers); ?>)
-                    </button>
-
-                    <a href="../logout.php" class="btn"
-                        style="background: #fef2f1; color: #d92d20; border: 1px solid #fed7d5; font-size: 0.85rem; padding: 6px 12px; font-weight: 700;">
-                        Logout
+                    <!-- Clean Logout Link -->
+                    <a href="../logout.php" class="topbar-logout-btn" title="Sign out of coordinator portal">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Logout</span>
                     </a>
                 </div>
             </header>
@@ -1155,217 +1620,308 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 <div id="tabPanelProfile" style="<?php echo $activeTab === 'profile' ? 'display: block;' : 'display: none;'; ?>">
 
                     <!-- 1. HERO PROFILE SUMMARY BANNER -->
-                    <div style="background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%); border-radius: 16px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.3); margin-bottom: 2rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
-                            <div style="display: flex; align-items: center; gap: 1.25rem;">
-                                <div style="width: 72px; height: 72px; border-radius: 18px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; border: 2px solid rgba(255, 255, 255, 0.35); flex-shrink: 0;">
-                                    👔
+                    <div class="profile-hero-card">
+                        <div class="profile-hero-top">
+                            <div class="profile-hero-user">
+                                <div class="profile-hero-avatar">
+                                    <?php echo strtoupper(substr($user['name'] ?: $user['username'], 0, 1)); ?>
+                                    <span class="avatar-online-dot" title="Account active and verified"></span>
                                 </div>
-                                <div>
-                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                                        <h2 style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em;">
-                                            <?php echo htmlspecialchars($user['name'] ?? $user['username']); ?>
-                                        </h2>
-                                        <span style="background: rgba(255, 255, 255, 0.22); border: 1px solid rgba(255, 255, 255, 0.35); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;">
-                                            Field Coordinator
-                                        </span>
-                                        <span style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">
-                                            ● Active &amp; Authorized
-                                        </span>
+                                <div class="profile-hero-title-group">
+                                    <div class="profile-hero-name">
+                                        <span><?php echo htmlspecialchars($user['name'] ?: $user['username']); ?></span>
                                     </div>
-                                    <div style="font-size: 0.9rem; color: #d1fae5; margin-top: 6px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-                                        <span>👤 Username: <strong><?php echo htmlspecialchars($user['username']); ?></strong></span>
-                                        <span>📍 Territory Scope: <strong><?php echo htmlspecialchars($user['assigned_district'] ?: 'All Districts (Statewide)'); ?></strong></span>
-                                        <?php if (!empty($user['email'])): ?>
-                                            <span>✉️ <?php echo htmlspecialchars($user['email']); ?></span>
-                                        <?php endif; ?>
-                                        <?php if (!empty($user['mobile'])): ?>
-                                            <span>📞 <?php echo htmlspecialchars($user['mobile']); ?></span>
-                                        <?php endif; ?>
+                                    <div class="profile-hero-badges">
+                                        <span class="badge-glass-role">Field Coordinator</span>
+                                        <span class="badge-glass-active">● Active &amp; Authorized</span>
+                                        <span style="font-size: 0.72rem; color: #94a3b8; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 999px;">ID: #<?php echo (int)$user['id']; ?></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Quick Action Shortcuts -->
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button type="button" onclick="switchDashboardTab('registrations')" class="btn"
-                                    style="background: #ffffff; color: #064e3b; font-weight: 800; font-size: 0.85rem; padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                                    📊 View Registrations (<?php echo $filteredCount; ?>) &rarr;
+                            <div class="profile-hero-actions">
+                                <a href="#editProfileSection" class="hero-action-btn btn-white">
+                                    ✏️ Edit Profile Form &darr;
+                                </a>
+                                <button type="button" onclick="switchDashboardTab('registrations')" class="hero-action-btn btn-glass">
+                                    📊 School Registrations (<?php echo $filteredCount; ?>) &rarr;
                                 </button>
-                                <button type="button" onclick="switchDashboardTab('prelims')" class="btn"
-                                    style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-weight: 700; font-size: 0.85rem; padding: 9px 14px; border-radius: 8px; cursor: pointer;">
-                                    📄 Prelims Papers (<?php echo count($questionPapers); ?>)
+                                <button type="button" onclick="switchDashboardTab('schools')" class="hero-action-btn btn-glass">
+                                    🏛️ Schools Directory &rarr;
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- 4 Distinct Key Details Tiles -->
+                        <div class="profile-tiles-grid">
+                            <div class="profile-info-tile">
+                                <div class="tile-icon">👤</div>
+                                <div class="tile-meta">
+                                    <span class="tile-label">Username</span>
+                                    <span class="tile-val">@<?php echo htmlspecialchars($user['username']); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-tile">
+                                <div class="tile-icon">📍</div>
+                                <div class="tile-meta">
+                                    <span class="tile-label">Jurisdiction / Territory</span>
+                                    <span class="tile-val"><?php echo htmlspecialchars($user['assigned_district'] ?: 'Statewide (All Districts)'); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-tile">
+                                <div class="tile-icon">✉️</div>
+                                <div class="tile-meta">
+                                    <span class="tile-label">Official Email</span>
+                                    <span class="tile-val"><?php echo htmlspecialchars($user['email'] ?: 'Not configured'); ?></span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-tile">
+                                <div class="tile-icon">📞</div>
+                                <div class="tile-meta">
+                                    <span class="tile-label">Contact Mobile</span>
+                                    <span class="tile-val"><?php echo htmlspecialchars($user['mobile'] ?: 'Not configured'); ?></span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- 2. PERMISSIONS BREAKDOWN IN DETAIL -->
                     <div style="margin-bottom: 2rem;">
-                        <div style="margin-bottom: 1rem;">
-                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem;">
-                                🛡️ Assigned Account Permissions &amp; Authority
+                        <div style="margin-bottom: 1.25rem;">
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem; display: flex; align-items: center; gap: 8px;">
+                                <span>🛡️</span>
+                                <span>Assigned Operational Permissions &amp; Authority</span>
                             </h3>
                             <p style="font-size: 0.85rem; color: #64748b; margin: 0;">
-                                Detailed breakdown of operational privileges and access levels granted to your coordinator account.
+                                Detailed overview of administrative privileges, verification authority, and data access levels granted to your account.
                             </p>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+                        <div class="perm-grid">
 
                             <!-- Permission Card 1: School Registrations -->
-                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid <?php echo $canEditRegs ? '#059669' : ($canViewRegs ? '#f59e0b' : '#ef4444'); ?>;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: <?php echo $canEditRegs ? '#ecfdf5' : '#fffbeb'; ?>; color: <?php echo $canEditRegs ? '#059669' : '#d97706'; ?>; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-                                            📊
+                            <div class="perm-card" style="border-top: 4px solid <?php echo $canEditRegs ? '#059669' : ($canViewRegs ? '#f59e0b' : '#ef4444'); ?>;">
+                                <div>
+                                    <div class="perm-card-header">
+                                        <div class="perm-header-left">
+                                            <div class="perm-icon-box" style="background: <?php echo $canEditRegs ? '#ecfdf5' : '#fffbeb'; ?>; color: <?php echo $canEditRegs ? '#059669' : '#d97706'; ?>;">
+                                                📊
+                                            </div>
+                                            <div>
+                                                <h4 class="perm-card-title">School Registrations</h4>
+                                                <div class="perm-card-category">Verification &amp; Follow-up</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">School Registrations</div>
-                                            <div style="font-size: 0.78rem; color: #64748b;">Verification &amp; Roster Data</div>
-                                        </div>
-                                    </div>
-                                    <?php if ($canEditRegs): ?>
-                                        <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            ✓ Full Edit Mode
-                                        </span>
-                                    <?php elseif ($canViewRegs): ?>
-                                        <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            👁️ View Only Mode
-                                        </span>
-                                    <?php else: ?>
-                                        <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            🔒 Access Restricted
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-
-                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
-                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
-                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
-                                        <li><strong style="color: #059669;">✓</strong> Access registered government schools roster</li>
-                                        <li><strong style="color: #059669;">✓</strong> Filter by District, Mandal &amp; Verification Status</li>
-                                        <li><strong style="color: #059669;">✓</strong> Search schools by Name, UDISE code, or In-Charge contact</li>
-                                        <li><strong style="color: #059669;">✓</strong> View &amp; download official School Registration Slips</li>
                                         <?php if ($canEditRegs): ?>
-                                            <li><strong style="color: #059669;">✓</strong> <strong>Update verification status</strong> (Submitted, Verified, Contacted, Completed)</li>
-                                            <li><strong style="color: #059669;">✓</strong> <strong>Edit school coordinator records</strong> (Teacher Name, Mobile, Email)</li>
+                                            <span class="perm-badge" style="background: #dcfce7; color: #15803d; border: 1px solid #86efac;">
+                                                ✓ Full Edit Mode
+                                            </span>
+                                        <?php elseif ($canViewRegs): ?>
+                                            <span class="perm-badge" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+                                                👁️ View Only
+                                            </span>
                                         <?php else: ?>
-                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Status updating restricted (View-Only account)</li>
-                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Record editing restricted to Administrators</li>
+                                            <span class="perm-badge" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
+                                                🔒 Restricted
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <ul class="perm-list">
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Access registered government schools roster</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Filter by District, Mandal &amp; Verification Status</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Search schools by Name, UDISE code, or In-Charge</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>View &amp; download official School Registration Slips</span>
+                                        </li>
+                                        <?php if ($canEditRegs): ?>
+                                            <li class="perm-item">
+                                                <span class="perm-check-icon">✓</span>
+                                                <span><strong>Update verification status</strong> (Submitted, Verified, Contacted, Completed)</span>
+                                            </li>
+                                            <li class="perm-item">
+                                                <span class="perm-check-icon">✓</span>
+                                                <span><strong>Edit school coordinator contacts</strong> (Teacher Name, Mobile, Email)</span>
+                                            </li>
+                                        <?php else: ?>
+                                            <li class="perm-item restricted">
+                                                <span class="perm-cross-icon">✕</span>
+                                                <span>Status updating restricted (View-Only mode)</span>
+                                            </li>
+                                            <li class="perm-item restricted">
+                                                <span class="perm-cross-icon">✕</span>
+                                                <span>School contact record editing restricted to Administrator</span>
+                                            </li>
                                         <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
 
-                            <!-- Permission Card 2: Schools & Mandals Directory -->
-                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid <?php echo canManageSchools() ? '#059669' : (canViewSchools() ? '#31328f' : '#ef4444'); ?>;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-                                            🏛️
+                            <!-- Permission Card 2: Schools Directory -->
+                            <div class="perm-card" style="border-top: 4px solid <?php echo canManageSchools() ? '#059669' : (canViewSchools() ? '#31328f' : '#ef4444'); ?>;">
+                                <div>
+                                    <div class="perm-card-header">
+                                        <div class="perm-header-left">
+                                            <div class="perm-icon-box" style="background: #ececf7; color: #31328f;">
+                                                🏛️
+                                            </div>
+                                            <div>
+                                                <h4 class="perm-card-title">Schools Directory</h4>
+                                                <div class="perm-card-category">AP Master Database</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">Schools Directory</div>
-                                            <div style="font-size: 0.78rem; color: #64748b;">AP Master Database</div>
-                                        </div>
-                                    </div>
-                                    <?php if (canManageSchools()): ?>
-                                        <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            ✓ Manage &amp; Edit
-                                        </span>
-                                    <?php elseif (canViewSchools()): ?>
-                                        <span style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            👁️ View Only Mode
-                                        </span>
-                                    <?php else: ?>
-                                        <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            🔒 Restricted
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-
-                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
-                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
-                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
-                                        <li><strong style="color: #059669;">✓</strong> Browse 28 AP Revenue Districts and all Mandals</li>
-                                        <li><strong style="color: #059669;">✓</strong> Access Government High Schools and Upper Primary list</li>
-                                        <li><strong style="color: #059669;">✓</strong> Verify 11-digit official UDISE school codes</li>
-                                        <li><strong style="color: #059669;">✓</strong> Check registration completion status per mandal</li>
                                         <?php if (canManageSchools()): ?>
-                                            <li><strong style="color: #059669;">✓</strong> <strong>Add or edit master school records</strong></li>
+                                            <span class="perm-badge" style="background: #dcfce7; color: #15803d; border: 1px solid #86efac;">
+                                                ✓ Manage &amp; Edit
+                                            </span>
+                                        <?php elseif (canViewSchools()): ?>
+                                            <span class="perm-badge" style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb;">
+                                                👁️ View Only
+                                            </span>
                                         <?php else: ?>
-                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Master modifications restricted to Administrator</li>
+                                            <span class="perm-badge" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
+                                                🔒 Restricted
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <ul class="perm-list">
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Browse 28 AP Revenue Districts and all Mandals</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Access Government High Schools and Upper Primary list</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Verify 11-digit official UDISE school codes</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Check registration completion status per mandal</span>
+                                        </li>
+                                        <?php if (canManageSchools()): ?>
+                                            <li class="perm-item">
+                                                <span class="perm-check-icon">✓</span>
+                                                <span><strong>Add or modify master school records</strong></span>
+                                            </li>
+                                        <?php else: ?>
+                                            <li class="perm-item restricted">
+                                                <span class="perm-cross-icon">✕</span>
+                                                <span>Master modifications restricted to Administrator</span>
+                                            </li>
                                         <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
 
                             <!-- Permission Card 3: Prelims Question Papers -->
-                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid <?php echo canManagePapers() ? '#7c3aed' : (canViewPapers() ? '#31328f' : '#ef4444'); ?>;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-                                            📄
+                            <div class="perm-card" style="border-top: 4px solid <?php echo canManagePapers() ? '#7c3aed' : (canViewPapers() ? '#31328f' : '#ef4444'); ?>;">
+                                <div>
+                                    <div class="perm-card-header">
+                                        <div class="perm-header-left">
+                                            <div class="perm-icon-box" style="background: #f5f3ff; color: #7c3aed;">
+                                                📄
+                                            </div>
+                                            <div>
+                                                <h4 class="perm-card-title">Prelims Exam Papers</h4>
+                                                <div class="perm-card-category">Examination Repository</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">Prelims Exam Papers</div>
-                                            <div style="font-size: 0.78rem; color: #64748b;">Examination Materials</div>
-                                        </div>
-                                    </div>
-                                    <?php if (canManagePapers()): ?>
-                                        <span style="background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            ✓ Upload &amp; Manage
-                                        </span>
-                                    <?php elseif (canViewPapers()): ?>
-                                        <span style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            ⬇️ Download Access
-                                        </span>
-                                    <?php else: ?>
-                                        <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                            🔒 Restricted
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-
-                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
-                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
-                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
-                                        <li><strong style="color: #059669;">✓</strong> Access Prelims Question Papers repository</li>
-                                        <li><strong style="color: #059669;">✓</strong> Download examination PDF files for standards 7 and 10</li>
-                                        <li><strong style="color: #059669;">✓</strong> Monitor exam day release schedules (28 Nov 2026)</li>
                                         <?php if (canManagePapers()): ?>
-                                            <li><strong style="color: #059669;">✓</strong> <strong>Upload and publish official question papers</strong></li>
+                                            <span class="perm-badge" style="background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe;">
+                                                ✓ Upload &amp; Manage
+                                            </span>
+                                        <?php elseif (canViewPapers()): ?>
+                                            <span class="perm-badge" style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb;">
+                                                ⬇️ Download Access
+                                            </span>
                                         <?php else: ?>
-                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Question paper uploading restricted to Publishing Admins</li>
+                                            <span class="perm-badge" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
+                                                🔒 Restricted
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+
+                                    <ul class="perm-list">
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Access Prelims Question Papers repository</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Download examination PDF files for standards 7 and 10</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Monitor exam day release schedule (28 Nov 2026)</span>
+                                        </li>
+                                        <?php if (canManagePapers()): ?>
+                                            <li class="perm-item">
+                                                <span class="perm-check-icon">✓</span>
+                                                <span><strong>Upload and publish official question papers</strong></span>
+                                            </li>
+                                        <?php else: ?>
+                                            <li class="perm-item restricted">
+                                                <span class="perm-cross-icon">✕</span>
+                                                <span>Question paper uploading restricted to Publishing Admins</span>
+                                            </li>
                                         <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
 
                             <!-- Permission Card 4: Territorial Scope -->
-                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid #0284c7;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #f0f9ff; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
-                                            🗺️
+                            <div class="perm-card" style="border-top: 4px solid #0284c7;">
+                                <div>
+                                    <div class="perm-card-header">
+                                        <div class="perm-header-left">
+                                            <div class="perm-icon-box" style="background: #f0f9ff; color: #0284c7;">
+                                                🗺️
+                                            </div>
+                                            <div>
+                                                <h4 class="perm-card-title">Territory Scope</h4>
+                                                <div class="perm-card-category">Assigned Jurisdiction</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">Territory Scope</div>
-                                            <div style="font-size: 0.78rem; color: #64748b;">Jurisdiction</div>
-                                        </div>
+                                        <span class="perm-badge" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
+                                            <?php echo htmlspecialchars($user['assigned_district'] ?: 'All Districts'); ?>
+                                        </span>
                                     </div>
-                                    <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
-                                        <?php echo htmlspecialchars($user['assigned_district'] ?: 'All Districts'); ?>
-                                    </span>
-                                </div>
 
-                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
-                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
-                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
-                                        <li><strong style="color: #059669;">✓</strong> Assigned Territory: <strong><?php echo htmlspecialchars($user['assigned_district'] ?: 'Statewide (All AP Districts)'); ?></strong></li>
-                                        <li><strong style="color: #059669;">✓</strong> Authorized for field outreach and Headmaster coordination</li>
-                                        <li><strong style="color: #059669;">✓</strong> Examination center assistance &amp; student enrollment monitoring</li>
+                                    <ul class="perm-list">
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Assigned Territory: <strong><?php echo htmlspecialchars($user['assigned_district'] ?: 'Statewide (All AP Districts)'); ?></strong></span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Authorized for field outreach and Headmaster coordination</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Exam center logistics &amp; student enrollment monitoring</span>
+                                        </li>
+                                        <li class="perm-item">
+                                            <span class="perm-check-icon">✓</span>
+                                            <span>Official EEMT 2027 District Representative Authority</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -1374,67 +1930,75 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     </div>
 
                     <!-- 3. EDIT COORDINATOR PROFILE SECTION -->
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.75rem 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 2.5rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                    <div id="editProfileSection" class="profile-edit-card">
+                        <div class="profile-edit-header">
                             <div>
-                                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">
-                                    ✏️ Edit Coordinator Profile
+                                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                                    <span>✏️</span>
+                                    <span>Edit Coordinator Profile &amp; Credentials</span>
                                 </h3>
                                 <p style="margin: 3px 0 0; font-size: 0.85rem; color: #64748b;">
-                                    Update your official contact details or change your dashboard password.
+                                    Update your official contact details or change your dashboard login password.
                                 </p>
                             </div>
-                            <span style="font-size: 0.8rem; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 12px; border-radius: 6px;">
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 12px; border-radius: 6px;">
                                 User ID: #<?php echo (int)$user['id']; ?>
                             </span>
                         </div>
 
-                        <form method="POST" action="dashboard.php?tab=profile" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                        <form method="POST" action="dashboard.php?tab=profile" style="display: flex; flex-direction: column; gap: 1.5rem;">
                             <input type="hidden" name="update_coordinator_profile" value="1">
 
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
-                                        Coordinator Full Name <span class="required" style="color: #ef4444;">*</span>
-                                    </label>
-                                    <input type="text" name="name" required class="form-control" style="height: 42px;"
-                                        value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" placeholder="Your full name">
+                            <!-- Section 1: Contact Information -->
+                            <div>
+                                <div style="font-size: 0.92rem; font-weight: 800; color: #1e293b; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                                    <span>👤</span>
+                                    <span>Personal &amp; Contact Details</span>
                                 </div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                            Coordinator Full Name <span class="required" style="color: #ef4444;">*</span>
+                                        </label>
+                                        <input type="text" name="name" required class="form-control" style="height: 44px; border-radius: 8px;"
+                                            value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" placeholder="Your full name">
+                                    </div>
 
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
-                                        Username <span style="font-weight: 400; color: #64748b;">(Locked)</span>
-                                    </label>
-                                    <input type="text" disabled class="form-control" style="height: 42px; background: #f8fafc; color: #64748b; cursor: not-allowed;"
-                                        value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>">
-                                    <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 3px;">Username cannot be changed.</div>
-                                </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                            Username <span style="font-weight: 400; color: #64748b;">(System Locked)</span>
+                                        </label>
+                                        <input type="text" disabled class="form-control" style="height: 44px; border-radius: 8px; background: #f8fafc; color: #64748b; cursor: not-allowed;"
+                                            value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>">
+                                        <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 3px;">Username cannot be changed.</div>
+                                    </div>
 
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
-                                        Email Address
-                                    </label>
-                                    <input type="email" name="email" class="form-control" style="height: 42px;"
-                                        value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" placeholder="coordinator@example.com">
-                                </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                            Official Email Address
+                                        </label>
+                                        <input type="email" name="email" class="form-control" style="height: 44px; border-radius: 8px;"
+                                            value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" placeholder="coordinator@example.com">
+                                    </div>
 
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
-                                        Contact Mobile Number
-                                    </label>
-                                    <input type="text" name="mobile" class="form-control" style="height: 42px;"
-                                        value="<?php echo htmlspecialchars($user['mobile'] ?? ''); ?>" placeholder="10-digit mobile number">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                            Contact Mobile Number
+                                        </label>
+                                        <input type="text" name="mobile" class="form-control" style="height: 44px; border-radius: 8px;"
+                                            value="<?php echo htmlspecialchars($user['mobile'] ?? ''); ?>" placeholder="10-digit mobile number">
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Password Change Block -->
-                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-top: 0.5rem;">
+                            <!-- Section 2: Password Change Block -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.35rem;">
                                 <div style="font-size: 0.95rem; font-weight: 800; color: #1e293b; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 8px;">
                                     <span>🔒</span>
                                     <span>Change Login Password (Optional)</span>
                                 </div>
                                 <div style="font-size: 0.78rem; color: #64748b; margin-bottom: 1rem;">
-                                    Leave password fields blank if you do not wish to change your current password.
+                                    Leave the password fields below empty if you only want to update your name or contact details.
                                 </div>
 
                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
@@ -1442,29 +2006,30 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                         <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
                                             Current Password
                                         </label>
-                                        <input type="password" name="current_password" class="form-control" style="height: 40px;" placeholder="Enter current password">
+                                        <input type="password" name="current_password" class="form-control" style="height: 42px; border-radius: 8px;" placeholder="Enter current password">
                                     </div>
 
                                     <div class="form-group" style="margin-bottom: 0;">
                                         <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
                                             New Password (min 6 characters)
                                         </label>
-                                        <input type="password" name="new_password" class="form-control" style="height: 40px;" placeholder="Enter new password">
+                                        <input type="password" name="new_password" class="form-control" style="height: 42px; border-radius: 8px;" placeholder="Enter new password">
                                     </div>
 
                                     <div class="form-group" style="margin-bottom: 0;">
                                         <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
                                             Confirm New Password
                                         </label>
-                                        <input type="password" name="confirm_password" class="form-control" style="height: 40px;" placeholder="Confirm new password">
+                                        <input type="password" name="confirm_password" class="form-control" style="height: 42px; border-radius: 8px;" placeholder="Confirm new password">
                                     </div>
                                 </div>
                             </div>
 
-                            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 0.5rem;">
+                            <div style="display: flex; justify-content: flex-end; gap: 10px;">
                                 <button type="submit" class="btn btn-primary"
-                                    style="padding: 10px 24px; font-weight: 800; font-size: 0.92rem; background: #059669; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);">
-                                    💾 Save Profile Changes &rarr;
+                                    style="padding: 11px 26px; font-weight: 800; font-size: 0.92rem; background: #059669; border: none; border-radius: 9px; cursor: pointer; box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3); display: inline-flex; align-items: center; gap: 8px;">
+                                    <span>💾</span>
+                                    <span>Save Profile Changes &rarr;</span>
                                 </button>
                             </div>
                         </form>
@@ -2589,7 +3154,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             const sidebarReg = document.getElementById('sidebarLinkRegistrations');
             const sidebarPrelims = document.getElementById('sidebarLinkPrelims');
             const sidebarSchools = document.getElementById('sidebarLinkSchools');
-            const topbarTitle = document.querySelector('.topbar-title span');
+            const topbarTitle = document.getElementById('topbarActiveTitle') || document.querySelector('.topbar-title span');
 
             if (sidebarProfile) sidebarProfile.classList.remove('active');
             if (sidebarReg) sidebarReg.classList.remove('active');
@@ -2603,7 +3168,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 if (schoolsPanel) schoolsPanel.style.display = 'none';
 
                 if (sidebarProfile) sidebarProfile.classList.add('active');
-                if (topbarTitle) topbarTitle.textContent = 'Coordinator Profile & Permission Details';
+                if (topbarTitle) topbarTitle.textContent = 'Profile & Permissions';
 
                 try {
                     const url = new URL(window.location.href);
@@ -2617,7 +3182,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 if (schoolsPanel) schoolsPanel.style.display = 'block';
 
                 if (sidebarSchools) sidebarSchools.classList.add('active');
-                if (topbarTitle) topbarTitle.textContent = 'Schools, Mandals & Districts Directory';
+                if (topbarTitle) topbarTitle.textContent = 'Schools & Mandals Directory';
 
                 try {
                     const url = new URL(window.location.href);
@@ -2631,7 +3196,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 if (prelimsPanel) prelimsPanel.style.display = 'block';
 
                 if (sidebarPrelims) sidebarPrelims.classList.add('active');
-                if (topbarTitle) topbarTitle.textContent = 'Prelims Question Papers Repository';
+                if (topbarTitle) topbarTitle.textContent = 'Prelims Question Papers';
 
                 try {
                     const url = new URL(window.location.href);
@@ -2645,7 +3210,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 if (regPanel) regPanel.style.display = 'block';
 
                 if (sidebarReg) sidebarReg.classList.add('active');
-                if (topbarTitle) topbarTitle.textContent = 'Field Operations & School Verification Roster';
+                if (topbarTitle) topbarTitle.textContent = 'School Registrations Roster';
 
                 try {
                     const url = new URL(window.location.href);
