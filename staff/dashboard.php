@@ -11,6 +11,16 @@ requireStaffLogin();
 $user = currentUser();
 $pdo = getDB();
 
+// Refresh latest profile info from database
+if (!empty($user['id'])) {
+    $userStmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+    $userStmt->execute([$user['id']]);
+    $freshUser = $userStmt->fetch(PDO::FETCH_ASSOC);
+    if ($freshUser) {
+        $user = array_merge($user, $freshUser);
+    }
+}
+
 $assignedDistrict = trim($user['assigned_district'] ?? '');
 if ($assignedDistrict === 'ALL' || empty($assignedDistrict)) {
     $assignedDistrict = '';
@@ -21,8 +31,72 @@ $canViewRegs = canViewRegistrations();
 $canEditRegs = canEditRegistrations();
 $isViewOnly = !$canEditRegs;
 
-// Handle Status Updates by Staff
 $statusMessage = '';
+$statusType = 'success';
+
+// Handle Coordinator Profile & Password Update
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_coordinator_profile'])) {
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $mobile = trim($_POST['mobile'] ?? '');
+    $currentPass = $_POST['current_password'] ?? '';
+    $newPass = $_POST['new_password'] ?? '';
+    $confirmPass = $_POST['confirm_password'] ?? '';
+
+    if (empty($name)) {
+        $statusMessage = "Full Name is required.";
+        $statusType = 'error';
+    } else {
+        $canUpdate = true;
+        $passUpdate = false;
+
+        if (!empty($newPass)) {
+            if (empty($currentPass)) {
+                $statusMessage = "Please enter your current password to set a new password.";
+                $statusType = 'error';
+                $canUpdate = false;
+            } elseif (!password_verify($currentPass, $user['password_hash'])) {
+                $statusMessage = "Current password entered is incorrect.";
+                $statusType = 'error';
+                $canUpdate = false;
+            } elseif (strlen($newPass) < 6) {
+                $statusMessage = "New password must be at least 6 characters long.";
+                $statusType = 'error';
+                $canUpdate = false;
+            } elseif ($newPass !== $confirmPass) {
+                $statusMessage = "New password and confirm password do not match.";
+                $statusType = 'error';
+                $canUpdate = false;
+            } else {
+                $passUpdate = true;
+            }
+        }
+
+        if ($canUpdate) {
+            if ($passUpdate) {
+                $newHash = password_hash($newPass, PASSWORD_DEFAULT);
+                $updStmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, mobile = ?, password_hash = ? WHERE id = ?");
+                $updStmt->execute([$name, $email, $mobile, $newHash, $user['id']]);
+                $user['password_hash'] = $newHash;
+            } else {
+                $updStmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, mobile = ? WHERE id = ?");
+                $updStmt->execute([$name, $email, $mobile, $user['id']]);
+            }
+
+            $_SESSION['user']['name'] = $name;
+            $_SESSION['user']['email'] = $email;
+            $_SESSION['user']['mobile'] = $mobile;
+            $user['name'] = $name;
+            $user['email'] = $email;
+            $user['mobile'] = $mobile;
+
+            $statusMessage = "Coordinator profile updated successfully!" . ($passUpdate ? " Password was also changed." : "");
+            $statusType = 'success';
+        }
+    }
+}
+
+// Handle Status Updates by Staff
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     if (!$canViewRegs || !$canEditRegs) {
         $statusMessage = "Access Denied: Your account does not have permission to edit school registrations status.";
@@ -130,12 +204,12 @@ $perPage = (int)($_GET['per_page'] ?? 10);
 if (!in_array($perPage, [10, 25, 50, 100])) {
     $perPage = 10;
 }
-$activeTab = trim($_GET['tab'] ?? ($canViewRegs ? 'registrations' : 'prelims'));
-if (!in_array($activeTab, ['registrations', 'prelims', 'schools'])) {
-    $activeTab = $canViewRegs ? 'registrations' : 'prelims';
+$activeTab = trim($_GET['tab'] ?? 'profile');
+if (!in_array($activeTab, ['profile', 'registrations', 'prelims', 'schools'])) {
+    $activeTab = 'profile';
 }
 if (!$canViewRegs && $activeTab === 'registrations') {
-    $activeTab = 'prelims';
+    $activeTab = 'profile';
 }
 
 // Schools Directory Data for tab=schools
@@ -885,6 +959,17 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 
             <!-- Navigation Menu -->
             <nav class="sidebar-nav">
+                <div class="nav-section-title">My Account</div>
+
+                <a href="javascript:void(0)" onclick="switchDashboardTab('profile')" id="sidebarLinkProfile"
+                    class="sidebar-item <?php echo $activeTab === 'profile' ? 'active' : ''; ?>">
+                    <div class="sidebar-item-content">
+                        <div class="sidebar-icon">👤</div>
+                        <span>Profile &amp; Permissions</span>
+                    </div>
+                    <span class="sidebar-badge" style="background: rgba(16, 185, 129, 0.25); color: #34d399; font-size: 0.72rem;">Overview</span>
+                </a>
+
                 <div class="nav-section-title">Field Operations</div>
 
                 <?php if ($canViewRegs): ?>
@@ -983,11 +1068,21 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                         </svg>
                     </button>
                     <div class="topbar-title">
-                        <span>Field Operations & School Verification Roster</span>
+                        <span><?php 
+                            if ($activeTab === 'profile') echo 'Coordinator Profile & Permission Details';
+                            elseif ($activeTab === 'schools') echo 'Schools, Mandals & Districts Directory';
+                            elseif ($activeTab === 'prelims') echo 'Prelims Question Papers Repository';
+                            else echo 'Field Operations & School Verification Roster';
+                        ?></span>
                     </div>
                 </div>
 
                 <div class="topbar-right">
+                    <button type="button" onclick="switchDashboardTab('profile')" class="btn"
+                        style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; font-size: 0.82rem; padding: 6px 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; border-radius: 6px;">
+                        👤 My Profile
+                    </button>
+
                     <span class="badge"
                         style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 700; padding: 6px 12px;">
                         Scope: <?php echo htmlspecialchars($user['assigned_district'] ?: 'All AP Districts'); ?>
@@ -1049,12 +1144,333 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 <?php endif; ?>
 
                 <?php if ($statusMessage): ?>
-                    <div class="alert alert-success"
-                        style="margin-bottom: 1.5rem; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 12px 16px; border-radius: 8px;">
-                        <span>✅</span>
+                    <div class="alert alert-<?php echo ($statusType ?? 'success') === 'error' ? 'danger' : 'success'; ?>"
+                        style="margin-bottom: 1.5rem; background: <?php echo ($statusType ?? 'success') === 'error' ? '#fef2f2' : '#ecfdf5'; ?>; border: 1px solid <?php echo ($statusType ?? 'success') === 'error' ? '#fca5a5' : '#a7f3d0'; ?>; color: <?php echo ($statusType ?? 'success') === 'error' ? '#991b1b' : '#065f46'; ?>; padding: 12px 16px; border-radius: 8px;">
+                        <span><?php echo ($statusType ?? 'success') === 'error' ? '⚠️' : '✅'; ?></span>
                         <span><?php echo htmlspecialchars($statusMessage); ?></span>
                     </div>
                 <?php endif; ?>
+
+                <!-- TAB PANEL 0: COORDINATOR PROFILE & DETAILED PERMISSIONS -->
+                <div id="tabPanelProfile" style="<?php echo $activeTab === 'profile' ? 'display: block;' : 'display: none;'; ?>">
+
+                    <!-- 1. HERO PROFILE SUMMARY BANNER -->
+                    <div style="background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%); border-radius: 16px; padding: 1.75rem 2rem; color: #ffffff; box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.3); margin-bottom: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1.25rem;">
+                                <div style="width: 72px; height: 72px; border-radius: 18px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; border: 2px solid rgba(255, 255, 255, 0.35); flex-shrink: 0;">
+                                    👔
+                                </div>
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                        <h2 style="margin: 0; font-size: 1.6rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em;">
+                                            <?php echo htmlspecialchars($user['name'] ?? $user['username']); ?>
+                                        </h2>
+                                        <span style="background: rgba(255, 255, 255, 0.22); border: 1px solid rgba(255, 255, 255, 0.35); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; text-transform: uppercase;">
+                                            Field Coordinator
+                                        </span>
+                                        <span style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;">
+                                            ● Active &amp; Authorized
+                                        </span>
+                                    </div>
+                                    <div style="font-size: 0.9rem; color: #d1fae5; margin-top: 6px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                                        <span>👤 Username: <strong><?php echo htmlspecialchars($user['username']); ?></strong></span>
+                                        <span>📍 Territory Scope: <strong><?php echo htmlspecialchars($user['assigned_district'] ?: 'All Districts (Statewide)'); ?></strong></span>
+                                        <?php if (!empty($user['email'])): ?>
+                                            <span>✉️ <?php echo htmlspecialchars($user['email']); ?></span>
+                                        <?php endif; ?>
+                                        <?php if (!empty($user['mobile'])): ?>
+                                            <span>📞 <?php echo htmlspecialchars($user['mobile']); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Action Shortcuts -->
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button type="button" onclick="switchDashboardTab('registrations')" class="btn"
+                                    style="background: #ffffff; color: #064e3b; font-weight: 800; font-size: 0.85rem; padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                    📊 View Registrations (<?php echo $filteredCount; ?>) &rarr;
+                                </button>
+                                <button type="button" onclick="switchDashboardTab('prelims')" class="btn"
+                                    style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); font-weight: 700; font-size: 0.85rem; padding: 9px 14px; border-radius: 8px; cursor: pointer;">
+                                    📄 Prelims Papers (<?php echo count($questionPapers); ?>)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. PERMISSIONS BREAKDOWN IN DETAIL -->
+                    <div style="margin-bottom: 2rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 0.25rem;">
+                                🛡️ Assigned Account Permissions &amp; Authority
+                            </h3>
+                            <p style="font-size: 0.85rem; color: #64748b; margin: 0;">
+                                Detailed breakdown of operational privileges and access levels granted to your coordinator account.
+                            </p>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+
+                            <!-- Permission Card 1: School Registrations -->
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid <?php echo $canEditRegs ? '#059669' : ($canViewRegs ? '#f59e0b' : '#ef4444'); ?>;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: <?php echo $canEditRegs ? '#ecfdf5' : '#fffbeb'; ?>; color: <?php echo $canEditRegs ? '#059669' : '#d97706'; ?>; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                                            📊
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">School Registrations</div>
+                                            <div style="font-size: 0.78rem; color: #64748b;">Verification &amp; Roster Data</div>
+                                        </div>
+                                    </div>
+                                    <?php if ($canEditRegs): ?>
+                                        <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            ✓ Full Edit Mode
+                                        </span>
+                                    <?php elseif ($canViewRegs): ?>
+                                        <span style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            👁️ View Only Mode
+                                        </span>
+                                    <?php else: ?>
+                                        <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            🔒 Access Restricted
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
+                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
+                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
+                                        <li><strong style="color: #059669;">✓</strong> Access registered government schools roster</li>
+                                        <li><strong style="color: #059669;">✓</strong> Filter by District, Mandal &amp; Verification Status</li>
+                                        <li><strong style="color: #059669;">✓</strong> Search schools by Name, UDISE code, or In-Charge contact</li>
+                                        <li><strong style="color: #059669;">✓</strong> View &amp; download official School Registration Slips</li>
+                                        <?php if ($canEditRegs): ?>
+                                            <li><strong style="color: #059669;">✓</strong> <strong>Update verification status</strong> (Submitted, Verified, Contacted, Completed)</li>
+                                            <li><strong style="color: #059669;">✓</strong> <strong>Edit school coordinator records</strong> (Teacher Name, Mobile, Email)</li>
+                                        <?php else: ?>
+                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Status updating restricted (View-Only account)</li>
+                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Record editing restricted to Administrators</li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Permission Card 2: Schools & Mandals Directory -->
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid <?php echo canManageSchools() ? '#059669' : (canViewSchools() ? '#31328f' : '#ef4444'); ?>;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                                            🏛️
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">Schools Directory</div>
+                                            <div style="font-size: 0.78rem; color: #64748b;">AP Master Database</div>
+                                        </div>
+                                    </div>
+                                    <?php if (canManageSchools()): ?>
+                                        <span style="background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            ✓ Manage &amp; Edit
+                                        </span>
+                                    <?php elseif (canViewSchools()): ?>
+                                        <span style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            👁️ View Only Mode
+                                        </span>
+                                    <?php else: ?>
+                                        <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            🔒 Restricted
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
+                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
+                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
+                                        <li><strong style="color: #059669;">✓</strong> Browse 28 AP Revenue Districts and all Mandals</li>
+                                        <li><strong style="color: #059669;">✓</strong> Access Government High Schools and Upper Primary list</li>
+                                        <li><strong style="color: #059669;">✓</strong> Verify 11-digit official UDISE school codes</li>
+                                        <li><strong style="color: #059669;">✓</strong> Check registration completion status per mandal</li>
+                                        <?php if (canManageSchools()): ?>
+                                            <li><strong style="color: #059669;">✓</strong> <strong>Add or edit master school records</strong></li>
+                                        <?php else: ?>
+                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Master modifications restricted to Administrator</li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Permission Card 3: Prelims Question Papers -->
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid <?php echo canManagePapers() ? '#7c3aed' : (canViewPapers() ? '#31328f' : '#ef4444'); ?>;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                                            📄
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">Prelims Exam Papers</div>
+                                            <div style="font-size: 0.78rem; color: #64748b;">Examination Materials</div>
+                                        </div>
+                                    </div>
+                                    <?php if (canManagePapers()): ?>
+                                        <span style="background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            ✓ Upload &amp; Manage
+                                        </span>
+                                    <?php elseif (canViewPapers()): ?>
+                                        <span style="background: #ececf7; color: #31328f; border: 1px solid #c8c9eb; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            ⬇️ Download Access
+                                        </span>
+                                    <?php else: ?>
+                                        <span style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                            🔒 Restricted
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+
+                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
+                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
+                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
+                                        <li><strong style="color: #059669;">✓</strong> Access Prelims Question Papers repository</li>
+                                        <li><strong style="color: #059669;">✓</strong> Download examination PDF files for standards 7 and 10</li>
+                                        <li><strong style="color: #059669;">✓</strong> Monitor exam day release schedules (28 Nov 2026)</li>
+                                        <?php if (canManagePapers()): ?>
+                                            <li><strong style="color: #059669;">✓</strong> <strong>Upload and publish official question papers</strong></li>
+                                        <?php else: ?>
+                                            <li style="color: #94a3b8;"><strong style="color: #ef4444;">✗</strong> Question paper uploading restricted to Publishing Admins</li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Permission Card 4: Territorial Scope -->
+                            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03); border-top: 4px solid #0284c7;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 40px; height: 40px; border-radius: 10px; background: #f0f9ff; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                                            🗺️
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 800; font-size: 1rem; color: #0f172a;">Territory Scope</div>
+                                            <div style="font-size: 0.78rem; color: #64748b;">Jurisdiction</div>
+                                        </div>
+                                    </div>
+                                    <span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;">
+                                        <?php echo htmlspecialchars($user['assigned_district'] ?: 'All Districts'); ?>
+                                    </span>
+                                </div>
+
+                                <div style="font-size: 0.84rem; color: #334155; line-height: 1.6; border-top: 1px solid #f1f5f9; padding-top: 0.85rem;">
+                                    <div style="margin-bottom: 6px; font-weight: 700; color: #0f172a;">Authorized Capabilities:</div>
+                                    <ul style="margin: 0; padding-left: 1.2rem; color: #475569; display: flex; flex-direction: column; gap: 4px;">
+                                        <li><strong style="color: #059669;">✓</strong> Assigned Territory: <strong><?php echo htmlspecialchars($user['assigned_district'] ?: 'Statewide (All AP Districts)'); ?></strong></li>
+                                        <li><strong style="color: #059669;">✓</strong> Authorized for field outreach and Headmaster coordination</li>
+                                        <li><strong style="color: #059669;">✓</strong> Examination center assistance &amp; student enrollment monitoring</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 3. EDIT COORDINATOR PROFILE SECTION -->
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.75rem 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 2.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #0f172a;">
+                                    ✏️ Edit Coordinator Profile
+                                </h3>
+                                <p style="margin: 3px 0 0; font-size: 0.85rem; color: #64748b;">
+                                    Update your official contact details or change your dashboard password.
+                                </p>
+                            </div>
+                            <span style="font-size: 0.8rem; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; padding: 5px 12px; border-radius: 6px;">
+                                User ID: #<?php echo (int)$user['id']; ?>
+                            </span>
+                        </div>
+
+                        <form method="POST" action="dashboard.php?tab=profile" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                            <input type="hidden" name="update_coordinator_profile" value="1">
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                        Coordinator Full Name <span class="required" style="color: #ef4444;">*</span>
+                                    </label>
+                                    <input type="text" name="name" required class="form-control" style="height: 42px;"
+                                        value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>" placeholder="Your full name">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                        Username <span style="font-weight: 400; color: #64748b;">(Locked)</span>
+                                    </label>
+                                    <input type="text" disabled class="form-control" style="height: 42px; background: #f8fafc; color: #64748b; cursor: not-allowed;"
+                                        value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>">
+                                    <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 3px;">Username cannot be changed.</div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                        Email Address
+                                    </label>
+                                    <input type="email" name="email" class="form-control" style="height: 42px;"
+                                        value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" placeholder="coordinator@example.com">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="form-label" style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 5px; display: block;">
+                                        Contact Mobile Number
+                                    </label>
+                                    <input type="text" name="mobile" class="form-control" style="height: 42px;"
+                                        value="<?php echo htmlspecialchars($user['mobile'] ?? ''); ?>" placeholder="10-digit mobile number">
+                                </div>
+                            </div>
+
+                            <!-- Password Change Block -->
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-top: 0.5rem;">
+                                <div style="font-size: 0.95rem; font-weight: 800; color: #1e293b; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 8px;">
+                                    <span>🔒</span>
+                                    <span>Change Login Password (Optional)</span>
+                                </div>
+                                <div style="font-size: 0.78rem; color: #64748b; margin-bottom: 1rem;">
+                                    Leave password fields blank if you do not wish to change your current password.
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
+                                            Current Password
+                                        </label>
+                                        <input type="password" name="current_password" class="form-control" style="height: 40px;" placeholder="Enter current password">
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
+                                            New Password (min 6 characters)
+                                        </label>
+                                        <input type="password" name="new_password" class="form-control" style="height: 40px;" placeholder="Enter new password">
+                                    </div>
+
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
+                                            Confirm New Password
+                                        </label>
+                                        <input type="password" name="confirm_password" class="form-control" style="height: 40px;" placeholder="Confirm new password">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 0.5rem;">
+                                <button type="submit" class="btn btn-primary"
+                                    style="padding: 10px 24px; font-weight: 800; font-size: 0.92rem; background: #059669; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);">
+                                    💾 Save Profile Changes &rarr;
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div> <!-- End #tabPanelProfile -->
 
                 <!-- TAB 1: SCHOOL REGISTRATIONS PANEL -->
                 <div id="tabPanelRegistrations"
@@ -2165,19 +2581,37 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
 
         // Tab Switching Logic
         function switchDashboardTab(tabName) {
+            const profilePanel = document.getElementById('tabPanelProfile');
             const regPanel = document.getElementById('tabPanelRegistrations');
             const prelimsPanel = document.getElementById('tabPanelPrelims');
             const schoolsPanel = document.getElementById('tabPanelSchools');
+            const sidebarProfile = document.getElementById('sidebarLinkProfile');
             const sidebarReg = document.getElementById('sidebarLinkRegistrations');
             const sidebarPrelims = document.getElementById('sidebarLinkPrelims');
             const sidebarSchools = document.getElementById('sidebarLinkSchools');
             const topbarTitle = document.querySelector('.topbar-title span');
 
+            if (sidebarProfile) sidebarProfile.classList.remove('active');
             if (sidebarReg) sidebarReg.classList.remove('active');
             if (sidebarPrelims) sidebarPrelims.classList.remove('active');
             if (sidebarSchools) sidebarSchools.classList.remove('active');
 
-            if (tabName === 'schools') {
+            if (tabName === 'profile') {
+                if (profilePanel) profilePanel.style.display = 'block';
+                if (regPanel) regPanel.style.display = 'none';
+                if (prelimsPanel) prelimsPanel.style.display = 'none';
+                if (schoolsPanel) schoolsPanel.style.display = 'none';
+
+                if (sidebarProfile) sidebarProfile.classList.add('active');
+                if (topbarTitle) topbarTitle.textContent = 'Coordinator Profile & Permission Details';
+
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('tab', 'profile');
+                    window.history.replaceState({}, '', url);
+                } catch (e) { }
+            } else if (tabName === 'schools') {
+                if (profilePanel) profilePanel.style.display = 'none';
                 if (regPanel) regPanel.style.display = 'none';
                 if (prelimsPanel) prelimsPanel.style.display = 'none';
                 if (schoolsPanel) schoolsPanel.style.display = 'block';
@@ -2191,8 +2625,9 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     window.history.replaceState({}, '', url);
                 } catch (e) { }
             } else if (tabName === 'prelims') {
-                if (regPanel) regPanel.style.display = 'none';
+                if (profilePanel) profilePanel.style.display = 'none';
                 if (schoolsPanel) schoolsPanel.style.display = 'none';
+                if (regPanel) regPanel.style.display = 'none';
                 if (prelimsPanel) prelimsPanel.style.display = 'block';
 
                 if (sidebarPrelims) sidebarPrelims.classList.add('active');
@@ -2204,6 +2639,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     window.history.replaceState({}, '', url);
                 } catch (e) { }
             } else {
+                if (profilePanel) profilePanel.style.display = 'none';
                 if (prelimsPanel) prelimsPanel.style.display = 'none';
                 if (schoolsPanel) schoolsPanel.style.display = 'none';
                 if (regPanel) regPanel.style.display = 'block';
@@ -2228,6 +2664,10 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                     switchDashboardTab('schools');
                 } else if (reqTab === 'prelims' || window.location.hash === '#prelims' || window.location.hash === '#papers-section') {
                     switchDashboardTab('prelims');
+                } else if (reqTab === 'registrations') {
+                    switchDashboardTab('registrations');
+                } else {
+                    switchDashboardTab('profile');
                 }
             } catch (e) { }
 
