@@ -31,6 +31,100 @@ $canViewRegs = canViewRegistrations();
 $canEditRegs = canEditRegistrations();
 $isViewOnly = !$canEditRegs;
 
+// Helper functions for clean display of school names and roster details
+if (!function_exists('formatSchoolTitle')) {
+    function formatSchoolTitle($text) {
+        if (empty($text)) return '';
+        $text = trim($text);
+        // Add space before parenthesis if missing (e.g. ROMPICHERLA(BOYS) -> ROMPICHERLA (BOYS))
+        $text = preg_replace('/([a-zA-Z0-9])\(/', '$1 (', $text);
+        $keepUpper = [
+            'ZPHS' => 'ZPHS',
+            'HS' => 'HS',
+            'MPL' => 'MPL',
+            'GOVT' => 'Govt',
+            'APMS' => 'APMS',
+            'KGBV' => 'KGBV',
+            'AP' => 'AP',
+            'BC' => 'BC',
+            'SC' => 'SC',
+            'ST' => 'ST',
+            'MPSR' => 'MPSR',
+            'BBR' => 'BBR',
+            'DR' => 'Dr.',
+            'DR.' => 'Dr.',
+            'UPS' => 'UPS',
+            'PS' => 'PS',
+            'ZP' => 'ZP',
+            'ZPP' => 'ZPP',
+            'MJP' => 'MJP',
+            'APREIS' => 'APREIS'
+        ];
+        $words = preg_split('/\s+/', $text);
+        $formatted = [];
+        foreach ($words as $w) {
+            $wTrim = trim($w);
+            if ($wTrim === '') continue;
+
+            if (preg_match('/^\((.+)\)$/', $wTrim, $m)) {
+                $inner = $m[1];
+                $uInner = strtoupper($inner);
+                if (isset($keepUpper[$uInner])) {
+                    $formatted[] = '(' . $keepUpper[$uInner] . ')';
+                } else {
+                    $formatted[] = '(' . ucfirst(strtolower($inner)) . ')';
+                }
+                continue;
+            }
+
+            $upper = strtoupper($wTrim);
+            if (isset($keepUpper[$upper])) {
+                $formatted[] = $keepUpper[$upper];
+            } else {
+                if (strpos($wTrim, '.') !== false) {
+                    $formatted[] = strtoupper($wTrim);
+                } else {
+                    $formatted[] = ucfirst(strtolower($wTrim));
+                }
+            }
+        }
+        return implode(' ', $formatted);
+    }
+}
+
+if (!function_exists('formatLocationTitle')) {
+    function formatLocationTitle($text) {
+        if (empty($text)) return ['name' => '', 'code' => ''];
+        $text = trim($text);
+        if (preg_match('/^([a-zA-Z\s\.\(\)\&]+)[\s\-]+(\d+)$/', $text, $matches)) {
+            $name = trim($matches[1]);
+            $code = trim($matches[2]);
+            return ['name' => ucwords(strtolower($name)), 'code' => $code];
+        }
+        return ['name' => ucwords(strtolower($text)), 'code' => ''];
+    }
+}
+
+if (!function_exists('formatDesignationTitle')) {
+    function formatDesignationTitle($text) {
+        if (empty($text)) return 'Principal';
+        $u = strtoupper(trim($text));
+        if (strpos($u, 'HEAD MASTER') !== false || strpos($u, 'HEADMASTER') !== false || $u === 'HM') {
+            return 'Headmaster (HM)';
+        }
+        if (strpos($u, 'PRINCIPAL') !== false) {
+            return 'Principal';
+        }
+        if (strpos($u, 'TEACHER') !== false) {
+            return 'Teacher';
+        }
+        if (strpos($u, 'COORDINATOR') !== false) {
+            return 'Coordinator';
+        }
+        return ucwords(strtolower($text));
+    }
+}
+
 $statusMessage = '';
 $statusType = 'success';
 
@@ -1306,24 +1400,413 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             flex-wrap: wrap;
         }
 
-        /* Table Card */
+        /* Modern Table Card & Roster Styles */
         .table-card {
             background: #ffffff;
-            border-radius: 12px;
+            border-radius: 16px;
             border: 1px solid #e2e8f0;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
             margin-bottom: 2.5rem;
         }
 
         .table-card-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1.5px solid #f1f5f9;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.75rem;
+            gap: 1rem;
+            background: #ffffff;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Slim Custom Scrollbar */
+        .table-responsive::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 0 0 14px 14px;
+            scrollbar-width: thin;
+            scrollbar-color: #94a3b8 #f1f5f9;
+        }
+
+        .table-responsive::-webkit-scrollbar {
+            height: 9px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 6px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .roster-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: left;
+            min-width: 1550px;
+        }
+
+        .roster-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #f8fafc;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding: 14px 18px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .roster-table tbody tr {
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.15s ease;
+            background: #ffffff;
+        }
+
+        .roster-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .roster-table tbody td {
+            padding: 14px 18px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Sticky Actions Column - stays visible during horizontal scroll */
+        .roster-table thead th.col-actions {
+            position: sticky;
+            right: 0;
+            z-index: 20;
+            background: #f8fafc;
+            box-shadow: -4px 0 12px rgba(15, 23, 42, 0.06);
+            text-align: right;
+        }
+
+        .roster-table tbody td.col-actions {
+            position: sticky;
+            right: 0;
+            z-index: 15;
+            background: #ffffff;
+            box-shadow: -4px 0 12px rgba(15, 23, 42, 0.06);
+            text-align: right;
+        }
+
+        .roster-table tbody tr:hover td.col-actions {
+            background: #f8fafc;
+        }
+
+        /* Ref ID Chip */
+        .roster-ref-chip {
+            display: inline-block;
+            background: #eef2ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.84rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .roster-date-sub {
+            font-size: 0.74rem;
+            color: #64748b;
+            margin-top: 5px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* School & UDISE */
+        .roster-school-name {
+            font-size: 0.94rem;
+            font-weight: 750;
+            color: #0f172a;
+            line-height: 1.45;
+            margin-bottom: 5px;
+        }
+
+        .roster-udise-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+            color: #0284c7;
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .roster-udise-pill .udise-num {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-weight: 700;
+        }
+
+        /* Location */
+        .roster-location-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .roster-district-line {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .roster-district-name {
+            font-size: 0.90rem;
+            font-weight: 750;
+            color: #1e293b;
+        }
+
+        .roster-code-pill {
+            font-size: 0.70rem;
+            font-weight: 700;
+            color: #64748b;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, monospace;
+        }
+
+        .roster-mandal-line {
+            font-size: 0.80rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .roster-mandal-line .mandal-pin {
+            font-size: 0.78rem;
+        }
+
+        .roster-mandal-name {
+            color: #334155;
+            font-weight: 650;
+        }
+
+        /* In-Charge Person */
+        .roster-person-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roster-person-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(5, 150, 105, 0.2);
+        }
+
+        .roster-person-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .roster-person-name {
+            font-size: 0.90rem;
+            font-weight: 750;
+            color: #1e293b;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .roster-designation-badge {
+            font-size: 0.70rem;
+            font-weight: 700;
+            color: #475569;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 2px 7px;
+            border-radius: 4px;
+            text-transform: capitalize;
+            white-space: nowrap;
+            width: fit-content;
+        }
+
+        /* Contact Phone Button */
+        .roster-phone-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #0f766e;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            width: fit-content;
+        }
+
+        .roster-phone-btn:hover {
+            background: #f0fdf4;
+            border-color: #86efac;
+            color: #15803d;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Status Form */
+        .roster-status-form {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+        }
+
+        .roster-status-select {
+            height: 34px;
+            padding: 0 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: 7px;
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            color: #1e293b;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .roster-status-select:focus {
+            border-color: #31328f;
+        }
+
+        .roster-status-save-btn {
+            height: 34px;
+            padding: 0 12px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            border-radius: 7px;
+            border: none;
+            background: #31328f;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(49, 50, 143, 0.2);
+        }
+
+        .roster-status-save-btn:hover {
+            background: #252673;
+            transform: translateY(-1px);
+        }
+
+        /* Actions Wrap */
+        .roster-actions-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .roster-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 11px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .roster-action-btn.btn-view {
+            background: #f0fdf4;
+            color: #15803d;
+            border-color: #bbf7d0;
+        }
+        .roster-action-btn.btn-view:hover {
+            background: #dcfce7;
+            border-color: #86efac;
+            transform: translateY(-1px);
+        }
+
+        .roster-action-btn.btn-edit {
+            background: #ececf7;
+            color: #31328f;
+            border-color: #c8c9eb;
+        }
+        .roster-action-btn.btn-edit:hover {
+            background: #dbdcf3;
+            border-color: #a8a9df;
+            transform: translateY(-1px);
+        }
+
+        .roster-action-btn.btn-slip {
+            background: #f8fafc;
+            color: #475569;
+            border-color: #cbd5e1;
+        }
+        .roster-action-btn.btn-slip:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+            color: #0f172a;
+            transform: translateY(-1px);
         }
 
         /* Responsive Breakpoints */
@@ -2204,121 +2687,128 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                         <div class="table-card">
                             <div class="table-card-header">
                                 <div>
-                                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">
-                                        Registered Schools Verification Roster
+                                    <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                        <span>📋</span>
+                                        <span>Registered Schools Verification Roster</span>
                                     </h3>
                                     <span style="font-size: 0.8rem; color: #64748b;">
-                                        Registered schools directory and status verification
+                                        Official school registrations directory, verification tracking, and coordinator contact details
                                     </span>
                                 </div>
                                 <span class="badge"
-                                    style="background: #ecfdf5; color: #047857; font-weight: 700; border: 1px solid #a7f3d0; padding: 6px 12px; font-size: 0.82rem;">
-                                    <?php echo $filteredCount; ?> Schools in View
+                                    style="background: #ecfdf5; color: #047857; font-weight: 800; border: 1px solid #a7f3d0; padding: 6px 14px; font-size: 0.82rem; border-radius: 999px;">
+                                    ● <?php echo $filteredCount; ?> Schools in View
                                 </span>
                             </div>
 
                             <?php if (empty($registrations)): ?>
-                                <div style="padding: 3.5rem 2rem; text-align: center; color: #64748b;">
-                                    <div style="font-size: 2.8rem; margin-bottom: 0.5rem;">🏫</div>
-                                    <h4 style="font-weight: 700; color: #334155; margin-bottom: 0.25rem;">No School
-                                        Registrations Found</h4>
-                                    <p style="font-size: 0.9rem; margin: 0;">Try adjusting your search query or filters above.
-                                    </p>
+                                <div style="padding: 4rem 2rem; text-align: center; color: #64748b;">
+                                    <div style="font-size: 3rem; margin-bottom: 0.75rem;">🏫</div>
+                                    <h4 style="font-weight: 800; color: #1e293b; margin-bottom: 0.35rem; font-size: 1.15rem;">No School Registrations Found</h4>
+                                    <p style="font-size: 0.88rem; margin: 0; color: #64748b;">Try adjusting your keyword search query, district or status filters above.</p>
                                 </div>
                             <?php else: ?>
-                                <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                                    <table class="table" style="width: 100%; min-width: 1100px; border-collapse: collapse;">
+                                <div class="table-responsive">
+                                    <table class="roster-table">
                                         <thead>
-                                            <tr style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0;">
-                                                <th
-                                                    style="width: 160px; min-width: 160px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-                                                    EEMTSRC (Ref ID)</th>
-                                                <th
-                                                    style="width: 320px; min-width: 260px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-                                                    School Details</th>
-                                                <th
-                                                    style="width: 190px; min-width: 170px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-                                                    Location</th>
-                                                <th
-                                                    style="width: 190px; min-width: 170px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-                                                    In-Charge Person</th>
-                                                <th
-                                                    style="width: 180px; min-width: 160px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-                                                    Mobile Number</th>
-                                                <th
-                                                    style="width: 160px; min-width: 140px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase;">
-                                                    Status Tracking</th>
-                                                <th
-                                                    style="width: 170px; min-width: 150px; padding: 14px 16px; font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase; text-align: right;">
-                                                    Actions</th>
+                                            <tr>
+                                                <th style="width: 175px; min-width: 170px;">EEMTSRC (Ref ID)</th>
+                                                <th style="min-width: 360px;">School Details</th>
+                                                <th style="width: 240px; min-width: 230px;">District &amp; Mandal</th>
+                                                <th style="width: 240px; min-width: 230px;">In-Charge Person</th>
+                                                <th style="width: 190px; min-width: 180px;">Contact Mobile</th>
+                                                <th style="width: 200px; min-width: 190px;">Verification Status</th>
+                                                <th class="col-actions" style="width: 220px; min-width: 210px;">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($registrations as $row): ?>
-                                                <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
-                                                    <td style="padding: 14px 16px; vertical-align: middle;">
-                                                        <span class="badge"
-                                                            style="background: #ececf7; color: #1d4ed8; font-family: monospace; font-size: 0.9rem; font-weight: 800; border: 1px solid #c8c9eb; white-space: nowrap; padding: 4px 8px;">
-                                                            <?php echo htmlspecialchars($row['reference_id']); ?>
+                                                <tr>
+                                                    <!-- Col 1: Ref ID & Date -->
+                                                    <td>
+                                                        <span class="roster-ref-chip">
+                                                            #<?php echo htmlspecialchars($row['reference_id']); ?>
                                                         </span>
-                                                        <div
-                                                            style="font-size: 0.75rem; color: #64748b; margin-top: 5px; white-space: nowrap;">
-                                                            Reg: <?php echo date('d M, h:i A', strtotime($row['created_at'])); ?>
+                                                        <div class="roster-date-sub">
+                                                            <span>📅</span>
+                                                            <span><?php echo date('d M, h:i A', strtotime($row['created_at'])); ?></span>
                                                         </div>
                                                     </td>
-                                                    <td style="padding: 14px 16px; vertical-align: middle;">
-                                                        <strong
-                                                            style="color: #0f172a; display: block; font-size: 0.94rem; line-height: 1.4;">
-                                                            <?php echo htmlspecialchars($row['school_name']); ?>
-                                                        </strong>
-                                                        <span style="font-size: 0.78rem; color: #64748b;">
-                                                            UDISE: <code
-                                                                style="color: #0284c7; background: #f0f9ff; padding: 2px 5px; border-radius: 4px;"><?php echo htmlspecialchars($row['unique_code']); ?></code>
-                                                        </span>
+
+                                                    <!-- Col 2: School Name & UDISE -->
+                                                    <td>
+                                                        <div class="roster-school-name" title="<?php echo htmlspecialchars($row['school_name']); ?>">
+                                                            <?php echo htmlspecialchars(formatSchoolTitle($row['school_name'] ?? '')); ?>
+                                                        </div>
+                                                        <div class="roster-udise-pill">
+                                                            <span class="udise-lbl">UDISE:</span>
+                                                            <span class="udise-num"><?php echo htmlspecialchars($row['unique_code']); ?></span>
+                                                        </div>
                                                     </td>
-                                                    <td style="padding: 14px 16px; vertical-align: middle;">
-                                                        <div style="font-weight: 700; color: #334155; font-size: 0.88rem;">
-                                                            <?php echo htmlspecialchars($row['district']); ?></div>
-                                                        <div style="font-size: 0.8rem; color: #64748b;">Mandal:
-                                                            <?php echo htmlspecialchars($row['mandal']); ?></div>
+
+                                                    <!-- Col 3: District & Mandal -->
+                                                    <td>
+                                                        <div class="roster-location-box">
+                                                            <div class="roster-district-line">
+                                                                <?php $distInfo = formatLocationTitle($row['district'] ?? ''); ?>
+                                                                <span class="roster-district-name"><?php echo htmlspecialchars($distInfo['name']); ?></span>
+                                                                <?php if (!empty($distInfo['code'])): ?>
+                                                                    <span class="roster-code-pill" title="District Code"><?php echo htmlspecialchars($distInfo['code']); ?></span>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                            <div class="roster-mandal-line">
+                                                                <?php $mandalInfo = formatLocationTitle($row['mandal'] ?? ''); ?>
+                                                                <span class="mandal-pin">📍</span>
+                                                                <span style="color: #64748b; font-weight: 500;">Mandal:</span>
+                                                                <span class="roster-mandal-name"><?php echo htmlspecialchars($mandalInfo['name']); ?></span>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td style="padding: 14px 16px; vertical-align: middle;">
-                                                        <div style="font-weight: 600; color: #1e293b;">
-                                                            <?php echo htmlspecialchars($row['contact_person']); ?></div>
-                                                        <span class="badge badge-info"
-                                                            style="font-size: 0.72rem; padding: 2px 6px;"><?php echo htmlspecialchars($row['designation']); ?></span>
+
+                                                    <!-- Col 4: In-Charge Person -->
+                                                    <td>
+                                                        <div class="roster-person-wrap">
+                                                            <div class="roster-person-avatar">
+                                                                <?php echo strtoupper(substr($row['contact_person'] ?: 'P', 0, 1)); ?>
+                                                            </div>
+                                                            <div class="roster-person-info">
+                                                                <span class="roster-person-name" title="<?php echo htmlspecialchars($row['contact_person']); ?>">
+                                                                    <?php echo htmlspecialchars(ucwords(strtolower($row['contact_person'] ?: 'In-Charge'))); ?>
+                                                                </span>
+                                                                <span class="roster-designation-badge">
+                                                                    <?php echo htmlspecialchars(formatDesignationTitle($row['designation'] ?? '')); ?>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td style="padding: 14px 16px; vertical-align: middle;">
+
+                                                    <!-- Col 5: Contact Mobile -->
+                                                    <td>
                                                         <?php if (!empty($row['mobile'])): ?>
                                                             <a href="tel:<?php echo htmlspecialchars($row['mobile']); ?>"
-                                                                style="font-weight: 700; color: #1e293b; font-size: 0.92rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; transition: all 0.15s ease;"
-                                                                onmouseover="this.style.background='#ececf7'; this.style.borderColor='#93c5fd'; this.style.color='#31328f';"
-                                                                onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.color='#1e293b';"
-                                                                title="Mobile: <?php echo htmlspecialchars($row['mobile']); ?>">
-                                                                <span style="font-size: 0.95rem;">📱</span>
+                                                                class="roster-phone-btn"
+                                                                title="Call <?php echo htmlspecialchars($row['contact_person']); ?>">
+                                                                <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.72 11.72 0 00.59 3.68 1 1 0 01-.24 1.02l-2.23 2.09z"/></svg>
                                                                 <span><?php echo htmlspecialchars($row['mobile']); ?></span>
                                                             </a>
                                                         <?php else: ?>
-                                                            <span style="font-size: 0.82rem; color: #94a3b8; font-style: italic;">No Mobile</span>
+                                                            <span style="font-size: 0.80rem; color: #94a3b8; font-style: italic;">No Mobile</span>
                                                         <?php endif; ?>
                                                     </td>
-                                                    <td style="padding: 14px 16px; vertical-align: middle;">
+
+                                                    <!-- Col 6: Verification Status -->
+                                                    <td>
                                                         <?php if ($canEditRegs): ?>
-                                                            <form method="POST" action="dashboard.php"
-                                                                style="display: flex; gap: 6px; align-items: center; margin: 0;">
+                                                            <form method="POST" action="dashboard.php" class="roster-status-form">
                                                                 <input type="hidden" name="update_status" value="1">
                                                                 <input type="hidden" name="reg_id" value="<?php echo $row['id']; ?>">
-                                                                <select name="status"
-                                                                    style="font-size: 0.78rem; padding: 4px 6px; height: 32px; border-radius: 6px; border: 1.5px solid #cbd5e1; font-weight: 700; color: #1e293b; background: #fff; cursor: pointer;">
-                                                                    <option value="submitted" <?php echo ($row['status'] ?? '') === 'submitted' ? 'selected' : ''; ?>>Submitted</option>
-                                                                    <option value="contacted" <?php echo ($row['status'] ?? '') === 'contacted' ? 'selected' : ''; ?>>Contacted</option>
-                                                                    <option value="verified" <?php echo ($row['status'] ?? '') === 'verified' ? 'selected' : ''; ?>>Verified</option>
-                                                                    <option value="completed" <?php echo ($row['status'] ?? '') === 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                                                <select name="status" class="roster-status-select" title="Change status" onchange="this.form.submit()">
+                                                                    <option value="submitted" <?php echo ($row['status'] ?? '') === 'submitted' ? 'selected' : ''; ?>>⏳ Submitted</option>
+                                                                    <option value="contacted" <?php echo ($row['status'] ?? '') === 'contacted' ? 'selected' : ''; ?>>📞 Contacted</option>
+                                                                    <option value="verified" <?php echo ($row['status'] ?? '') === 'verified' ? 'selected' : ''; ?>>✓ Verified</option>
+                                                                    <option value="completed" <?php echo ($row['status'] ?? '') === 'completed' ? 'selected' : ''; ?>>★ Completed</option>
                                                                 </select>
-                                                                <button type="submit"
-                                                                    style="height: 32px; padding: 0 10px; font-size: 0.75rem; font-weight: 700; border-radius: 6px; border: none; background: #31328f; color: white; cursor: pointer; transition: background 0.15s ease;"
-                                                                    onmouseover="this.style.background='#1d4ed8';"
-                                                                    onmouseout="this.style.background='#31328f';">
+                                                                <button type="submit" class="roster-status-save-btn" title="Save status update">
                                                                     Save
                                                                 </button>
                                                             </form>
@@ -2328,37 +2818,48 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                                             $bBg = '#f1f5f9';
                                                             $bColor = '#475569';
                                                             $bBdr = '#cbd5e1';
+                                                            $bIcon = '●';
                                                             if ($st === 'verified') {
                                                                 $bBg = '#ecfdf5';
                                                                 $bColor = '#047857';
                                                                 $bBdr = '#a7f3d0';
+                                                                $bIcon = '✓';
                                                             } elseif ($st === 'contacted') {
-                                                                $bBg = '#ececf7';
+                                                                $bBg = '#eff6ff';
                                                                 $bColor = '#1d4ed8';
-                                                                $bBdr = '#c8c9eb';
+                                                                $bBdr = '#bfdbfe';
+                                                                $bIcon = '📞';
                                                             } elseif ($st === 'completed') {
-                                                                $bBg = '#f5f3ff';
-                                                                $bColor = '#7c3aed';
-                                                                $bBdr = '#ddd6fe';
+                                                                $bBg = '#faf5ff';
+                                                                $bColor = '#7e22ce';
+                                                                $bBdr = '#e9d5ff';
+                                                                $bIcon = '★';
+                                                            } else {
+                                                                $bBg = '#fffbeb';
+                                                                $bColor = '#b45309';
+                                                                $bBdr = '#fde68a';
+                                                                $bIcon = '⏳';
                                                             }
                                                             ?>
-                                                            <span
-                                                                style="background: <?php echo $bBg; ?>; color: <?php echo $bColor; ?>; border: 1px solid <?php echo $bBdr; ?>; font-size: 0.8rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; text-align: center; display: inline-block; letter-spacing: 0.03em;">
-                                                                <?php echo htmlspecialchars($row['status'] ?? 'submitted'); ?>
+                                                            <span style="background: <?php echo $bBg; ?>; color: <?php echo $bColor; ?>; border: 1px solid <?php echo $bBdr; ?>; font-size: 0.78rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; display: inline-flex; align-items: center; gap: 4px;">
+                                                                <span><?php echo $bIcon; ?></span>
+                                                                <span><?php echo ucfirst(htmlspecialchars($row['status'] ?? 'submitted')); ?></span>
                                                             </span>
                                                         <?php endif; ?>
                                                     </td>
-                                                    <td style="padding: 14px 16px; vertical-align: middle; text-align: right; white-space: nowrap;">
-                                                        <div style="display: inline-flex; align-items: center; gap: 5px;">
-                                                            <button type="button" class="btn" onclick='openViewRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 6px; cursor: pointer;" title="View Registration Full Details">
+
+                                                    <!-- Col 7: Actions (Sticky) -->
+                                                    <td class="col-actions">
+                                                        <div class="roster-actions-wrap">
+                                                            <button type="button" class="roster-action-btn btn-view" onclick='openViewRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' title="View Registration Full Details">
                                                                 👁️ View
                                                             </button>
                                                             <?php if ($canEditRegs): ?>
-                                                                <button type="button" class="btn" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' style="padding: 5px 10px; font-size: 0.76rem; font-weight: 700; background: #ececf7; color: #1d4ed8; border: 1px solid #c8c9eb; border-radius: 6px; cursor: pointer;" title="Edit Registration Details">
+                                                                <button type="button" class="roster-action-btn btn-edit" onclick='openEditRegModal(<?php echo json_encode($row, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>)' title="Edit Registration Details">
                                                                     ✏️ Edit
                                                                 </button>
                                                             <?php endif; ?>
-                                                            <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="btn" style="padding: 5px 10px; font-size: 0.76rem; font-weight: 600; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; border-radius: 6px; text-decoration: none;" title="View Official Registration Slip">
+                                                            <a href="../register_success.php?ref=<?php echo urlencode($row['reference_id']); ?>" target="_blank" class="roster-action-btn btn-slip" title="View Official Registration Slip">
                                                                 📄 Slip
                                                             </a>
                                                         </div>
