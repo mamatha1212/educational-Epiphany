@@ -60,11 +60,6 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page-header">
-    <div style="margin-bottom: 1rem;">
-        <img src="assets/images/logo.png" alt="EEMT Logo"
-            style="height: 85px; width: auto; background: white; padding: 6px; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display: inline-block;"
-            onerror="this.src='assets/images/logo.jpeg';">
-    </div>
     <div
         style="display: inline-flex; align-items: center; gap: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; padding: 6px 14px; border-radius: 9999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.75rem;">
         <span>🔒 Management & Field Operations</span>
