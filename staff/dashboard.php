@@ -1872,7 +1872,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .topbar-left {
                 gap: 8px;
                 min-width: 0;
@@ -1897,6 +1897,8 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 gap: 4px;
             }
 
+            /* 2 Columns in Mobile View for KPI Cards */
+            .kpi-grid,
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 0.65rem !important;
@@ -1904,17 +1906,38 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             }
 
             .kpi-card {
-                padding: 0.85rem !important;
+                padding: 0.85rem 0.75rem !important;
+                border-radius: 10px !important;
+                gap: 6px !important;
             }
 
-            .kpi-card .kpi-num {
-                font-size: 1.5rem !important;
+            .kpi-card > div:first-child {
+                min-width: 0;
+            }
+
+            .kpi-card > div:first-child > div:first-child {
+                font-size: 0.68rem !important;
+                letter-spacing: 0.3px !important;
+            }
+
+            .kpi-card > div:first-child > div:nth-child(2) {
+                font-size: 1.4rem !important;
+                margin: 0.15rem 0 !important;
+                line-height: 1.2 !important;
+            }
+
+            .kpi-card > div:first-child > div:last-child {
+                font-size: 0.68rem !important;
+                line-height: 1.25 !important;
+                word-break: break-word;
             }
 
             .kpi-icon {
-                width: 34px !important;
-                height: 34px !important;
+                width: 32px !important;
+                height: 32px !important;
                 font-size: 1rem !important;
+                border-radius: 8px !important;
+                flex-shrink: 0 !important;
             }
 
             .filter-toolbar {
@@ -3027,10 +3050,8 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                 <div id="tabPanelPrelims" style="<?php echo $activeTab === 'prelims' ? '' : 'display: none;'; ?>">
 
                     <!-- Prelims Summary Stats Strip -->
-                    <div
-                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div
-                            style="background: #ffffff; border: 1.5px solid #ddd6fe; border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(124,58,237,0.05);">
+                    <div class="kpi-grid" style="margin-bottom: 1.5rem;">
+                        <div class="kpi-card" style="border-top: 4px solid #8b5cf6;">
                             <div>
                                 <div
                                     style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">
@@ -3040,14 +3061,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                 <div style="font-size: 0.76rem; color: #7c3aed; font-weight: 600;">Available for Schools
                                 </div>
                             </div>
-                            <div
-                                style="width: 44px; height: 44px; border-radius: 10px; background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                            <div class="kpi-icon" style="background: #f5f3ff; color: #7c3aed;">
                                 📄
                             </div>
                         </div>
 
-                        <div
-                            style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                        <div class="kpi-card" style="border-top: 4px solid #059669;">
                             <div>
                                 <div
                                     style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">
@@ -3057,14 +3076,12 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                 <div style="font-size: 0.76rem; color: #059669; font-weight: 600;">State High Schools
                                 </div>
                             </div>
-                            <div
-                                style="width: 44px; height: 44px; border-radius: 10px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                            <div class="kpi-icon" style="background: #ecfdf5; color: #059669;">
                                 🎯
                             </div>
                         </div>
 
-                        <div
-                            style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                        <div class="kpi-card" style="border-top: 4px solid #31328f;">
                             <div>
                                 <div
                                     style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 0.5px;">
@@ -3076,8 +3093,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                 <div style="font-size: 0.76rem; color: #64748b; font-weight: 600;">Exam Materials
                                     Console</div>
                             </div>
-                            <div
-                                style="width: 44px; height: 44px; border-radius: 10px; background: #ececf7; color: #31328f; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                            <div class="kpi-icon" style="background: #ececf7; color: #31328f;">
                                 🛡️
                             </div>
                         </div>
