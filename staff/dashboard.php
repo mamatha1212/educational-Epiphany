@@ -1400,6 +1400,61 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             flex-wrap: wrap;
         }
 
+        /* Form Inputs and Selects Text Visibility & Vertical Alignment */
+        .filter-toolbar .form-input,
+        .filter-toolbar .form-select,
+        .filter-row .form-input,
+        .filter-row .form-select,
+        .modal-body .form-input,
+        .modal-body .form-select,
+        .form-input,
+        .form-select {
+            height: 42px !important;
+            min-height: 42px !important;
+            padding: 7px 12px !important;
+            font-size: 0.9rem !important;
+            line-height: normal !important;
+            box-sizing: border-box !important;
+            color: #0f172a !important;
+            background-color: #ffffff !important;
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            vertical-align: middle !important;
+        }
+
+        .filter-toolbar .form-select,
+        .filter-row .form-select,
+        .modal-body .form-select,
+        select.form-select {
+            padding: 7px 34px 7px 12px !important;
+            line-height: normal !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
+            background-position: right 10px center !important;
+            background-repeat: no-repeat !important;
+            background-size: 16px 16px !important;
+            cursor: pointer;
+        }
+
+        .filter-toolbar .form-input::placeholder,
+        .form-input::placeholder {
+            color: #94a3b8 !important;
+            opacity: 1 !important;
+            font-size: 0.88rem !important;
+            line-height: normal !important;
+        }
+
+        .filter-toolbar .form-input:focus,
+        .filter-toolbar .form-select:focus,
+        .form-input:focus,
+        .form-select:focus {
+            border-color: #31328f !important;
+            box-shadow: 0 0 0 3px rgba(49, 50, 143, 0.15) !important;
+            outline: none !important;
+        }
+
         /* Modern Table Card & Roster Styles */
         .table-card {
             background: #ffffff;
@@ -1952,6 +2007,20 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
             .filter-row .form-group {
                 flex: 1 1 100% !important;
                 min-width: 100% !important;
+            }
+
+            .filter-row .form-input,
+            .filter-row .form-select {
+                height: 42px !important;
+                min-height: 42px !important;
+                font-size: 0.92rem !important;
+                padding: 7px 12px !important;
+                line-height: normal !important;
+                box-sizing: border-box !important;
+            }
+
+            .filter-row .form-select {
+                padding: 7px 34px 7px 12px !important;
             }
 
             .filter-actions-wrap {
@@ -3259,7 +3328,7 @@ $pageTitle = "Coordinator Dashboard - EEMT 2027";
                                 <input type="text" name="schools_search" class="form-input" style="height: 40px; font-size: 0.88rem; width: 100%;" placeholder="Search school name, UDISE code, mandal..." value="<?php echo htmlspecialchars($schoolSearch); ?>">
                             </div>
 
-                            <div style="display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;">
+                            <div class="filter-actions-wrap" style="display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;">
                                 <button type="submit" class="btn btn-primary" style="height: 40px; padding: 0 1.25rem; background: #059669; border: none; white-space: nowrap; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
                                     🔍 Search
                                 </button>
